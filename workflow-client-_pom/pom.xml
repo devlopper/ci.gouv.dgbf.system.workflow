@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.cyk.pom.jee.client.jboss.swarm</groupId>
+		<artifactId>pom-jee-client-jboss-swarm</artifactId>
+		<version>pom.jee.client.jboss.swarm.0.0.1</version>
+	</parent>
+
+	<groupId>ci.gouv.dgbf.system.workflow.client</groupId>
+	<artifactId>workflow-client-_pom</artifactId>
+	<version>0.0.1</version>
+	<packaging>pom</packaging>
+
+	<name>workflow system client</name>
+	<url>http://www.cykcorp.org</url>
+	
+	<modules>
+		<!-- Controller Layer -->
+		<module>../workflow-client-controller-entities</module>
+		<module>../workflow-client-controller-api</module>
+		<module>../workflow-client-controller-impl</module>
+		
+		<!-- Application Layer -->
+		<module>../workflow-client-application</module>
+				
+	</modules>
+
+	<repositories>
+	    <repository>
+	        <id>cyk</id>
+	        <url>https://rawgit.com/devlopper/artifact.maven/master</url>
+	    </repository>
+	</repositories>
+	
+</project>

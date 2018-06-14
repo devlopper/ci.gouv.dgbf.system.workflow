@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ci.gouv.dgbf.system.workflow.server</groupId>
+		<artifactId>workflow-server-_pom</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<name>Representation Implementation based on JAXRS</name>
+	
+	<groupId>ci.gouv.dgbf.system.workflow.server.representation</groupId>
+	<artifactId>workflow-server-representation-impl</artifactId>
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>ci.gouv.dgbf.system.workflow.server.representation</groupId>
+			<artifactId>workflow-server-representation-api</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ci.gouv.dgbf.system.workflow.server.business</groupId>
+			<artifactId>workflow-server-business-impl</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>jaxrs</artifactId>
+		</dependency>
+	</dependencies>		
+
+</project>
