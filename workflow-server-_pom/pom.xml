@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -15,30 +16,128 @@
 
 	<name>workflow system server</name>
 	<url>http://www.cykcorp.org</url>
+
+	<properties>
+		<jbpm-bom.version>7.7.0.Final</jbpm-bom.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jbpm</groupId>
+				<artifactId>jbpm-bom</artifactId>
+				<type>pom</type>
+				<version>${jbpm-bom.version}</version>
+				<scope>import</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.jbpm</groupId>
+				<artifactId>jbpm-flow</artifactId>
+				<version>${jbpm-bom.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.jbpm</groupId>
+				<artifactId>jbpm-bpmn2</artifactId>
+				<version>${jbpm-bom.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.jbpm</groupId>
+				<artifactId>jbpm-flow-builder</artifactId>
+				<version>${jbpm-bom.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.jbpm</groupId>
+				<artifactId>jbpm-persistence-jpa</artifactId>
+				<version>${jbpm-bom.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.jbpm</groupId>
+			    <artifactId>jbpm-runtime-manager</artifactId>
+			    <version>${jbpm-bom.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.jbpm</groupId>
+			    <artifactId>jbpm-human-task-core</artifactId>
+			    <version>${jbpm-bom.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.jbpm</groupId>
+			    <artifactId>jbpm-human-task-jpa</artifactId>
+			    <version>${jbpm-bom.version}</version>
+			</dependency>
+			
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-flow</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-bpmn2</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-flow-builder</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-persistence-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jbpm</groupId>
+		    <artifactId>jbpm-runtime-manager</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jbpm</groupId>
+		    <artifactId>jbpm-human-task-core</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jbpm</groupId>
+		    <artifactId>jbpm-human-task-jpa</artifactId>
+		</dependency>
+	
+	</dependencies>
 	
 	<modules>
 		<!-- Persistence Layer -->
 		<module>../workflow-server-persistence-entities</module>
 		<module>../workflow-server-persistence-api</module>
 		<module>../workflow-server-persistence-impl</module>
-		
+
 		<!-- Business Layer -->
 		<module>../workflow-server-business-entities</module>
 		<module>../workflow-server-business-api</module>
 		<module>../workflow-server-business-impl</module>
-		
+
 		<!-- Representation Layer -->
 		<module>../workflow-server-representation-entities</module>
 		<module>../workflow-server-representation-api</module>
 		<module>../workflow-server-representation-impl</module>
-		
+
 	</modules>
-	
+
 	<repositories>
-	    <repository>
-	        <id>cyk</id>
-	        <url>https://rawgit.com/devlopper/artifact.maven/master</url>
-	    </repository>
+		<repository>
+			<id>cyk</id>
+			<url>https://rawgit.com/devlopper/artifact.maven/master</url>
+		</repository>
 	</repositories>
-	
+
 </project>
