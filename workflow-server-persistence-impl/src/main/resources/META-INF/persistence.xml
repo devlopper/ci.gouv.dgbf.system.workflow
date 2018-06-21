@@ -41,12 +41,14 @@
 		<class>org.jbpm.services.task.audit.impl.model.AuditTaskImpl</class>
 		<class>org.jbpm.services.task.audit.impl.model.TaskEventImpl</class>
 		<class>org.jbpm.services.task.audit.impl.model.BAMTaskSummaryImpl</class>
+		
+		<class>ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow</class>
 
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="create" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.format_sql" value="true" />
 			<!--property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.CMTTransactionFactory"/ -->
 			<!--property name="hibernate.transaction.jta.platform" value="org.hibernate.transaction.JBossTransactionManagerLookup" 

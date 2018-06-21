@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>Persistence Implementation based on JPA</name>
@@ -13,7 +14,7 @@
 	<groupId>ci.gouv.dgbf.system.workflow.server.persistence</groupId>
 	<artifactId>workflow-server-persistence-impl</artifactId>
 	<packaging>jar</packaging>
-	
+
 	<!-- Following has to be redeclared to make test work -->
 
 	<properties>
@@ -22,14 +23,14 @@
 
 	<dependencyManagement>
 		<dependencies>
-	      <dependency>
-	        <groupId>org.jbpm</groupId>
-	        <artifactId>jbpm-bom</artifactId>
-	        <type>pom</type>
-	        <version>${jbpm.version}</version>
-	        <scope>import</scope>
-	      </dependency>
-	    </dependencies>
+			<dependency>
+				<groupId>org.jbpm</groupId>
+				<artifactId>jbpm-bom</artifactId>
+				<type>pom</type>
+				<version>${jbpm.version}</version>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
@@ -38,18 +39,18 @@
 			<artifactId>workflow-server-persistence-api</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		
+
 		<!-- Following has to be redeclared to make test work -->
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-flow</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-bpmn2</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-flow-builder</artifactId>
@@ -59,21 +60,35 @@
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-persistence-jpa</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.jbpm</groupId>
-		    <artifactId>jbpm-runtime-manager</artifactId>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-runtime-manager</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.jbpm</groupId>
-		    <artifactId>jbpm-human-task-core</artifactId>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-human-task-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.jbpm</groupId>
-		    <artifactId>jbpm-human-task-jpa</artifactId>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-human-task-jpa</artifactId>
 		</dependency>
-	</dependencies>		
+
+		<dependency>
+			<groupId>ci.gouv.dgbf.system.workflow.server.persistence</groupId>
+			<artifactId>workflow-server-persistence-impl</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+
+	</dependencies>
 
 </project>
