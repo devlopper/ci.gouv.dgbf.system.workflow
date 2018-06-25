@@ -27,6 +27,8 @@ import org.jbpm.services.api.DeploymentService;
 import org.jbpm.services.api.ProcessService;
 import org.jbpm.services.api.RuntimeDataService;
 import org.jbpm.services.api.UserTaskService;
+import org.jbpm.services.api.model.DeployedUnit;
+import org.jbpm.services.api.model.DeploymentUnit;
 import org.jbpm.services.api.model.ProcessDefinition;
 import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
@@ -80,8 +82,16 @@ public class PersistenceImplJbpmSetupUnitTest {
 		Assert.assertNotNull(deploymentService);
 	}
 	
+	@Test
 	public void isDeploymentActivated(){
 		deploymentService.activate("MyDeploymentId001");
+	}
+	
+	@Test
+	public void isDeployedUnitNotNull(){
+		deploymentService.activate("MyDeploymentId002");
+		DeployedUnit deployedUnit = deploymentService.getDeployedUnit("MyDeploymentId002");
+		Assert.assertNotNull(deployedUnit);
 	}
 	
 	@Test

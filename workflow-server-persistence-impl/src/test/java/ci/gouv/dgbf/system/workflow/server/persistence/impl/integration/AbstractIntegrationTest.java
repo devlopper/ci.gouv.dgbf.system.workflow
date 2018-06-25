@@ -34,7 +34,16 @@ public abstract class AbstractIntegrationTest {
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
 		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		if(Boolean.TRUE.equals(isAddProcessDefinitionFromClassPathOnListenBefore()))
+			__listenBefore__addProcessDefinitionFromClassPath();
+	}
+	
+	protected void __listenBefore__addProcessDefinitionFromClassPath(){
 		persistenceHelper.addProcessDefinitionFromClassPath("/bpmn/withhuman/Validation du PAP.bpmn2","/bpmn/withhuman/Validation du PAP V01.bpmn2");
+	}
+	
+	protected Boolean isAddProcessDefinitionFromClassPathOnListenBefore(){
+		return Boolean.FALSE;
 	}
 	
 	/* Deployment */

@@ -6,9 +6,11 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.io.IOUtils;
+import org.jbpm.services.api.model.ProcessDefinition;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,15 +25,13 @@ public class Workflow extends AbstractEntity implements Serializable {
 	@NotNull
 	private String code;
 	
-	@Column(nullable=false)
-	@NotNull
-	private String name;
-	
 	@Lob
 	@Column(nullable=false)
 	@NotNull
 	private String modelAsBpmn;
 	
+	@Transient
+	private ProcessDefinition jbpmProcessDefinition;
 	
 	/**/
 	
@@ -42,6 +42,12 @@ public class Workflow extends AbstractEntity implements Serializable {
 			e.printStackTrace();
 		}
 		return this;
+	}
+	
+	public String getName(){
+		if(jbpmProcessDefinition == null)
+			return null;
+		return jbpmProcessDefinition.getName();
 	}
 	
 }

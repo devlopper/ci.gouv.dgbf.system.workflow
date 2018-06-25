@@ -2,7 +2,7 @@ package ci.gouv.dgbf.system.workflow.server.persistence.entities;
 
 import java.io.Serializable;
 
-import org.kie.api.runtime.manager.audit.ProcessInstanceLog;
+import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.kie.api.runtime.process.ProcessInstance;
 
 import lombok.Getter;
@@ -17,5 +17,6 @@ public class WorkflowProcess extends AbstractEntity implements Serializable {
 	private Workflow workflow;
 	
 	private ProcessInstance processInstance;
-	private ProcessInstanceLog processInstanceLog;
+	private ProcessInstanceDesc processInstanceDesc;
+
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jbpm.services.api.DefinitionService;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.EntityPersistence;
@@ -18,16 +19,25 @@ public class WorkflowPersistenceImpl extends AbstractEntityPersistenceImpl<Workf
 	
 	@Override
 	public WorkflowPersistence create(Workflow workflow) {
+		if(workflow.getJbpmProcessDefinition() == null)
+			buildProcessDefinition(workflow);
+		if(StringUtils.isBlank(workflow.getCode()))
+			workflow.setCode(workflow.getJbpmProcessDefinition().getId());
 		super.create(workflow);
-		buildProcessDefinition(workflow);
+		persistenceHelper.addProcessDefinitionsFromWorkflow(workflow);
 		return this;
 	}
 	
 	@Override
 	public Workflow readByCode(String code) {
 		try {
-			return entityManager.createQuery("SELECT workflow FROM Workflow workflow WHERE workflow.code = :workflowCode",Workflow.class)
+			Workflow workflow = entityManager.createQuery("SELECT workflow FROM Workflow workflow WHERE workflow.code = :workflowCode",Workflow.class)
 					.setParameter("workflowCode", code).getSingleResult();
+			if(workflow!=null){
+				if(workflow.getJbpmProcessDefinition() == null)
+					buildProcessDefinition(workflow);
+			}
+			return workflow;
 		} catch (NoResultException exception) {
 			return null;
 		}
@@ -35,8 +45,13 @@ public class WorkflowPersistenceImpl extends AbstractEntityPersistenceImpl<Workf
 	
 	@Override
 	public EntityPersistence<Workflow> update(Workflow workflow) {
+		if(workflow.getJbpmProcessDefinition() == null)
+			buildProcessDefinition(workflow);
+		if(StringUtils.isBlank(workflow.getCode()))
+			workflow.setCode(workflow.getJbpmProcessDefinition().getId());
 		super.update(workflow);
-		buildProcessDefinition(workflow);
+		//TODO we should update the bytes
+		//persistenceHelper.addProcessDefinitionsFromWorkflow(workflow);
 		return this;
 	}
 
@@ -49,6 +64,7 @@ public class WorkflowPersistenceImpl extends AbstractEntityPersistenceImpl<Workf
 	/**/
 	
 	private void buildProcessDefinition(Workflow workflow){
-		definitionService.buildProcessDefinition(persistenceHelper.getDeploymentIdentifier(), workflow.getModelAsBpmn(), null, Boolean.TRUE);
+		workflow.setJbpmProcessDefinition(definitionService.buildProcessDefinition("MYDEP", workflow.getModelAsBpmn(), null, Boolean.FALSE));
 	}
+
 }

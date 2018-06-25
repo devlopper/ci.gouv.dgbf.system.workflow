@@ -57,7 +57,7 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 			workflowProcesses = new ArrayList<>();
 			for(ProcessInstanceLog index : processInstances){
 				WorkflowProcess workflowProcess = new WorkflowProcess().setWorkflow(workflow);
-				workflowProcess.setProcessInstanceLog(index);
+				//workflowProcess.setProcessInstanceLog(index);
 				workflowProcesses.add(workflowProcess);
 			}
 				

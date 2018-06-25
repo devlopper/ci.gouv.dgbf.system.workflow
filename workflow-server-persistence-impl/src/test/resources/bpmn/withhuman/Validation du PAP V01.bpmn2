@@ -4,7 +4,7 @@
   <bpmn2:itemDefinition id="ItemDefinition_1" isCollection="false" structureRef="java.lang.String"/>
   <bpmn2:itemDefinition id="ItemDefinition_2" isCollection="false" structureRef="java.lang.Integer"/>
   <bpmn2:itemDefinition id="ItemDefinition_3" isCollection="false" structureRef="java.lang.Boolean"/>
-  <bpmn2:process id="ci.gouv.dgbf.workflow.validation.pap.v01" tns:packageName="ci.gouv.dgbf.workflow.validation" name="Validation du PAP" isExecutable="true" processType="Private">
+  <bpmn2:process id="ci.gouv.dgbf.workflow.validation.pap.v01" tns:packageName="ci.gouv.dgbf.workflow.validation" name="Validation du PAP V01" isExecutable="true" processType="Private">
     <bpmn2:startEvent id="StartEvent_1" name="PAP créé">
       <bpmn2:extensionElements>
         <tns:metaData name="elementname">

@@ -42,6 +42,7 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Collection<byte[]> processDefinitions;
+	//TODO this one should come from database
 	private String deploymentIdentifier;
 	@Inject private DeploymentService deploymentService;
 	@Inject private DefinitionService definitionService;
@@ -55,7 +56,7 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	
 	@PostConstruct
 	public void __listenPostConstruct__() {
-		deploymentIdentifier = "Deployment";
+		//deploymentIdentifier = "Deployment";
 		//buildKieBase();
 	}
 	
@@ -63,6 +64,14 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	public PersistenceHelper initialise() {
 		buildKieBase();
 		return this;
+	}
+	
+	public String getDeploymentIdentifier(){
+		if(deploymentIdentifier == null){
+			deploymentIdentifier = "Deployment";
+			deploymentService.activate(deploymentIdentifier);
+		}
+		return deploymentIdentifier;
 	}
 	
 	@Override
@@ -113,8 +122,10 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 		RuntimeEnvironmentBuilder runtimeEnvironmentBuilder = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder().entityManagerFactory(entityManagerFactory)
 				.knowledgeBase(getKieBase()).userGroupCallback(getUserGroupCallback());
 		if(processDefinitions!=null)
-			for(byte[] index : processDefinitions)
+			for(byte[] index : processDefinitions){
 				runtimeEnvironmentBuilder.addAsset(ResourceFactory.newByteArrayResource(index), ResourceType.BPMN2);
+				definitionService.buildProcessDefinition(getDeploymentIdentifier(),  new String(index), null, Boolean.TRUE);
+			}
 		runtimeEnvironment = runtimeEnvironmentBuilder.get();
 		return this;
 	}
