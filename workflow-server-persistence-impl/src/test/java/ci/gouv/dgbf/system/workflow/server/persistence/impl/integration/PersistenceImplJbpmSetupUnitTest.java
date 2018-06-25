@@ -4,20 +4,30 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jbpm.services.api.DefinitionService;
+import org.jbpm.services.api.DeploymentService;
+import org.jbpm.services.api.ProcessService;
+import org.jbpm.services.api.RuntimeDataService;
+import org.jbpm.services.api.UserTaskService;
+import org.jbpm.services.api.model.ProcessDefinition;
 import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,14 +49,106 @@ import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 
+import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
+
 @RunWith(Arquillian.class)
 public class PersistenceImplJbpmSetupUnitTest {
 	
-	@PersistenceUnit
-	private EntityManagerFactory entityManagerFactory;
+	@PersistenceUnit private EntityManagerFactory entityManagerFactory;
+	@PersistenceContext private EntityManager entityManager;
+	@Inject private DeploymentService deploymentService;
+	@Inject private RuntimeDataService runtimeDataService;
+	@Inject private DefinitionService definitionService;
+	@Inject private UserTaskService userTaskService;
+	@Inject private ProcessService processService;
+	@Inject private PersistenceHelper persistenceHelper;
 	
-	@PersistenceContext
-	private EntityManager entityManager;
+	@Test
+	public void isPersistenceHelperRuntimeEnvironmentNotNull(){
+		Assert.assertNotNull(persistenceHelper.getRuntimeEnvironment());
+	}
+	
+	@Test
+	public void isPersistenceHelperRuntimeManagerNotNull(){
+		RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
+		Assert.assertNotNull(runtimeManager);
+		persistenceHelper.closeRuntimeManager();
+	}
+	
+	@Test
+	public void isDeploymentServiceNotNull(){
+		Assert.assertNotNull(deploymentService);
+	}
+	
+	public void isDeploymentActivated(){
+		deploymentService.activate("MyDeploymentId001");
+	}
+	
+	@Test
+	public void isRuntimeDataServiceNotNull(){
+		Assert.assertNotNull(runtimeDataService);
+	}
+	
+	@Test
+	public void isDefinitionServiceNotNull(){
+		Assert.assertNotNull(definitionService);
+	}
+	
+	@Test
+	public void isProcessDefinitionBuilt(){
+		String deploymentIdentifier = "BuildProcessDefinition001";
+		deploymentService.activate(deploymentIdentifier);
+		ProcessDefinition processDefinition = null;
+		try {
+			processDefinition = definitionService.buildProcessDefinition(deploymentIdentifier, IOUtils.toString(getClass().getResourceAsStream("/bpmn/demo.bpmn")
+					,Charset.forName("UTF-8")), null, true);
+		} catch (IllegalArgumentException | IOException e) {
+			fail(e.getMessage());
+		}
+		Assert.assertNotNull(processDefinition);
+		Assert.assertEquals("com.sample.hello", processDefinition.getId());
+		Assert.assertNotNull(definitionService.getProcessDefinition(deploymentIdentifier, "com.sample.hello"));
+		deploymentService.deactivate(deploymentIdentifier);
+	}
+	
+	@Test
+	public void isProcessDefinitionBuiltUpdated(){
+		String deploymentIdentifier = "BuildProcessDefinition001";
+		deploymentService.activate(deploymentIdentifier);
+		
+		ProcessDefinition processDefinition = null;
+		try {
+			definitionService.buildProcessDefinition(deploymentIdentifier, IOUtils.toString(getClass().getResourceAsStream("/bpmn/demo.bpmn")
+					,Charset.forName("UTF-8")), null, true);
+		} catch (IllegalArgumentException | IOException e) {
+			fail(e.getMessage());
+		}
+		
+		processDefinition = definitionService.getProcessDefinition(deploymentIdentifier, "com.sample.hello");
+		Assert.assertEquals("Hello Process", processDefinition.getName());
+		
+		try {
+			definitionService.buildProcessDefinition(deploymentIdentifier, IOUtils.toString(getClass().getResourceAsStream("/bpmn/demo_another_name.bpmn")
+					,Charset.forName("UTF-8")), null, true);
+		} catch (IllegalArgumentException | IOException e) {
+			fail(e.getMessage());
+		}
+		
+		processDefinition = definitionService.getProcessDefinition(deploymentIdentifier, "com.sample.hello");
+		Assert.assertEquals("Hello Process My name has changed", processDefinition.getName());
+		
+		deploymentService.deactivate(deploymentIdentifier);
+	}
+	
+	@Test
+	public void isUserTaskServiceNotNull(){
+		Assert.assertNotNull(userTaskService);
+	}
+	
+	@Test
+	public void isProcessServiceNotNull(){
+		Assert.assertNotNull(processService);
+	}
 	
 	@Test
 	public void isEntityManagerFactoryNotNull(){
@@ -229,8 +331,9 @@ public class PersistenceImplJbpmSetupUnitTest {
 	public static WebArchive createArchive(){
 		return ShrinkWrap.create(WebArchive.class)
 				.addAsResource("project-defaults-test.yml", "project-defaults.yml")
-				.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")	
+				//.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")	
 				.addAsResource("bpmn/demo.bpmn", "bpmn/demo.bpmn")	
+				.addAsResource("bpmn/demo_another_name.bpmn", "bpmn/demo_another_name.bpmn")	
 				.addAsResource("bpmn/withhuman/process01.bpmn", "bpmn/withhuman/process01.bpmn")
 				.addAsResource("bpmn/withhuman/Validate Sale.bpmn2", "bpmn/withhuman/Validate Sale.bpmn2")
 				.addAsLibraries(Maven.resolver().loadPomFromFile("pom-test.xml").importRuntimeDependencies().resolve().withTransitivity().asFile())

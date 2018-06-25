@@ -16,7 +16,6 @@ import org.kie.internal.KieInternalServices;
 import org.kie.internal.process.CorrelationAwareProcessRuntime;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
@@ -25,12 +24,11 @@ import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImpl<WorkflowProcess> implements WorkflowProcessPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private PersistenceHelper persistenceHelper;
 	@Inject private WorkflowPersistence workflowPersistence;
 	
 	@Override
 	public WorkflowProcessPersistence create(WorkflowProcess workflowProcess) {
-		String identifier = persistenceHelper.getProcessDefinitionIdentifier(workflowProcess.getWorkflow().getBytes());
+		String identifier = businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModelAsBpmn());
 		((CorrelationAwareProcessRuntime)persistenceHelper.getKieSession()).startProcess(identifier,KieInternalServices.Factory.get().newCorrelationKeyFactory()
 				.newCorrelationKey(Arrays.asList(workflowProcess.getWorkflow().getCode(),workflowProcess.getCode())),null).getId();
 		return this;
@@ -38,36 +36,38 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 	
 	@Override
 	public WorkflowProcess readByWorkflowByCode(Workflow workflow, String code) {
-		
-		
 		RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
 		RuntimeEngine runtimeEngine = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get());
 		KieSession session = runtimeEngine.getKieSession();
 		ProcessInstance processInstance = ((CorrelationAwareProcessRuntime)session).getProcessInstance(KieInternalServices.Factory.get().newCorrelationKeyFactory()
-				.newCorrelationKey(code));
+				.newCorrelationKey(Arrays.asList(workflow.getCode(),code)));
 		if(processInstance == null)
 			return null;
-		WorkflowProcess workflowProcess = new WorkflowProcess().setProcessInstance(processInstance);
+		WorkflowProcess workflowProcess = new WorkflowProcess().setWorkflow(workflow).setProcessInstance(processInstance);
 		return workflowProcess;
 	}
 
-	
 	@Override
 	public Collection<WorkflowProcess> readByWorkflow(Workflow workflow) {
-		String identifier = persistenceHelper.getProcessDefinitionIdentifier(workflow.getBytes());
+		String identifier = businessProcessModelNotationHelper.getIdentifier(workflow.getModelAsBpmn());
 		Collection<WorkflowProcess> workflowProcesses = null;
 		@SuppressWarnings("unchecked")
 		Collection<ProcessInstanceLog> processInstances = (Collection<ProcessInstanceLog>) persistenceHelper.getRuntimeEngine().getAuditService().findProcessInstances(identifier);
 		if(processInstances != null && !processInstances.isEmpty()){
 			workflowProcesses = new ArrayList<>();
 			for(ProcessInstanceLog index : processInstances){
-				WorkflowProcess workflowProcess = new WorkflowProcess();
+				WorkflowProcess workflowProcess = new WorkflowProcess().setWorkflow(workflow);
 				workflowProcess.setProcessInstanceLog(index);
 				workflowProcesses.add(workflowProcess);
 			}
 				
 		}
 		return workflowProcesses;
+	}
+	
+	@Override
+	public WorkflowProcess readByWorkflowCodeByCode(String workflowCode, String code) {
+		return readByWorkflowByCode(workflowPersistence.readByCode(workflowCode), code);
 	}
 
 	@Override

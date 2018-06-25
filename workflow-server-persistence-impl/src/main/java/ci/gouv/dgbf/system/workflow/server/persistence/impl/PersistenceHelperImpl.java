@@ -1,7 +1,8 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl;
 
-import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -12,13 +13,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.io.IOUtils;
+import org.jbpm.services.api.DefinitionService;
+import org.jbpm.services.api.DeploymentService;
 import org.kie.api.KieBase;
+import org.kie.api.KieServices;
+import org.kie.api.io.ResourceType;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeEnvironment;
@@ -28,12 +30,8 @@ import org.kie.api.runtime.manager.RuntimeManagerFactory;
 import org.kie.api.task.UserGroupCallback;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
-import org.kie.internal.utils.KieHelper;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,17 +41,28 @@ import lombok.experimental.Accessors;
 public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Collection<byte[]> processDefinitions;
+	private String deploymentIdentifier;
+	@Inject private DeploymentService deploymentService;
+	@Inject private DefinitionService definitionService;
+	
 	@PersistenceUnit private EntityManagerFactory entityManagerFactory;
 	private Set<String> kieBaseResourceByClassPath;
 	private KieBase kieBase;
 	private UserGroupCallback userGroupCallback;
 	private RuntimeEnvironment runtimeEnvironment;
 	private RuntimeManager runtimeManager;
-	@Inject private WorkflowPersistence workflowPersistence;
 	
 	@PostConstruct
 	public void __listenPostConstruct__() {
+		deploymentIdentifier = "Deployment";
+		//buildKieBase();
+	}
+	
+	@Override
+	public PersistenceHelper initialise() {
 		buildKieBase();
+		return this;
 	}
 	
 	@Override
@@ -76,13 +85,21 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	
 	@Override
 	public PersistenceHelper buildKieBase() {
-		KieHelper kieHelper = new KieHelper();
-		for(Workflow index : workflowPersistence.readAll())
-			kieHelper.addResource(ResourceFactory.newByteArrayResource(index.getBytes()));
+		/*KieHelper kieHelper = new KieHelper();
+		for(Workflow index : CDI.current().select(WorkflowPersistence.class).get().readAll())
+			kieHelper.addResource(ResourceFactory.newByteArrayResource(index.getModelAsBpmn().getBytes()));
 		if(kieBaseResourceByClassPath!=null)
 			for(String index : kieBaseResourceByClassPath)
 				kieHelper.addResource(ResourceFactory.newClassPathResource(index));
 		kieBase = kieHelper.build();
+		*/
+		
+		KieServices kieServices = KieServices.Factory.get();
+		
+		KieContainer kieContainer = kieServices.newKieContainer( kieServices.getRepository().getDefaultReleaseId() );
+
+		kieBase = kieContainer.getKieBase();
+		
 		return this;
 	}
 	
@@ -92,10 +109,19 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	}
 	
 	@Override
-	public RuntimeEnvironment getRuntimeEnvironment() {
+	public PersistenceHelper buildRuntimeEnvironment() {
+		RuntimeEnvironmentBuilder runtimeEnvironmentBuilder = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder().entityManagerFactory(entityManagerFactory)
+				.knowledgeBase(getKieBase()).userGroupCallback(getUserGroupCallback());
+		if(processDefinitions!=null)
+			for(byte[] index : processDefinitions)
+				runtimeEnvironmentBuilder.addAsset(ResourceFactory.newByteArrayResource(index), ResourceType.BPMN2);
+		runtimeEnvironment = runtimeEnvironmentBuilder.get();
+		return this;
+	}
+	
+	public RuntimeEnvironment getRuntimeEnvironment(){
 		if(runtimeEnvironment == null)
-			runtimeEnvironment = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder().entityManagerFactory(entityManagerFactory)
-				.knowledgeBase(getKieBase()).userGroupCallback(getUserGroupCallback()).get();
+			buildRuntimeEnvironment();
 		return runtimeEnvironment;
 	}
 	
@@ -107,24 +133,81 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	}
 	
 	@Override
+	public PersistenceHelper closeRuntimeManager() {
+		if(runtimeManager!=null){
+			runtimeManager.close();
+			runtimeManager = null;
+		}
+		return this;
+	}
+	
+	@Override
 	public RuntimeEngine getRuntimeEngine() {
 		return getRuntimeManager().getRuntimeEngine(ProcessInstanceIdContext.get());
 	}
 	
 	@Override
-	public String getProcessDefinitionIdentifier(byte[] bytes) {
-		String identifier = null;
-		try {
-			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = builderFactory.newDocumentBuilder();
-			Document xmlDocument = builder.parse(new ByteArrayInputStream(bytes));
-			XPath xPath = XPathFactory.newInstance().newXPath();
-			NodeList nodeList = (NodeList) xPath.compile("definitions/process").evaluate(xmlDocument, XPathConstants.NODESET);
-			identifier = nodeList.item(0).getAttributes().getNamedItem("id").getTextContent();	
-		} catch(Exception exception) {
-			exception.printStackTrace();
-		}
-		return identifier;
+	public PersistenceHelper setProcessDefinitions(Collection<byte[]> processDefinitions) {
+		this.processDefinitions = processDefinitions;
+		return this;
 	}
 	
+	@Override
+	public PersistenceHelper addProcessDefinitions(Collection<byte[]> processDefinitions) {
+		if(processDefinitions!=null && !processDefinitions.isEmpty()){
+			if(this.processDefinitions == null)
+				this.processDefinitions = new ArrayList<>();
+			this.processDefinitions.addAll(processDefinitions);
+		}
+		return this;
+	}
+	
+	@Override
+	public PersistenceHelper addProcessDefinitions(byte[]... processDefinitions) {
+		if(processDefinitions!=null && processDefinitions.length>0)
+			addProcessDefinitions(Arrays.asList(processDefinitions));
+		return this;
+	}
+	
+	@Override
+	public PersistenceHelper addProcessDefinitionFromClassPath(Collection<String> paths) {
+		if(paths!=null && !paths.isEmpty()){
+			Collection<byte[]> bytes = new ArrayList<>();	
+			for(String index : paths)
+				try {
+					bytes.add(IOUtils.toByteArray(getClass().getResourceAsStream(index)));
+					//definitionService.buildProcessDefinition(getDeploymentIdentifier(),  IOUtils.toString(getClass().getResourceAsStream(index),Charset.forName("UTF-8")), null, Boolean.TRUE);
+				} catch (IllegalArgumentException | IOException e) {
+					e.printStackTrace();
+				}
+			addProcessDefinitions(bytes);
+		}
+		return this;
+	}
+	
+	@Override
+	public PersistenceHelper addProcessDefinitionFromClassPath(String... paths) {
+		if(paths!=null && paths.length>0){
+			addProcessDefinitionFromClassPath(Arrays.asList(paths));
+		}
+		return this;
+	}
+	
+	@Override
+	public PersistenceHelper addProcessDefinitionsFromWorkflow(Collection<Workflow> workflows) {
+		if(workflows!=null && !workflows.isEmpty()){
+			Collection<byte[]> bytes = new ArrayList<>();	
+			for(Workflow index : workflows)
+				bytes.add(index.getModelAsBpmn().getBytes());
+			addProcessDefinitions(bytes);
+		}
+		return this;
+	}
+	
+	@Override
+	public PersistenceHelper addProcessDefinitionsFromWorkflow(Workflow... workflows) {
+		if(workflows!=null && workflows.length>0)
+			addProcessDefinitionsFromWorkflow(Arrays.asList(workflows));
+		return this;
+	}
 }

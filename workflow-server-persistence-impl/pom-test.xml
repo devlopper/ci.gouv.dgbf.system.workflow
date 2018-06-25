@@ -75,6 +75,11 @@
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-human-task-jpa</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-services-cdi</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.persistence</groupId>

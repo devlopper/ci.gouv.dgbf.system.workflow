@@ -8,5 +8,9 @@ import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessT
 public interface WorkflowProcessTaskPersistence extends EntityPersistence<WorkflowProcessTask> {
 
 	Collection<WorkflowProcessTask> readByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier);
+	Long countByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier);
+	
+	Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
+	Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
 	
 }

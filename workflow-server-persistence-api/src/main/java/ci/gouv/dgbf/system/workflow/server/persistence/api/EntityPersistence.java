@@ -14,6 +14,7 @@ public interface EntityPersistence<ENTITY extends AbstractEntity> extends Persis
 	Collection<ENTITY> readAll();
 	
 	/* Update */
+	EntityPersistence<ENTITY> update(ENTITY entity);
 	
 	/* Delete */
 	EntityPersistence<ENTITY> delete(ENTITY entity);

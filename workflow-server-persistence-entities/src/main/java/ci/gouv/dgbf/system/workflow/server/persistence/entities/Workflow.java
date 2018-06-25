@@ -30,17 +30,18 @@ public class Workflow extends AbstractEntity implements Serializable {
 	@Lob
 	@Column(nullable=false)
 	@NotNull
-	private byte[] bytes;
+	private String modelAsBpmn;
 	
 	
 	/**/
 	
-	public Workflow setBytesFromResourceAsStream(String name){
+	public Workflow setModelAsBpmnFromResourceAsStream(String name){
 		try {
-			setBytes(IOUtils.toByteArray(getClass().getResourceAsStream(name)));
+			setModelAsBpmn(new String(IOUtils.toByteArray(getClass().getResourceAsStream(name))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return this;
 	}
+	
 }

@@ -36,6 +36,12 @@ public abstract class AbstractEntityPersistenceImpl<ENTITY extends AbstractEntit
 	}
 	
 	@Override
+	public EntityPersistence<ENTITY> update(ENTITY entity) {
+		entityManager.merge(entity);
+		return this;
+	}
+	
+	@Override
 	public EntityPersistence<ENTITY> delete(ENTITY entity) {
 		entityManager.remove(entityManager.merge(entity));
 		return this;

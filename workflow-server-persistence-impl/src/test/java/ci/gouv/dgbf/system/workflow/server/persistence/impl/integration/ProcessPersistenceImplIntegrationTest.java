@@ -1,9 +1,5 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.List;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
@@ -13,8 +9,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jbpm.persistence.correlation.CorrelationKeyInfo;
-import org.jbpm.persistence.correlation.CorrelationPropertyInfo;
 import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,16 +22,10 @@ import org.kie.api.runtime.manager.RuntimeEnvironmentBuilder;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.runtime.manager.RuntimeManagerFactory;
 import org.kie.api.runtime.manager.audit.AuditService;
-import org.kie.api.runtime.manager.audit.ProcessInstanceLog;
-import org.kie.api.runtime.process.ProcessInstance;
-import org.kie.api.task.TaskService;
 import org.kie.api.task.UserGroupCallback;
-import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.KieInternalServices;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.process.CorrelationAwareProcessRuntime;
-import org.kie.internal.process.CorrelationKey;
-import org.kie.internal.process.CorrelationKeyFactory;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 
 @RunWith(Arquillian.class)
@@ -119,7 +107,6 @@ public class ProcessPersistenceImplIntegrationTest {
 	public static WebArchive createArchive(){
 		return ShrinkWrap.create(WebArchive.class)
 				.addAsResource("project-defaults-test.yml", "project-defaults.yml")
-				.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")	
 				.addAsResource("bpmn/withhuman/Validation du PAP.bpmn2", "bpmn/withhuman/Validation du PAP.bpmn2")
 				.addAsLibraries(Maven.resolver().loadPomFromFile("pom-test.xml").importRuntimeDependencies().resolve().withTransitivity().asFile())
 		;

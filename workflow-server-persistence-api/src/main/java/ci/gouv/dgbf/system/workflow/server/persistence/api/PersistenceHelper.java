@@ -9,24 +9,45 @@ import org.kie.api.runtime.manager.RuntimeEnvironment;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.task.UserGroupCallback;
 
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
+
 public interface PersistenceHelper {
 
 	/* JBPM functions */
 	
-	PersistenceHelper addKieBaseResourceByClassPath(Collection<String> paths);
-	PersistenceHelper addKieBaseResourceByClassPath(String...paths);
+	String getDeploymentIdentifier();
+	PersistenceHelper setDeploymentIdentifier(String identifier);
 	
+	@Deprecated PersistenceHelper addKieBaseResourceByClassPath(Collection<String> paths);
+	@Deprecated PersistenceHelper addKieBaseResourceByClassPath(String...paths);
+	
+	@Deprecated
 	PersistenceHelper buildKieBase();
 	
-	KieBase getKieBase();
+	@Deprecated KieBase getKieBase();
 	
 	PersistenceHelper setUserGroupCallback(UserGroupCallback userGroupCallback);
 	UserGroupCallback getUserGroupCallback();
 	
+	PersistenceHelper buildRuntimeEnvironment();
 	RuntimeEnvironment getRuntimeEnvironment();
+	
 	RuntimeManager getRuntimeManager();
+	PersistenceHelper closeRuntimeManager();
+	
 	RuntimeEngine getRuntimeEngine();
 	KieSession getKieSession();
 	
-	String getProcessDefinitionIdentifier(byte[] bytes);
+	PersistenceHelper initialise();
+	
+	Collection<byte[]> getProcessDefinitions();
+	PersistenceHelper setProcessDefinitions(Collection<byte[]> processDefinitions);
+	PersistenceHelper addProcessDefinitions(Collection<byte[]> processDefinitions);
+	PersistenceHelper addProcessDefinitions(byte[]...processDefinitions);
+	
+	PersistenceHelper addProcessDefinitionsFromWorkflow(Collection<Workflow> workflows);
+	PersistenceHelper addProcessDefinitionsFromWorkflow(Workflow...workflows);
+	PersistenceHelper addProcessDefinitionFromClassPath(Collection<String> paths);
+	PersistenceHelper addProcessDefinitionFromClassPath(String...paths);
+	
 }

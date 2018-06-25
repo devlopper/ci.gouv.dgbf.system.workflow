@@ -73,6 +73,12 @@
 			    <version>${jbpm-bom.version}</version>
 			</dependency>
 			
+			<dependency>
+			    <groupId>org.jbpm</groupId>
+			    <artifactId>jbpm-services-cdi</artifactId>
+			    <version>${jbpm-bom.version}</version>
+			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 	
@@ -111,6 +117,11 @@
 		<dependency>
 		    <groupId>org.jbpm</groupId>
 		    <artifactId>jbpm-human-task-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-services-cdi</artifactId>
 		</dependency>
 	
 	</dependencies>

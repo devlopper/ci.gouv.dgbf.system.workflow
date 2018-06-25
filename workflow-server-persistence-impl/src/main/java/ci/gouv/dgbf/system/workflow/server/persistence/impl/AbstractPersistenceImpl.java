@@ -2,14 +2,15 @@ package ci.gouv.dgbf.system.workflow.server.persistence.impl;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
-import org.kie.api.task.UserGroupCallback;
-
+import ci.gouv.dgbf.system.workflow.server.persistence.api.BusinessProcessModelNotationHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.Persistence;
+import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -20,6 +21,8 @@ public abstract class AbstractPersistenceImpl implements Persistence, Serializab
 
 	@PersistenceUnit protected EntityManagerFactory entityManagerFactory;
 	@PersistenceContext protected EntityManager entityManager;
-	protected UserGroupCallback userGroupCallback;
+	
+	@Inject protected PersistenceHelper persistenceHelper;
+	@Inject protected BusinessProcessModelNotationHelper businessProcessModelNotationHelper;
 	
 }

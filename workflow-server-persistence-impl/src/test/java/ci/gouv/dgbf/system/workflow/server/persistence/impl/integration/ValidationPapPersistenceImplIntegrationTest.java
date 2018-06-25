@@ -34,6 +34,7 @@ import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 public class ValidationPapPersistenceImplIntegrationTest {
 	
 	@Inject private PersistenceHelper persistenceHelper;
+	//@Inject @PerRequest private RuntimeManager runtimeManager;
 	
 	@Before
 	public void listenBefore(){
@@ -43,7 +44,7 @@ public class ValidationPapPersistenceImplIntegrationTest {
 		properties.put("directeur", "");	
 		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 		
-		persistenceHelper.addKieBaseResourceByClassPath("/bpmn/withhuman/Validation du PAP.bpmn2").buildKieBase();
+		persistenceHelper.addProcessDefinitionFromClassPath("/bpmn/withhuman/Validation du PAP.bpmn2");
 	}
 	
 	/**/
