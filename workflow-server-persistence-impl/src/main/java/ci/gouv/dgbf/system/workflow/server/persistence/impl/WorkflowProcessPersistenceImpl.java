@@ -6,15 +6,12 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
-import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.manager.RuntimeEngine;
-import org.kie.api.runtime.manager.RuntimeManager;
+import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.kie.api.runtime.manager.audit.ProcessInstanceLog;
-import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.internal.KieInternalServices;
 import org.kie.internal.process.CorrelationAwareProcessRuntime;
-import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
@@ -30,21 +27,30 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 	public WorkflowProcessPersistence create(WorkflowProcess workflowProcess) {
 		String identifier = businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModelAsBpmn());
 		((CorrelationAwareProcessRuntime)persistenceHelper.getKieSession()).startProcess(identifier,KieInternalServices.Factory.get().newCorrelationKeyFactory()
-				.newCorrelationKey(Arrays.asList(workflowProcess.getWorkflow().getCode(),workflowProcess.getCode())),null).getId();
+				.newCorrelationKey(Arrays.asList(workflowProcess.getWorkflow().getCode(),workflowProcess.getCode())),null);
 		return this;
 	}
 	
 	@Override
 	public WorkflowProcess readByWorkflowByCode(Workflow workflow, String code) {
-		RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
+		/*RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
 		RuntimeEngine runtimeEngine = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get());
 		KieSession session = runtimeEngine.getKieSession();
 		ProcessInstance processInstance = ((CorrelationAwareProcessRuntime)session).getProcessInstance(KieInternalServices.Factory.get().newCorrelationKeyFactory()
 				.newCorrelationKey(Arrays.asList(workflow.getCode(),code)));
 		if(processInstance == null)
 			return null;
-		WorkflowProcess workflowProcess = new WorkflowProcess().setWorkflow(workflow).setProcessInstance(processInstance);
+		WorkflowProcess workflowProcess = instanciateByJbpmProcessInstanceIdentifier(processInstance.getId(), workflow);
 		return workflowProcess;
+		*/
+		String correlationKey = KieInternalServices.Factory.get().newCorrelationKeyFactory()
+				.newCorrelationKey(Arrays.asList(workflow.getCode(),code)).toExternalForm();
+		try {
+			return entityManager.createNamedQuery("WorkflowProcess.readByCorrelationKey", WorkflowProcess.class).setParameter("correlationKey", correlationKey)
+					.getSingleResult().setWorkflow(workflow);
+		} catch (NoResultException exception) {
+			return null;
+		}
 	}
 
 	@Override
@@ -56,11 +62,9 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 		if(processInstances != null && !processInstances.isEmpty()){
 			workflowProcesses = new ArrayList<>();
 			for(ProcessInstanceLog index : processInstances){
-				WorkflowProcess workflowProcess = new WorkflowProcess().setWorkflow(workflow);
-				//workflowProcess.setProcessInstanceLog(index);
+				WorkflowProcess workflowProcess = instanciateByJbpmProcessInstanceIdentifier(index.getProcessInstanceId(), workflow);
 				workflowProcesses.add(workflowProcess);
-			}
-				
+			}				
 		}
 		return workflowProcesses;
 	}
@@ -85,6 +89,27 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 	public Long countByWorkflowCode(String workflowCode) {
 		return countByWorkflow(workflowPersistence.readByCode(workflowCode));
 	}
+	
+	@Override
+	public WorkflowProcess instanciateByJbpmProcessInstanceIdentifier(Long jbpmProcessInstanceIdentifier,Workflow workflow) {
+		WorkflowProcess workflowProcess = null;
+		ProcessInstanceDesc processInstanceDesc = runtimeDataService.getProcessInstanceById(jbpmProcessInstanceIdentifier);
+		if(processInstanceDesc!=null){
+			String[] keys = processInstanceDesc.getCorrelationKey().split(":");
+			if(workflow == null)
+				workflow = workflowPersistence.readByCode(keys[0]);
+			workflowProcess = new WorkflowProcess().setCode(keys[1]).setWorkflow(workflow);	
+		}
+		return workflowProcess;
+	}
+	
+	@Override
+	public WorkflowProcess instanciateByJbpmProcessInstanceIdentifier(Long jbpmProcessInstanceIdentifier) {
+		return instanciateByJbpmProcessInstanceIdentifier(jbpmProcessInstanceIdentifier, null);
+	}
+	
+	/**/
+	
 	
 	
 }

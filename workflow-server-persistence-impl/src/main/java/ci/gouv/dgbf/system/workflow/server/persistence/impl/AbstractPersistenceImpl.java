@@ -8,6 +8,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
+import org.jbpm.services.api.RuntimeDataService;
+
 import ci.gouv.dgbf.system.workflow.server.persistence.api.BusinessProcessModelNotationHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.Persistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
@@ -24,5 +26,7 @@ public abstract class AbstractPersistenceImpl implements Persistence, Serializab
 	
 	@Inject protected PersistenceHelper persistenceHelper;
 	@Inject protected BusinessProcessModelNotationHelper businessProcessModelNotationHelper;
+	
+	@Inject protected RuntimeDataService runtimeDataService;
 	
 }

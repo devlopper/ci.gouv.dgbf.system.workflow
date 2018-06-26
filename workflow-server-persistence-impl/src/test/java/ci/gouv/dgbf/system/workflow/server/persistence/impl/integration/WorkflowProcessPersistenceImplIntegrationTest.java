@@ -1,5 +1,8 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl.integration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.jboss.arquillian.junit.InSequence;
@@ -32,6 +35,8 @@ public class WorkflowProcessPersistenceImplIntegrationTest extends AbstractInteg
 		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("VPAP")).setCode("PAP001"));
 		
 		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001").getWorkflow());
+		Assert.assertEquals("PAP001", workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001").getCode());
 		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP002"));
 		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP01", "PAP001"));
 		Assert.assertEquals(new Long(1), workflowProcessPersistence.countByWorkflowCode("VPAP"));
@@ -53,6 +58,14 @@ public class WorkflowProcessPersistenceImplIntegrationTest extends AbstractInteg
 		Assert.assertEquals(new Long(2), workflowProcessPersistence.countByWorkflowCode("VPAP"));
 		Assert.assertEquals(new Long(1), workflowProcessPersistence.countByWorkflowCode("VPAP01"));
 		
+		List<WorkflowProcess> workflowProcesses = new ArrayList<>(workflowProcessPersistence.readByWorkflowCode("VPAP"));
+		Assert.assertEquals(2, workflowProcesses.size());
+		Assert.assertNotNull(workflowProcesses.get(0).getWorkflow());
+		Assert.assertEquals("PAP001", workflowProcesses.get(0).getCode());
+		
+		for(WorkflowProcess index : workflowProcessPersistence.readAll()){
+			System.out.println("WorkflowProcessPersistenceImplIntegrationTest.createWorkflowProcess() : "+index);
+		}
 	}
 	
 }

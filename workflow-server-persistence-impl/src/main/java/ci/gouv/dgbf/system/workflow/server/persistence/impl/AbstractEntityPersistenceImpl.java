@@ -32,7 +32,8 @@ public abstract class AbstractEntityPersistenceImpl<ENTITY extends AbstractEntit
 	
 	@Override
 	public Collection<ENTITY> readAll() {
-		return entityManager.createQuery("SELECT tuple FROM "+entityClass.getSimpleName()+" tuple", entityClass).getResultList();
+		return entityManager.createNamedQuery(entityClass.getSimpleName()+".readAll", entityClass).getResultList();
+		//return entityManager.createQuery("SELECT tuple FROM "+entityClass.getSimpleName()+" tuple", entityClass).getResultList();
 	}
 	
 	@Override

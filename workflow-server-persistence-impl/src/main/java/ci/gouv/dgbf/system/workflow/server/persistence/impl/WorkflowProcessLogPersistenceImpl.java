@@ -8,7 +8,6 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jbpm.services.api.RuntimeDataService;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.manager.RuntimeEngine;
@@ -31,7 +30,6 @@ public class WorkflowProcessLogPersistenceImpl extends AbstractEntityPersistence
 
 	@Inject private WorkflowPersistence workflowPersistence;
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
-	@Inject private RuntimeDataService runtimeDataService;
 	
 	@Override
 	public WorkflowProcessLog readByWorkflowByProcessCode(Workflow workflow, String processCode) {
@@ -64,7 +62,7 @@ public class WorkflowProcessLogPersistenceImpl extends AbstractEntityPersistence
 			for(ProcessInstanceLog index : processInstanceLogs){
 				ProcessInstanceDesc processInstanceDesc = runtimeDataService.getProcessInstanceById(index.getProcessInstanceId());
 				WorkflowProcessLog workflowProcessLog = new WorkflowProcessLog().setWorkflowProcess(new WorkflowProcess().setCode(StringUtils.substringAfter(processInstanceDesc.getCorrelationKey(),":")).setWorkflow(workflow)
-						.setProcessInstanceDesc(processInstanceDesc)).setJbpmProcessInstanceLog(index);
+						).setJbpmProcessInstanceLog(index);
 				workflowProcessLogs.add(workflowProcessLog);
 			}
 		}

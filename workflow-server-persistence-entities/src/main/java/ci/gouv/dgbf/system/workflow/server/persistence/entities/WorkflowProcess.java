@@ -1,22 +1,45 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
-import org.kie.api.runtime.process.ProcessInstance;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class WorkflowProcess extends AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	private String code;
+	private String workflowCode;
+	private Integer state;
+	
+	private Date startDate,endDate;
+	private Long duration;
+	
+	private Date lastReadDate;
+	private Date lastModificationDate;
+	
 	private Workflow workflow;
 	
-	private ProcessInstance processInstance;
-	private ProcessInstanceDesc processInstanceDesc;
-
+	public WorkflowProcess(Long identifier,String code,String workflowCode,Date startDate,Date endDate,Long duration,Integer state){
+		this.identifier = identifier;
+		this.code = code == null ? null : code.substring(code.indexOf(':')+1);
+		this.workflowCode = workflowCode;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.duration = duration;
+		this.state = state;
+	}
+	
+	/**/
+	
+	public static final String FIELD_WORKFLOW_CODE = "workflowCode";
+	public static final String FIELD_WORKFLOW_STATE = "state";
+	public static final String FIELD_WORKFLOW_START_DATE = "startDate";
 }

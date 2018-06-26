@@ -50,7 +50,6 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractIn
 		Assert.assertNotNull(workflowProcessLogs.get(0).getWorkflowProcess());
 		Assert.assertEquals("PAP001",workflowProcessLogs.get(0).getWorkflowProcess().getCode());
 		Assert.assertNotNull(workflowProcessLogs.get(0).getJbpmProcessInstanceLog());
-		Assert.assertNotNull(workflowProcessLogs.get(0).getWorkflowProcess().getProcessInstanceDesc());
 		
 		Assert.assertEquals("PAP002",workflowProcessLogs.get(1).getWorkflowProcess().getCode());
 	}

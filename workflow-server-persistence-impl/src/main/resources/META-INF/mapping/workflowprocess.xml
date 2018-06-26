@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_0.xsd"
+	version="2.0">
+	
+	<!-- read one -->
+	
+	<named-query name="WorkflowProcess.readByCorrelationKey">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess(
+			info.processInstanceId,log.correlationKey,info.processId,info.startDate,log.end,log.duration,info.state
+			)
+			FROM ProcessInstanceInfo info , ProcessInstanceLog log
+			WHERE info.processInstanceId = log.processInstanceId AND log.correlationKey = :correlationKey
+		</query>
+	</named-query>
+	
+	<!-- read many -->
+	
+	<named-query name="WorkflowProcess.readByProcessId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess(
+			info.processInstanceId,log.correlationKey,info.processId,info.startDate,log.end,log.duration,info.state
+			)
+			FROM ProcessInstanceInfo info , ProcessInstanceLog log
+			WHERE info.processInstanceId = log.processInstanceId AND info.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcess.readAll">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess(
+			info.processInstanceId,log.correlationKey,info.processId,info.startDate,log.end,log.duration,info.state
+			)
+			FROM ProcessInstanceInfo info , ProcessInstanceLog log
+			WHERE info.processInstanceId = log.processInstanceId
+		</query>
+	</named-query>
+
+</entity-mappings>

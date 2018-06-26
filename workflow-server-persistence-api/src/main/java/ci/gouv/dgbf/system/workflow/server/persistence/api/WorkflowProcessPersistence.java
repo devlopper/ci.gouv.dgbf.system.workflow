@@ -16,4 +16,6 @@ public interface WorkflowProcessPersistence extends EntityPersistence<WorkflowPr
 	WorkflowProcess readByWorkflowByCode(Workflow workflow,String code);
 	WorkflowProcess readByWorkflowCodeByCode(String workflowCode,String code);
 	
+	WorkflowProcess instanciateByJbpmProcessInstanceIdentifier(Long jbpmProcessInstanceIdentifier,Workflow workflow);
+	WorkflowProcess instanciateByJbpmProcessInstanceIdentifier(Long jbpmProcessInstanceIdentifier);
 }
