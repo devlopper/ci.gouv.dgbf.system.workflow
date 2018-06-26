@@ -49,7 +49,7 @@ public class WorkflowProcessLogPersistenceImpl extends AbstractEntityPersistence
 
 	@Override
 	public Collection<WorkflowProcessLog> readByWorkflow(Workflow workflow) {
-		String identifier = businessProcessModelNotationHelper.getIdentifier(workflow.getModelAsBpmn());
+		String identifier = businessProcessModelNotationHelper.getIdentifier(workflow.getModel());
 		//RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
 		//RuntimeEngine runtimeEngine = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get());
 		//KieSession session = runtimeEngine.getKieSession();

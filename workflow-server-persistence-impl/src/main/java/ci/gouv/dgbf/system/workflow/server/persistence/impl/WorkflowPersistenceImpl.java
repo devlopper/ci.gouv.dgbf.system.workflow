@@ -64,7 +64,7 @@ public class WorkflowPersistenceImpl extends AbstractEntityPersistenceImpl<Workf
 	/**/
 	
 	private void buildProcessDefinition(Workflow workflow){
-		workflow.setJbpmProcessDefinition(definitionService.buildProcessDefinition("MYDEP", workflow.getModelAsBpmn(), null, Boolean.FALSE));
+		workflow.setJbpmProcessDefinition(definitionService.buildProcessDefinition("MYDEP", workflow.getModel(), null, Boolean.FALSE));
 	}
 
 }

@@ -24,8 +24,8 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractIn
 	@Test
 	public void createWorkflowProcess() throws Exception{
 		userTransaction.begin();
-		workflowPersistence.create(new Workflow().setCode("VPAP").setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
-		workflowPersistence.create(new Workflow().setCode("VPAP01").setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
+		workflowPersistence.create(new Workflow().setCode("VPAP").setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		workflowPersistence.create(new Workflow().setCode("VPAP01").setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
 		userTransaction.commit();
 		
 		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("VPAP")).setCode("PAP001"));

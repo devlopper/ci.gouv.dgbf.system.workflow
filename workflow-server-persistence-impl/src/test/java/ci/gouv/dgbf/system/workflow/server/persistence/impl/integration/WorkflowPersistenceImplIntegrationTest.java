@@ -14,8 +14,8 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractIntegrationT
 	
 	@Test
 	public void createWorkflow() throws Exception{
-		Workflow workflow = new Workflow().setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2");
-		Assert.assertNotNull(workflow.getModelAsBpmn());
+		Workflow workflow = new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2");
+		Assert.assertNotNull(workflow.getModel());
 		Assert.assertNull(workflow.getIdentifier());
 		Assert.assertEquals(new Long(0), workflowPersistence.countAll());
 		userTransaction.begin();
@@ -38,14 +38,14 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractIntegrationT
 	@Test
 	public void readWorkflowByCode() throws Exception{
 		userTransaction.begin();
-		workflowPersistence.create(new Workflow().setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
 		userTransaction.commit();
 		Workflow workflow = workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap");
 		Assert.assertNotNull(workflow);
 		Assert.assertNotNull(workflow.getIdentifier());
 		Assert.assertNotNull(workflow.getJbpmProcessDefinition());
 		Assert.assertEquals("ci.gouv.dgbf.workflow.validation.pap", workflow.getCode());
-		Assert.assertNotNull(workflow.getModelAsBpmn());
+		Assert.assertNotNull(workflow.getModel());
 		
 		/* cleaning */
 		userTransaction.begin();
@@ -56,12 +56,12 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractIntegrationT
 	@Test
 	public void updateWorkflow() throws Exception{
 		userTransaction.begin();
-		workflowPersistence.create(new Workflow().setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
 		userTransaction.commit();
 		Workflow workflow = workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap");
 		Assert.assertEquals("Validation du PAP", workflow.getName());
 		
-		workflow.setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2");
+		workflow.setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2");
 		userTransaction.begin();
 		workflowPersistence.update(workflow);
 		userTransaction.commit();
@@ -79,7 +79,7 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractIntegrationT
 	public void deleteWorkflowByCode() throws Exception{
 		Assert.assertEquals(new Long(0), workflowPersistence.countAll());
 		userTransaction.begin();
-		workflowPersistence.create(new Workflow().setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
 		userTransaction.commit();
 		
 		Assert.assertEquals(new Long(1), workflowPersistence.countAll());

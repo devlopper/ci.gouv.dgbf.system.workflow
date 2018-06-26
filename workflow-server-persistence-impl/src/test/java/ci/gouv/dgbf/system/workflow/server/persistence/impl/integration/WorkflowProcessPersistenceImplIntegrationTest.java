@@ -22,50 +22,48 @@ public class WorkflowProcessPersistenceImplIntegrationTest extends AbstractInteg
 	@Test @InSequence(1)
 	public void createWorkflowProcess() throws Exception{
 		userTransaction.begin();
-		workflowPersistence.create(new Workflow().setCode("VPAP").setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
-		workflowPersistence.create(new Workflow().setCode("VPAP01").setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
+		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
 		userTransaction.commit();
 		
-		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001"));
-		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP002"));
-		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP01", "PAP001"));
-		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("VPAP"));
-		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("VPAP01"));
+		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001"));
+		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP002"));
+		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap.v01", "PAP001"));
+		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 		
-		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("VPAP")).setCode("PAP001"));
+		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap")).setCode("PAP001"));
 		
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001"));
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001").getWorkflow());
-		Assert.assertEquals("PAP001", workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001").getCode());
-		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP002"));
-		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP01", "PAP001"));
-		Assert.assertEquals(new Long(1), workflowProcessPersistence.countByWorkflowCode("VPAP"));
-		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("VPAP01"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001").getWorkflow());
+		Assert.assertEquals("ci.gouv.dgbf.workflow.validation.pap", workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001").getWorkflow().getCode());
+		Assert.assertEquals("PAP001", workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001").getCode());
+		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP002"));
+		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap.v01", "PAP001"));
+		Assert.assertEquals(new Long(1), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 		
-		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("VPAP")).setCode("PAP002"));
+		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap")).setCode("PAP002"));
 		
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001"));
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP002"));
-		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP01", "PAP001"));
-		Assert.assertEquals(new Long(2), workflowProcessPersistence.countByWorkflowCode("VPAP"));
-		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("VPAP01"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP002"));
+		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap.v01", "PAP001"));
+		Assert.assertEquals(new Long(2), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 		
-		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("VPAP01")).setCode("PAP001"));
+		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap.v01")).setCode("PAP001"));
 		
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP001"));
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP", "PAP002"));
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP01", "PAP001"));
-		Assert.assertEquals(new Long(2), workflowProcessPersistence.countByWorkflowCode("VPAP"));
-		Assert.assertEquals(new Long(1), workflowProcessPersistence.countByWorkflowCode("VPAP01"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP002"));
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap.v01", "PAP001"));
+		Assert.assertEquals(new Long(2), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		Assert.assertEquals(new Long(1), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 		
-		List<WorkflowProcess> workflowProcesses = new ArrayList<>(workflowProcessPersistence.readByWorkflowCode("VPAP"));
+		List<WorkflowProcess> workflowProcesses = new ArrayList<>(workflowProcessPersistence.readByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(2, workflowProcesses.size());
 		Assert.assertNotNull(workflowProcesses.get(0).getWorkflow());
+		Assert.assertEquals("ci.gouv.dgbf.workflow.validation.pap", workflowProcesses.get(0).getWorkflow().getCode());
 		Assert.assertEquals("PAP001", workflowProcesses.get(0).getCode());
-		
-		for(WorkflowProcess index : workflowProcessPersistence.readAll()){
-			System.out.println("WorkflowProcessPersistenceImplIntegrationTest.createWorkflowProcess() : "+index);
-		}
 	}
 	
 }

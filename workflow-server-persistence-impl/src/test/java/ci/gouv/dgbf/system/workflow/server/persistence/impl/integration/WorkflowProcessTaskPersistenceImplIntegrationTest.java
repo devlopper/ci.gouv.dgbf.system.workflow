@@ -20,8 +20,8 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractI
 	@Test
 	public void readByWorkflowByUserIdentifier() throws Exception{
 		userTransaction.begin();
-		workflowPersistence.create(new Workflow().setCode("VPAP").setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
-		workflowPersistence.create(new Workflow().setCode("VPAP01").setModelAsBpmnFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
+		workflowPersistence.create(new Workflow().setCode("VPAP").setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		workflowPersistence.create(new Workflow().setCode("VPAP01").setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
 		userTransaction.commit();
 		
 		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowPersistence.readByCode("VPAP")));

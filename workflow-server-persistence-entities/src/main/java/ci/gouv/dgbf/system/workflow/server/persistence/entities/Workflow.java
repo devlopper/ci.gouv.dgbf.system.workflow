@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -21,23 +20,25 @@ import lombok.experimental.Accessors;
 public class Workflow extends AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Code of the workflow. This code must be equals to the one defined in the model
+	 */
 	@Column(nullable=false,unique=true)
 	@NotNull
 	private String code;
 	
-	@Lob
-	@Column(nullable=false)
+	@Column(nullable=false,length=1024 * 100)
 	@NotNull
-	private String modelAsBpmn;
+	private String model;
 	
 	@Transient
 	private ProcessDefinition jbpmProcessDefinition;
 	
 	/**/
 	
-	public Workflow setModelAsBpmnFromResourceAsStream(String name){
+	public Workflow setModelFromResourceAsStream(String name){
 		try {
-			setModelAsBpmn(new String(IOUtils.toByteArray(getClass().getResourceAsStream(name))));
+			setModel(new String(IOUtils.toByteArray(getClass().getResourceAsStream(name))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

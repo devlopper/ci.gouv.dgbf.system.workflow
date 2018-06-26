@@ -9,10 +9,10 @@
 	<named-query name="WorkflowProcess.readByCorrelationKey">
 		<query>
 			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess(
-			info.processInstanceId,log.correlationKey,info.processId,info.startDate,log.end,log.duration,info.state
+			info.processInstanceId,log.correlationKey,info.processId,workflow.model,info.startDate,log.end,log.duration,info.state
 			)
-			FROM ProcessInstanceInfo info , ProcessInstanceLog log
-			WHERE info.processInstanceId = log.processInstanceId AND log.correlationKey = :correlationKey
+			FROM ProcessInstanceInfo info , ProcessInstanceLog log , Workflow workflow
+			WHERE info.processInstanceId = log.processInstanceId AND info.processId = workflow.code AND log.processId = workflow.code AND log.correlationKey = :correlationKey
 		</query>
 	</named-query>
 	
@@ -21,20 +21,20 @@
 	<named-query name="WorkflowProcess.readByProcessId">
 		<query>
 			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess(
-			info.processInstanceId,log.correlationKey,info.processId,info.startDate,log.end,log.duration,info.state
+			info.processInstanceId,log.correlationKey,info.processId,workflow.model,info.startDate,log.end,log.duration,info.state
 			)
-			FROM ProcessInstanceInfo info , ProcessInstanceLog log
-			WHERE info.processInstanceId = log.processInstanceId AND info.processId = :processId
+			FROM ProcessInstanceInfo info , ProcessInstanceLog log , Workflow workflow
+			WHERE info.processInstanceId = log.processInstanceId AND info.processId = workflow.code AND log.processId = workflow.code AND info.processId = :processId
 		</query>
 	</named-query>
 	
 	<named-query name="WorkflowProcess.readAll">
 		<query>
 			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess(
-			info.processInstanceId,log.correlationKey,info.processId,info.startDate,log.end,log.duration,info.state
+			info.processInstanceId,log.correlationKey,info.processId,workflow.model,info.startDate,log.end,log.duration,info.state
 			)
-			FROM ProcessInstanceInfo info , ProcessInstanceLog log
-			WHERE info.processInstanceId = log.processInstanceId
+			FROM ProcessInstanceInfo info , ProcessInstanceLog log , Workflow workflow
+			WHERE info.processInstanceId = log.processInstanceId AND info.processId = workflow.code AND log.processId = workflow.code
 		</query>
 	</named-query>
 

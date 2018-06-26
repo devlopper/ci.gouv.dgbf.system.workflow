@@ -86,7 +86,7 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractEntityPersistenc
 	/**/
 	
 	private List<TaskSummary> getTaskSummaries(Workflow workflow,String userIdentifier){
-		String workflowIdentifier = businessProcessModelNotationHelper.getIdentifier(workflow.getModelAsBpmn());
+		String workflowIdentifier = businessProcessModelNotationHelper.getIdentifier(workflow.getModel());
 		List<TaskSummary> taskSummaries = persistenceHelper.getRuntimeEngine().getTaskService().getTasksAssignedAsPotentialOwnerByProcessId(userIdentifier, workflowIdentifier);
 		/*if(taskSummaries!=null){
 			//workflowProcess.setProcessInstanceLog(persistenceHelper.getRuntimeEngine().getAuditService().findp);
@@ -102,7 +102,7 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractEntityPersistenc
 	}
 	
 	private List<TaskSummary> getTaskSummaries(WorkflowProcess workflowProcess,String userIdentifier){
-		String workflowIdentifier = businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModelAsBpmn());
+		String workflowIdentifier = businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModel());
 		List<TaskSummary> taskSummaries = persistenceHelper.getRuntimeEngine().getTaskService().getTasksAssignedAsPotentialOwnerByProcessId(userIdentifier, workflowIdentifier);
 		/*if(taskSummaries!=null){
 			//workflowProcess.setProcessInstanceLog(persistenceHelper.getRuntimeEngine().getAuditService().findp);

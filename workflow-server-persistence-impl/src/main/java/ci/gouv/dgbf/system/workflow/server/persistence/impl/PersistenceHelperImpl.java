@@ -96,7 +96,7 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	public PersistenceHelper buildKieBase() {
 		/*KieHelper kieHelper = new KieHelper();
 		for(Workflow index : CDI.current().select(WorkflowPersistence.class).get().readAll())
-			kieHelper.addResource(ResourceFactory.newByteArrayResource(index.getModelAsBpmn().getBytes()));
+			kieHelper.addResource(ResourceFactory.newByteArrayResource(index.getModel().getBytes()));
 		if(kieBaseResourceByClassPath!=null)
 			for(String index : kieBaseResourceByClassPath)
 				kieHelper.addResource(ResourceFactory.newClassPathResource(index));
@@ -209,7 +209,7 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 		if(workflows!=null && !workflows.isEmpty()){
 			Collection<byte[]> bytes = new ArrayList<>();	
 			for(Workflow index : workflows)
-				bytes.add(index.getModelAsBpmn().getBytes());
+				bytes.add(index.getModel().getBytes());
 			addProcessDefinitions(bytes);
 		}
 		return this;
