@@ -20,6 +20,14 @@ import lombok.experimental.Accessors;
 public class Workflow extends AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Column(nullable=false,length=1024 * 100)
+	@NotNull
+	private String model;
+	
+	/*
+	 * Following read only value from model
+	 */
+	
 	/**
 	 * Code of the workflow. This code must be equals to the one defined in the model
 	 */
@@ -27,10 +35,16 @@ public class Workflow extends AbstractEntity implements Serializable {
 	@NotNull
 	private String code;
 	
-	@Column(nullable=false,length=1024 * 100)
+	/**
+	 * Name of the workflow. This name must be equals to the one defined in the model
+	 */
+	@Column(nullable=false)
 	@NotNull
-	private String model;
+	private String name;
 	
+	/**
+	 * This is a helper object to read attributes
+	 */
 	@Transient
 	private ProcessDefinition jbpmProcessDefinition;
 	
@@ -43,12 +57,6 @@ public class Workflow extends AbstractEntity implements Serializable {
 			e.printStackTrace();
 		}
 		return this;
-	}
-	
-	public String getName(){
-		if(jbpmProcessDefinition == null)
-			return null;
-		return jbpmProcessDefinition.getName();
 	}
 	
 }

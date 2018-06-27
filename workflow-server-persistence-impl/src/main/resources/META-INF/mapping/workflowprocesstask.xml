@@ -3,7 +3,27 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_0.xsd"
 	version="2.0">
-
-
-
+	
+	<!-- read one -->
+		
+	<!-- read many -->
+	
+	<named-query name="WorkflowProcessTask.readAll">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask(
+			task.id,task.name,task.taskData.actualOwner.id,task.taskData.status
+			)
+			FROM TaskImpl task
+		</query>
+	</named-query>
+	
+	<!-- count -->
+	
+	<named-query name="WorkflowProcessTask.countAll">
+		<query>
+			SELECT COUNT(task)
+			FROM TaskImpl task
+		</query>
+	</named-query>
+	
 </entity-mappings>

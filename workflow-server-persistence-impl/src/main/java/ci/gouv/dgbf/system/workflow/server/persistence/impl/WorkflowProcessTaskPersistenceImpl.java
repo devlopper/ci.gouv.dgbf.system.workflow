@@ -29,7 +29,7 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractEntityPersistenc
 			workflowProcessTasks = new ArrayList<>();
 			for(Long index : identifiers){
 				UserTaskInstanceDesc userTaskInstanceDesc = runtimeDataService.getTaskById(index);
-				WorkflowProcessTask workflowProcessTask = new WorkflowProcessTask().setJbpmUserTaskInstanceDesc(userTaskInstanceDesc);
+				WorkflowProcessTask workflowProcessTask = new WorkflowProcessTask();
 				workflowProcessTasks.add(workflowProcessTask);
 			}
 		}
@@ -57,7 +57,7 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractEntityPersistenc
 		List<TaskSummary> taskSummaries = getTaskSummaries(workflowProcess, userIdentifier);
 		Collection<WorkflowProcessTask> workflowProcessTasks = new ArrayList<>();
 		for(TaskSummary index : taskSummaries)
-			workflowProcessTasks.add(new WorkflowProcessTask().setJbpmUserTaskInstanceDesc(null));
+			workflowProcessTasks.add(new WorkflowProcessTask());
 		return workflowProcessTasks;
 	}
 	

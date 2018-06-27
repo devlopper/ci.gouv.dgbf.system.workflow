@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jbpm.services.api.DefinitionService;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.EntityPersistence;
@@ -21,8 +20,8 @@ public class WorkflowPersistenceImpl extends AbstractEntityPersistenceImpl<Workf
 	public WorkflowPersistence create(Workflow workflow) {
 		if(workflow.getJbpmProcessDefinition() == null)
 			buildProcessDefinition(workflow);
-		if(StringUtils.isBlank(workflow.getCode()))
-			workflow.setCode(workflow.getJbpmProcessDefinition().getId());
+		workflow.setCode(workflow.getJbpmProcessDefinition().getId());
+		workflow.setName(workflow.getJbpmProcessDefinition().getName());
 		super.create(workflow);
 		persistenceHelper.addProcessDefinitionsFromWorkflow(workflow);
 		return this;
@@ -47,8 +46,9 @@ public class WorkflowPersistenceImpl extends AbstractEntityPersistenceImpl<Workf
 	public EntityPersistence<Workflow> update(Workflow workflow) {
 		if(workflow.getJbpmProcessDefinition() == null)
 			buildProcessDefinition(workflow);
-		if(StringUtils.isBlank(workflow.getCode()))
-			workflow.setCode(workflow.getJbpmProcessDefinition().getId());
+		workflow.setCode(workflow.getJbpmProcessDefinition().getId());
+		workflow.setName(workflow.getJbpmProcessDefinition().getName());
+		System.out.println("WorkflowPersistenceImpl.update() : "+workflow.getName());
 		super.update(workflow);
 		//TODO we should update the bytes
 		//persistenceHelper.addProcessDefinitionsFromWorkflow(workflow);

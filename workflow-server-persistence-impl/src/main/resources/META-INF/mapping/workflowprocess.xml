@@ -37,5 +37,22 @@
 			WHERE info.processInstanceId = log.processInstanceId AND info.processId = workflow.code AND log.processId = workflow.code
 		</query>
 	</named-query>
-
+	
+	<!-- count -->
+	
+	<named-query name="WorkflowProcess.countByProcessId">
+		<query>
+			SELECT COUNT(info)
+			FROM ProcessInstanceInfo info
+			WHERE info.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcess.countAll">
+		<query>
+			SELECT COUNT(info)
+			FROM ProcessInstanceInfo info
+		</query>
+	</named-query>
+	
 </entity-mappings>

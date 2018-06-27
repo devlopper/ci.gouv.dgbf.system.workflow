@@ -35,6 +35,10 @@ public class WorkflowProcess extends AbstractEntity implements Serializable {
 		this.state = state;
 	}
 	
+	public WorkflowProcess(Long identifier){
+		this.identifier = identifier;
+	}
+	
 	/**/
 	
 	public static final String FIELD_WORKFLOW_STATE = "state";
