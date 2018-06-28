@@ -26,33 +26,48 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractI
 		userTransaction.commit();
 		
 		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap")));
-		
+		/*
 		for(WorkflowProcessTask task : workflowProcessTaskPersistence.readAll())
 			System.out.println(task);
-		
-		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
-		
-		/*
-		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("VPAP","PAP001", "charge_etude"));
-		Assert.assertEquals(null, workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("VPAP01","PAP001", "charge_etude"));
-		
-		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP002").setWorkflow(workflowPersistence.readByCode("VPAP")));
-		
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP","PAP002"));
-		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("VPAP","PAP002", "charge_etude"));
-		Assert.assertEquals(null, workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("VPAP01","PAP001", "charge_etude"));
-		
-		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP003").setWorkflow(workflowPersistence.readByCode("VPAP")));
-		
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP","PAP003"));
-		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("VPAP","PAP003", "charge_etude"));
-		Assert.assertEquals(null, workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("VPAP01","PAP001", "charge_etude"));
-		
-		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowPersistence.readByCode("VPAP01")));
-		
-		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("VPAP","PAP003"));
-		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("VPAP01","PAP001", "charge_etude"));
 		*/
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","pas_charge_etude"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","pas_charge_etude"));
+		
+		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP002").setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap")));
+		
+		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP002"));
+		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","pas_charge_etude"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP002","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP002","pas_charge_etude"));
+		
+		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap.v01")));
+		
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap.v01","PAP001"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap.v01","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap.v01","pas_charge_etude"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap.v01","PAP001","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap.v01","PAP001","pas_charge_etude"));
+		
+		WorkflowProcessTask workflowProcessTask = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","charge_etude").iterator().next();
+		
+		//persistenceHelper.buildRuntimeEnvironment();
+		persistenceHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "charge_etude");
+		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "charge_etude", null);
+		
+		Assert.assertEquals(new Long(3), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
+		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","pas_charge_etude"));
+		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","charge_etude"));
+		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","pas_charge_etude"));
+		
 	}
 	
 }

@@ -119,7 +119,7 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	
 	@Override
 	public PersistenceHelper buildRuntimeEnvironment() {
-		RuntimeEnvironmentBuilder runtimeEnvironmentBuilder = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder().entityManagerFactory(entityManagerFactory)
+		RuntimeEnvironmentBuilder runtimeEnvironmentBuilder = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder().entityManagerFactory(getEntityManagerFactory())
 				.knowledgeBase(getKieBase()).userGroupCallback(getUserGroupCallback());
 		if(processDefinitions!=null)
 			for(byte[] index : processDefinitions){

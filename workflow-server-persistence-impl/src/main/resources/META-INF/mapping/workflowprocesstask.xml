@@ -11,9 +11,49 @@
 	<named-query name="WorkflowProcessTask.readAll">
 		<query>
 			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask(
-			task.id,task.name,task.taskData.actualOwner.id,task.taskData.status
+			task.id,task.name,task.taskData
 			)
 			FROM TaskImpl task
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.readByProcessId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask(
+			task.id,task.name,task.taskData
+			)
+			FROM TaskImpl task
+			WHERE task.taskData.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.readByProcessInstanceId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask(
+			task.id,task.name,task.taskData
+			)
+			FROM TaskImpl task
+			WHERE task.taskData.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.readByProcessIdByActualOwnerId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask(
+			task.id,task.name,task.taskData
+			)
+			FROM TaskImpl task
+			WHERE task.taskData.processId = :processId AND task.taskData.actualOwner.id = :actualOwnerId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.readByProcessInstanceIdByActualOwnerId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask(
+			task.id,task.name,task.taskData
+			)
+			FROM TaskImpl task
+			WHERE task.taskData.processInstanceId = :processInstanceId AND task.taskData.actualOwner.id = :actualOwnerId
 		</query>
 	</named-query>
 	
@@ -23,6 +63,38 @@
 		<query>
 			SELECT COUNT(task)
 			FROM TaskImpl task
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.countByProcessId">
+		<query>
+			SELECT COUNT(task)
+			FROM TaskImpl task
+			WHERE task.taskData.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.countByProcessInstanceId">
+		<query>
+			SELECT COUNT(task)
+			FROM TaskImpl task
+			WHERE task.taskData.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.countByProcessIdByActualOwnerId">
+		<query>
+			SELECT COUNT(task)
+			FROM TaskImpl task
+			WHERE task.taskData.processId = :processId AND task.taskData.actualOwner.id = :actualOwnerId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.countByProcessInstanceIdByActualOwnerId">
+		<query>
+			SELECT COUNT(task)
+			FROM TaskImpl task
+			WHERE task.taskData.processInstanceId = :processInstanceId AND task.taskData.actualOwner.id = :actualOwnerId
 		</query>
 	</named-query>
 	

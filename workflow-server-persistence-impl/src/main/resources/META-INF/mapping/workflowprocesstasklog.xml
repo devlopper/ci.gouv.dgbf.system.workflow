@@ -4,6 +4,62 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_0.xsd"
 	version="2.0">
 
-
+	<!-- read one -->
+		
+	<!-- read many -->
+	
+	<named-query name="WorkflowProcessTaskLog.readAll">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog(
+			taskLog.id,taskLog.name,taskLog.actualOwner,taskLog.status
+			)
+			FROM AuditTaskImpl taskLog
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskLog.readByProcessId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog(
+			taskLog.id,taskLog.name,taskLog.actualOwner,taskLog.status
+			)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskLog.readByProcessInstanceId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog(
+			taskLog.id,taskLog.name,taskLog.actualOwner,taskLog.status
+			)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+	
+	<!-- count -->
+	
+	<named-query name="WorkflowProcessTaskLog.countAll">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM AuditTaskImpl taskLog
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskLog.countByProcessId">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskLog.countByProcessInstanceId">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
 
 </entity-mappings>
