@@ -27,6 +27,7 @@ import org.kie.api.runtime.manager.RuntimeEnvironment;
 import org.kie.api.runtime.manager.RuntimeEnvironmentBuilder;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.runtime.manager.RuntimeManagerFactory;
+import org.kie.api.task.TaskService;
 import org.kie.api.task.UserGroupCallback;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
@@ -155,6 +156,11 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	@Override
 	public RuntimeEngine getRuntimeEngine() {
 		return getRuntimeManager().getRuntimeEngine(ProcessInstanceIdContext.get());
+	}
+	
+	@Override
+	public TaskService getTaskService() {
+		return getRuntimeEngine().getTaskService();
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeEnvironment;
 import org.kie.api.runtime.manager.RuntimeManager;
+import org.kie.api.task.TaskService;
 import org.kie.api.task.UserGroupCallback;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
@@ -36,6 +37,7 @@ public interface PersistenceHelper {
 	PersistenceHelper closeRuntimeManager();
 	
 	RuntimeEngine getRuntimeEngine();
+	TaskService getTaskService();
 	KieSession getKieSession();
 	
 	PersistenceHelper initialise();

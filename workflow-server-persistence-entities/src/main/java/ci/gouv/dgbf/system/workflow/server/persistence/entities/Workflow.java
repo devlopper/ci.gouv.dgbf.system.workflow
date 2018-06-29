@@ -59,4 +59,9 @@ public class Workflow extends AbstractEntity implements Serializable {
 		return this;
 	}
 	
+	@Override
+	public Workflow setIdentifier(Long identifier) {
+		return (Workflow) super.setIdentifier(identifier);
+	}
+	
 }

@@ -8,17 +8,13 @@ import org.junit.Test;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskLogPersistence;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
-import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
-import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog;
 
 public class WorkflowProcessTaskLogPersistenceImplIntegrationTest extends AbstractIntegrationTest {
 
 	@Inject private WorkflowPersistence workflowPersistence;
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
-	@Inject private WorkflowProcessTaskPersistence workflowProcessTaskPersistence;
 	@Inject private WorkflowProcessTaskLogPersistence workflowProcessTaskLogPersistence;	
 	
 	@Test
@@ -29,14 +25,6 @@ public class WorkflowProcessTaskLogPersistenceImplIntegrationTest extends Abstra
 		userTransaction.commit();
 		
 		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap")));
-		/*
-		System.out.println("TASKS");
-		for(WorkflowProcessTask index : workflowProcessTaskPersistence.readAll())
-			System.out.println(index);
-		System.out.println("LOGS");
-		for(WorkflowProcessTaskLog index : workflowProcessTaskLogPersistence.readAll())
-			System.out.println(index);
-		*/
 		
 		Assert.assertEquals(new Long(1), workflowProcessTaskLogPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskLogPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
