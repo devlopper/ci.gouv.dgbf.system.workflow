@@ -39,15 +39,26 @@ public abstract class AbstractEntityBusinessImpl<ENTITY extends AbstractEntity> 
 		return getPersistence().readAll();
 	}
 	
-	@Override
+	@Override @Transactional
 	public EntityBusiness<ENTITY> update(ENTITY entity) {
 		getPersistence().update(entity);
 		return this;
 	}
 	
-	@Override
+	@Override @Transactional
 	public EntityBusiness<ENTITY> delete(ENTITY entity) {
 		getPersistence().delete(entity);
+		return this;
+	}
+	
+	@Override @Transactional
+	public EntityBusiness<ENTITY> deleteByIdentifier(Long identifier) {
+		ENTITY entity = getPersistence().read(identifier);
+		if(entity == null){
+			//TODO throw an exception
+		}else{
+			delete(entity);	
+		}
 		return this;
 	}
 	

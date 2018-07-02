@@ -18,7 +18,9 @@ public interface EntityBusiness<ENTITY extends AbstractEntity> extends Business 
 	
 	/* Delete */
 	EntityBusiness<ENTITY> delete(ENTITY entity);
+	EntityBusiness<ENTITY> deleteByIdentifier(Long identifier);
 	
 	/* Count */
 	Long countAll();
+
 }

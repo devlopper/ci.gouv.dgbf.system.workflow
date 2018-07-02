@@ -6,7 +6,7 @@ import org.mapstruct.factory.Mappers;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 
 @Mapper
-public interface WorkflowEntityMapper {
+public interface WorkflowEntityMapper extends EntityMapper<Workflow,WorkflowDto> {
 
     WorkflowEntityMapper INSTANCE = Mappers.getMapper(WorkflowEntityMapper.class);
 

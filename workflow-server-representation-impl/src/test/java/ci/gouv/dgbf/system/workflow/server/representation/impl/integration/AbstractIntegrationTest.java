@@ -1,26 +1,44 @@
 package ci.gouv.dgbf.system.workflow.server.representation.impl.integration;
 
+import java.net.URL;
 import java.util.Properties;
+
+import javax.ws.rs.core.UriBuilder;
 
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Arquillian.class)
 public abstract class AbstractIntegrationTest {
 
-	//@Inject protected PersistenceHelper persistenceHelper;
+	/* Global variable */
+	protected static Boolean __INITIALISED__;
+	protected static ResteasyClient CLIENT;
+	protected static ResteasyWebTarget TARGET;
+	protected static Long IDENTIFIER;
+	
 	@Drone protected WebDriver browser;
+	@ArquillianResource protected URL contextPath;
 	
 	/* Configuration */
 	
-	//@Before
+	@Before
 	public void listenBefore(){
 		__listenBefore__();
+		if(__INITIALISED__ == null){
+			__initialise__();
+			__INITIALISED__ = Boolean.TRUE;
+		}
 	}
 	
 	protected void __listenBefore__(){
@@ -39,6 +57,11 @@ public abstract class AbstractIntegrationTest {
 	
 	protected Boolean isAddProcessDefinitionFromClassPathOnListenBefore(){
 		return Boolean.FALSE;
+	}
+	
+	protected void __initialise__(){
+		CLIENT = new ResteasyClientBuilder().build();
+		TARGET = CLIENT.target(UriBuilder.fromPath(contextPath.toExternalForm()));
 	}
 	
 	/* Deployment */

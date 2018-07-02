@@ -1,13 +1,10 @@
 package ci.gouv.dgbf.system.workflow.server.representation.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
-import ci.gouv.dgbf.system.workflow.business.api.EntityBusiness;
 import ci.gouv.dgbf.system.workflow.business.api.WorkflowBusiness;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowRepresentation;
@@ -20,31 +17,34 @@ public class WorkflowRepresentationImpl extends AbstractPersistenceEntityReprese
 	@Inject private WorkflowBusiness workflowBusiness;
 	
 	@Override
-	protected EntityBusiness<Workflow> getBusiness() {
-		return workflowBusiness;
-	}
-	
-	@Override
-	public Response createOne(WorkflowDto dto) {
-		workflowBusiness.create(WorkflowEntityMapper.INSTANCE.getPersistenceFromRepresentation(dto));
-		return Response.ok().status(Response.Status.CREATED).build();
+	public WorkflowDto getByIdentifier(Long identifier) {
+		return super.getByIdentifier(identifier);
 	}
 	
 	@Override
 	public WorkflowDto getByCode(String code) {
-		return WorkflowEntityMapper.INSTANCE.getRepresentationFromPersistence(workflowBusiness.findByCode(code));
+		return getEntityMapper().getRepresentationFromPersistence(getBusiness().findByCode(code));
 	}
-
+	
 	@Override
-	public Collection<WorkflowDto> getAll() {
-		Collection<WorkflowDto> collection = new ArrayList<>();
-		for(Workflow index : getBusiness().findAll())
-			collection.add(WorkflowEntityMapper.INSTANCE.getRepresentationFromPersistence(index));
-		return collection;
+	public Response deleteByCode(String code) {
+		getBusiness().deleteByCode(code);
+		return Response.ok().status(Response.Status.OK).build();
 	}
-
+	
+	/**/
+	
 	@Override
-	public Long countAll() {
-		return workflowBusiness.countAll();
+	protected WorkflowBusiness getBusiness() {
+		return workflowBusiness;
 	}
+	
+	@Override
+	protected WorkflowEntityMapper getEntityMapper() {
+		return WorkflowEntityMapper.INSTANCE;
+	}
+	
+	
+	
+	
 }

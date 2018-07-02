@@ -48,7 +48,6 @@ public class WorkflowPersistenceImpl extends AbstractEntityPersistenceImpl<Workf
 			buildProcessDefinition(workflow);
 		workflow.setCode(workflow.getJbpmProcessDefinition().getId());
 		workflow.setName(workflow.getJbpmProcessDefinition().getName());
-		System.out.println("WorkflowPersistenceImpl.update() : "+workflow.getName());
 		super.update(workflow);
 		//TODO we should update the bytes
 		//persistenceHelper.addProcessDefinitionsFromWorkflow(workflow);

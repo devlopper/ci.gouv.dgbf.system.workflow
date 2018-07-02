@@ -1,12 +1,16 @@
 package ci.gouv.dgbf.system.workflow.server.representation.entities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 
 public class WorkflowMapperUnitTest {
-
+	
+	private static Logger LOGGER = LogManager.getLogger(WorkflowMapperUnitTest.class);
+	
 	@Test
 	public void getPersistenceFromRepresentation(){
 		WorkflowDto representation = new WorkflowDto().setIdentifier(1l).setCode("c01").setName("n01").setModel("model01");
@@ -15,6 +19,7 @@ public class WorkflowMapperUnitTest {
 		Assert.assertEquals(representation.getCode(), persistence.getCode());
 		Assert.assertEquals(representation.getName(), persistence.getName());
 		Assert.assertEquals(representation.getModel(), persistence.getModel());
+		LOGGER.info("DONE!!!");
 	}
 	
 	@Test
