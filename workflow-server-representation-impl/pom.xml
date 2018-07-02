@@ -14,18 +14,6 @@
 	<artifactId>workflow-server-representation-impl</artifactId>
 	<packaging>war</packaging>
 	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-bom</artifactId>
-				<version>3.5.1.Final</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-	
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.representation</groupId>
@@ -39,38 +27,27 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs</artifactId>
+			<groupId>org.cyk.pom.jee.server.representation.main.jboss.swarm</groupId>
+			<artifactId>pom-jee-server-representation-main-jboss-swarm</artifactId>
+			<version>0.0.1</version>
+			<type>pom</type>
+			<scope>compile</scope>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>cdi</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jpa</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-client</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxb-provider</artifactId>
+			<groupId>org.cyk.pom.jee.server.representation.test.jboss.swarm</groupId>
+			<artifactId>pom-jee-server-representation-test-jboss-swarm</artifactId>
+			<version>0.0.1</version>
+			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
 		
-		<dependency>
+		<!--dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
-		</dependency>
-				
+		</dependency-->
+					
 	</dependencies>		
 
 </project>
