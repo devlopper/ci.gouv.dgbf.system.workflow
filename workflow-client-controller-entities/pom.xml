@@ -17,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.representation</groupId>
-			<artifactId>workflow-server-representation-entities</artifactId>
+			<artifactId>workflow-server-representation-api</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>		

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<name>Application based on Web</name>
-	
+
 	<parent>
 		<groupId>ci.gouv.dgbf.system.workflow.client</groupId>
 		<artifactId>workflow-client-_pom</artifactId>
@@ -14,12 +15,50 @@
 	<artifactId>workflow-client-application</artifactId>
 	<packaging>war</packaging>
 
+	<!--build>
+		<plugins>
+			<plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>multistart</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>multistart</goal>
+						</goals>
+						<configuration>
+							<processes>
+								<process>
+									<artifactId>my-frontend-app</artifactId>
+								</process>
+								<process>
+									<artifactId>my-auth-app</artifactId>
+									<properties>
+										<swarm.http.port>8081</swarm.http.port>
+									</properties>
+									<mainClass>com.example.auth.Main</mainClass>
+								</process>
+								<process>
+									<artifactId>my-indexing-app</artifactId>
+									<properties>
+										<swarm.http.port>8082</swarm.http.port>
+									</properties>
+								</process>
+							</processes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build-->
+
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.client.controller.impl</groupId>
 			<artifactId>workflow-client-controller-impl</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-	</dependencies>		
+			<version>0.0.1</version>			
+		</dependency>	
+	</dependencies>
 
 </project>

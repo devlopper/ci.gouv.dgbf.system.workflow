@@ -47,55 +47,17 @@
 			<groupId>ci.gouv.dgbf.system.workflow.client.controller.api</groupId>
 			<artifactId>workflow-client-controller-api</artifactId>
 			<version>0.0.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-services-cdi</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-runtime-manager</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-persistence-jpa</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-flow</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-human-task-jpa</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-human-task-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-bpmn2</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>jbpm-flow-builder</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jbpm</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>jaxrs</artifactId>
 		</dependency>
 		
 		<!--dependency>
 			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs</artifactId>
-		</dependency-->
-		
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>cdi</artifactId>
-		</dependency>
+		</dependency-->
 		
 		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
@@ -113,7 +75,12 @@
 			<artifactId>graphene-webdriver</artifactId>
 			<version>${graphene-webdriver.version}</version>
 			<type>pom</type>
-			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>ci.gouv.dgbf.system.workflow.client.controller.impl</groupId>
+			<artifactId>workflow-client-controller-impl</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 		
 	</dependencies>

@@ -20,14 +20,19 @@ public interface PersistenceEntityRepresentation<DTO extends AbstractDto> extend
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createOne(DTO dto);
 
-	@GET
+	/*
+	 * Using generic type makes building response end reading response not working because of type erasure.
+	 * For now , each child will redeclare the method in order to annotate it with its corresponding type.
+	 */
+	
+	/*@GET
 	@Path("/get/identifier/{identifier}")
-	@Produces({ MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_XML })*/
 	DTO getByIdentifier(@PathParam("identifier") Long identifier);
 	
-	@GET
+	/*@GET
 	@Path("/get/all")
-	@Produces({ MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_XML })*/
 	Collection<DTO> getAll();
 
 	@GET

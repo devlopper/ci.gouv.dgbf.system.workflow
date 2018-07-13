@@ -3,7 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
-	<!-- Do use PrettyFaces ONLY for navigation -->
+	<application>
+		<resource-handler>ci.gouv.dgbf.system.workflow.client.controller.impl.ResourceHandler</resource-handler>
+	</application>
+
+	<locale-config>
+		<supported-locale>fr</supported-locale>
+	</locale-config>
 
 	<navigation-rule>
 		<from-view-id>*</from-view-id>

@@ -1,5 +1,7 @@
 package ci.gouv.dgbf.system.workflow.server.representation.api;
 
+import java.util.Collection;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,11 +15,6 @@ import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
 public interface WorkflowRepresentation extends PersistenceEntityRepresentation<WorkflowDto> {
 
 	@GET
-	@Path("/get/identifier/{identifier}")
-	@Produces({ MediaType.APPLICATION_XML })
-	WorkflowDto getByIdentifier(@PathParam("identifier") Long identifier);
-	
-	@GET
 	@Path("/get/code/{code}")
 	@Produces({ MediaType.APPLICATION_XML })
 	WorkflowDto getByCode(@PathParam("code") String code);
@@ -26,6 +23,20 @@ public interface WorkflowRepresentation extends PersistenceEntityRepresentation<
 	@Path("/delete/code/{code}")
 	@Produces({ MediaType.APPLICATION_XML })
 	Response deleteByCode(@PathParam("code") String code);
+	
+	/*
+	 * Redeclarations
+	 */
+	
+	@GET
+	@Path("/get/identifier/{identifier}")
+	@Produces({ MediaType.APPLICATION_XML })
+	WorkflowDto getByIdentifier(@PathParam("identifier") Long identifier);
+	
+	@GET
+	@Path("/get/all")
+	@Produces({ MediaType.APPLICATION_XML })
+	Collection<WorkflowDto> getAll();
 	
 	/**/
 
