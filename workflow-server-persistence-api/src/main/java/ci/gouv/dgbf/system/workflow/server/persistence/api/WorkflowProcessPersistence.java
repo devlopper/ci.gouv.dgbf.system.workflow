@@ -15,5 +15,6 @@ public interface WorkflowProcessPersistence extends EntityPersistence<WorkflowPr
 	
 	WorkflowProcess readByWorkflowByCode(Workflow workflow,String code);
 	WorkflowProcess readByWorkflowCodeByCode(String workflowCode,String code);
+	WorkflowProcessPersistence deleteByWorkflowCodeByCode(String workflowCode, String code);
 	
 }

@@ -18,7 +18,7 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 
 	@Override
 	public WorkflowProcessPersistence create(WorkflowProcess workflowProcess) {
-		String identifier = businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModel());
+		String identifier = workflowProcess.getWorkflow().getCode();// businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModel());
 		((CorrelationAwareProcessRuntime)persistenceHelper.getKieSession()).startProcess(identifier,KieInternalServices.Factory.get().newCorrelationKeyFactory()
 				.newCorrelationKey(Arrays.asList(workflowProcess.getWorkflow().getCode(),workflowProcess.getCode())),null);
 		return this;
@@ -57,10 +57,21 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 	}
 	
 	@Override
+	public Long countAll() {
+		return entityManager.createNamedQuery("WorkflowProcess.countAll", Long.class).getSingleResult();
+	}
+	
+	@Override
 	public WorkflowProcess readByWorkflowByCode(Workflow workflow, String code) {
 		return readByWorkflowCodeByCode(workflow.getCode(), code);
 	}
 
+	@Override
+	public WorkflowProcessPersistence deleteByWorkflowCodeByCode(String workflowCode, String code) {
+		delete(readByWorkflowCodeByCode(workflowCode, code));
+		return this;
+	}
+	
 	/**/
 	
 }

@@ -14,6 +14,17 @@ public class WorkflowProcessBusinessImpl extends AbstractEntityBusinessImpl<Work
 	@Inject private WorkflowProcessPersistence persistence;
 	
 	@Override
+	public WorkflowProcess findByWorkflowCodeByCode(String workflowCode, String code) {
+		return persistence.readByWorkflowCodeByCode(workflowCode, code);
+	}
+	
+	@Override
+	public WorkflowProcessBusiness deleteByWorkflowCodeByCode(String workflowCode, String code) {
+		persistence.deleteByWorkflowCodeByCode(workflowCode,code);
+		return this;
+	}
+	
+	@Override
 	protected Class<WorkflowProcess> __getEntityClass__() {
 		return WorkflowProcess.class;
 	}

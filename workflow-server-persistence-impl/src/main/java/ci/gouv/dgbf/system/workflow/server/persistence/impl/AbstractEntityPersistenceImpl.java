@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Entity;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.EntityPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.AbstractEntity;
@@ -32,7 +33,10 @@ public abstract class AbstractEntityPersistenceImpl<ENTITY extends AbstractEntit
 	
 	@Override
 	public Collection<ENTITY> readAll() {
-		return entityManager.createNamedQuery(entityClass.getSimpleName()+".readAll", entityClass).getResultList();
+		Collection<ENTITY> collection = null;
+		if(entityClass.getAnnotation(Entity.class)!=null)
+			collection = entityManager.createNamedQuery(entityClass.getSimpleName()+".readAll", entityClass).getResultList();
+		return collection;
 	}
 	
 	@Override
@@ -49,7 +53,10 @@ public abstract class AbstractEntityPersistenceImpl<ENTITY extends AbstractEntit
 	
 	@Override
 	public Long countAll() {
-		return entityManager.createQuery("SELECT COUNT(tuple) FROM "+entityClass.getSimpleName()+" tuple", Long.class).getSingleResult();
+		Long count = null;
+		if(entityClass.getAnnotation(Entity.class)!=null)
+			count = entityManager.createQuery("SELECT COUNT(tuple) FROM "+entityClass.getSimpleName()+" tuple", Long.class).getSingleResult();
+		return count;
 	}
 	
 	/**/

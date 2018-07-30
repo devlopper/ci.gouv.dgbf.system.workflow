@@ -29,6 +29,24 @@ public class JaxRsMarshallingUnitTest {
 		System.out.println(dto.getModel());
 	}
 	
+	@Test
+	public void marshallWorkflowProcessDto() throws JAXBException {
+		WorkflowProcessDto dto = new WorkflowProcessDto();
+		dto.setCode("MyCode").setWorkflowCode("MyModel");
+		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowProcessDto.class);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		jaxbMarshaller.marshal(dto, System.out);
+	}
+	
+	@Test
+	public void unmarshallWorkflowProcessDto() throws JAXBException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowProcessDto.class);
+		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+		WorkflowProcessDto dto = (WorkflowProcessDto) unmarshaller.unmarshal(new StringReader(XML_WORKFLOW_PROCESS));
+		System.out.println(dto.getCode());
+	}
+	
 	public static String XML = ""
 			+ " <workflowDto>"
 			+ " <code>C</code>"
@@ -62,4 +80,10 @@ public class JaxRsMarshallingUnitTest {
 			+ " </workflowDto>"
 			+ "";
 
+	public static String XML_WORKFLOW_PROCESS = ""
+			+ " <workflowProcessDto>"
+			+ " <code>C</code>"
+			+ " <workflowCode>N</workflowCode>"
+			+ " </workflowProcessDto>"
+			+ "";
 }

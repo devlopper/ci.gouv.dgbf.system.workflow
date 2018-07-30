@@ -17,20 +17,20 @@ public abstract class AbstractPersistenceEntityRepresentationImpl<ENTITY extends
 
 	@Override
 	public Response createOne(DTO dto) {
-		getBusiness().create(getEntityMapper().getPersistenceFromRepresentation(dto));
+		getBusiness().create(getPersistenceFromRepresentation(dto));
 		return Response.ok().status(Response.Status.CREATED).build();
 	}
 	
 	@Override
 	public DTO getByIdentifier(Long identifier) {
-		return getEntityMapper().getRepresentationFromPersistence(getBusiness().find(identifier));
+		return getRepresentationFromPersistence(getBusiness().find(identifier));
 	}
 
 	@Override
 	public Collection<DTO> getAll() {
 		Collection<DTO> collection = new ArrayList<>();
 		for(ENTITY index : getBusiness().findAll())
-			collection.add(getEntityMapper().getRepresentationFromPersistence(index));
+			collection.add(getRepresentationFromPersistence(index));
 		return collection;
 	}
 
@@ -41,7 +41,7 @@ public abstract class AbstractPersistenceEntityRepresentationImpl<ENTITY extends
 	
 	@Override
 	public Response updateOne(DTO dto) {
-		getBusiness().update(getEntityMapper().getPersistenceFromRepresentation(dto));
+		getBusiness().update(getPersistenceFromRepresentation(dto));
 		return Response.ok().status(Response.Status.OK).build();
 	}
 	
@@ -52,6 +52,14 @@ public abstract class AbstractPersistenceEntityRepresentationImpl<ENTITY extends
 	}
 	
 	/**/
+	
+	protected ENTITY getPersistenceFromRepresentation(DTO dto){
+		return getEntityMapper().getPersistenceFromRepresentation(dto);
+	}
+	
+	protected DTO getRepresentationFromPersistence(ENTITY entity){
+		return getEntityMapper().getRepresentationFromPersistence(entity);
+	}
 	
 	protected abstract EntityBusiness<ENTITY> getBusiness();
 	
