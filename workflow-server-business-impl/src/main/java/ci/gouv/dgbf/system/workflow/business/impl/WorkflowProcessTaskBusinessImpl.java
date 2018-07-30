@@ -43,6 +43,15 @@ public class WorkflowProcessTaskBusinessImpl extends AbstractEntityBusinessImpl<
 		complete(workflowProcessTask, userIdentifier);
 		return this;
 	}
+	
+	@Override
+	public WorkflowProcessTaskBusiness execute(String workflowCode, String workflowProcessCode, String userIdentifier) {
+		Collection<WorkflowProcessTask> workflowProcessTasks = getPersistence().readByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode, workflowProcessCode, userIdentifier);
+		if(workflowProcessTasks!=null)
+			for(WorkflowProcessTask index : workflowProcessTasks)
+				execute(index, userIdentifier);
+		return this;
+	}
 
 	@Override
 	public Collection<WorkflowProcessTask> findByWorkflowCode(String workflowCode) {

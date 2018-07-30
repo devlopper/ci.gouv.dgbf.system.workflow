@@ -52,5 +52,5 @@ public interface WorkflowProcessRepresentation extends PersistenceEntityRepresen
 	
 	/**/
 
-	String PATH = "/workflow/process/";
+	String PATH = "/workflowprocess/";
 }

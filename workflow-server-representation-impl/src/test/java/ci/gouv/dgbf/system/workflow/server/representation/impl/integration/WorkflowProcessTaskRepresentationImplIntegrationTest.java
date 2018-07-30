@@ -13,50 +13,66 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Test;
 
+import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessRepresentation;
+import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessTaskRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
+import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessDto;
 
 public class WorkflowProcessTaskRepresentationImplIntegrationTest extends AbstractIntegrationTest {
 	
+	private static WorkflowProcessTaskRepresentation WORKFLOW_PROCESS_TASK_REPRESENTATION;
+	private static WorkflowProcessRepresentation WORKFLOW_PROCESS_REPRESENTATION;
 	private static WorkflowRepresentation WORKFLOW_REPRESENTATION;
 		
 	@Override
 	protected void __initialise__() {
 		super.__initialise__();
+		WORKFLOW_PROCESS_TASK_REPRESENTATION = TARGET.proxy(WorkflowProcessTaskRepresentation.class);
+		WORKFLOW_PROCESS_REPRESENTATION = TARGET.proxy(WorkflowProcessRepresentation.class);
 		WORKFLOW_REPRESENTATION = TARGET.proxy(WorkflowRepresentation.class);
+		
+		WORKFLOW_REPRESENTATION.createOne(new WorkflowDto().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap001").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap002").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
+		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap001").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 	}
 	
 	@Test @InSequence(1)
-	public void countWorkflowBeforeCreate(){
-		assertThat(WORKFLOW_REPRESENTATION.countAll()).isEqualTo(0);
+	public void countWorkflowProcessTaskBeforeExecute(){
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isEqualTo(2);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEqualTo(0);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countAll()).isEqualTo(2);
 	}
 	
 	@Test @InSequence(2)
-	public void readWorkflowByCodeBeforeCreate(){
-		assertThat(WORKFLOW_REPRESENTATION.getByCode("ci.gouv.dgbf.workflow.validation.pap")).isNull();
+	public void readWorkflowProcessTasksBeforeExecute(){
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isNotEmpty();
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEmpty();
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getAll()).isNotEmpty();
 	}
 	
 	@Test @InSequence(3)
-	public void createWorkflow(){
-		Response response = WORKFLOW_REPRESENTATION.createOne(new WorkflowDto().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
-		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
+	public void executeWorkflowProcessTask(){
+		Response response = WORKFLOW_PROCESS_TASK_REPRESENTATION.execute("ci.gouv.dgbf.workflow.validation.pap","pap001","charge_etude");
+		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 		response.close();
 	}
 	
 	@Test @InSequence(4)
-	public void countWorkflowAfterCreate(){
-		assertThat(WORKFLOW_REPRESENTATION.countAll()).isEqualTo(1);
+	public void countWorkflowProcessTaskAfterExecute(){
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isEqualTo(2);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEqualTo(0);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countAll()).isEqualTo(2);
 	}
 	
 	@Test @InSequence(5)
-	public void readWorkflowByCodeAfterCreate(){
-		WorkflowDto workflowDto = WORKFLOW_REPRESENTATION.getByCode("ci.gouv.dgbf.workflow.validation.pap");
-		assertThat(workflowDto).isNotNull();
-		IDENTIFIER = workflowDto.getIdentifier();
-		assertThat(workflowDto.getCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap");
-		assertThat(workflowDto.getName()).isEqualTo("Validation du PAP");
+	public void readWorkflowProcessTaskAfterExecute(){
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isNotEmpty();
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEmpty();
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getAll()).isNotEmpty();
 	}
-	
+	/*
 	@Test @InSequence(6)
 	public void readWorkflowByIdentifierAfterCreate(){
 		WorkflowDto workflowDto = WORKFLOW_REPRESENTATION.getByIdentifier(IDENTIFIER);
@@ -129,7 +145,7 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 		WorkflowDto dto = new WorkflowDto();
 		dto.setModel(XML)//.setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2")
 			;
-		/*String response = */target.request().post(Entity.entity(XML,MediaType.APPLICATION_XML),String.class);
+		target.request().post(Entity.entity(XML,MediaType.APPLICATION_XML),String.class);
 		//System.out.println("WorkflowProcessTaskRepresentationImplIntegrationTest.createWorkflowByManualPost() : "+response);
 		//assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		//response.close();
@@ -183,4 +199,5 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 			+ "]]></model>"
 			+ " </workflowDto>"
 			+ "";
+	*/
 }

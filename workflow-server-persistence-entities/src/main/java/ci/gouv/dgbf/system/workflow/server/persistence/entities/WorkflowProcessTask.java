@@ -31,7 +31,7 @@ public class WorkflowProcessTask extends AbstractEntity implements Serializable 
 	public WorkflowProcessTask(Long identifier,String name,org.kie.api.task.model.TaskData data){
 		this.identifier = identifier;
 		this.name = name;
-		this.owner = data.getActualOwner().getId();
+		this.owner = data == null ? null : (data.getActualOwner() == null ? null : data.getActualOwner().getId());
 		this.status = data.getStatus();
 	}
 	

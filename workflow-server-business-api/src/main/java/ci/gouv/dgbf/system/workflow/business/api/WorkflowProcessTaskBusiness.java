@@ -11,6 +11,7 @@ public interface WorkflowProcessTaskBusiness extends EntityBusiness<WorkflowProc
 	WorkflowProcessTaskBusiness complete(WorkflowProcessTask workflowProcessTask,String userIdentifier);
 	
 	WorkflowProcessTaskBusiness execute(WorkflowProcessTask workflowProcessTask,String userIdentifier);
+	WorkflowProcessTaskBusiness execute(String workflowCode,String workflowProcessCode,String userIdentifier);
 	
 	Collection<WorkflowProcessTask> findByWorkflowCode(String workflowCode);
 	Long countByWorkflowCode(String workflowCode);

@@ -61,6 +61,13 @@ public abstract class AbstractPersistenceEntityRepresentationImpl<ENTITY extends
 		return getEntityMapper().getRepresentationFromPersistence(entity);
 	}
 	
+	protected Collection<DTO> getRepresentationFromPersistence(Collection<ENTITY> entities){
+		Collection<DTO> collection = new ArrayList<>();
+		for(ENTITY index : entities)
+			collection.add(getRepresentationFromPersistence(index));
+		return collection;
+	}
+	
 	protected abstract EntityBusiness<ENTITY> getBusiness();
 	
 	protected abstract EntityMapper<ENTITY,DTO> getEntityMapper();

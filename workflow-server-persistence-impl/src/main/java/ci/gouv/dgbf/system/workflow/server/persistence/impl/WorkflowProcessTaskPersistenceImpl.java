@@ -80,5 +80,14 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractEntityPersistenc
 	public Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode, String processCode,String userIdentifier) {
 		return countByWorkflowProcessByUserIdentifier(workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode), userIdentifier);
 	}
+
+	@Override
+	public Collection<WorkflowProcessTask> readAll() {
+		return entityManager.createNamedQuery("WorkflowProcessTask.readAll", WorkflowProcessTask.class).getResultList();
+	}
 	
+	@Override
+	public Long countAll() {
+		return entityManager.createNamedQuery("WorkflowProcessTask.countAll", Long.class).getSingleResult();
+	}
 }
