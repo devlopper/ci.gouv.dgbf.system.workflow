@@ -6,11 +6,8 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
-import ci.gouv.dgbf.system.workflow.business.api.WorkflowBusiness;
 import ci.gouv.dgbf.system.workflow.business.api.WorkflowProcessBusiness;
 import ci.gouv.dgbf.system.workflow.business.api.WorkflowProcessTaskBusiness;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessTaskRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessTaskDto;
@@ -20,7 +17,6 @@ public class WorkflowProcessTaskRepresentationImpl extends AbstractPersistenceEn
 	private static final long serialVersionUID = 1L;
 
 	@Inject private WorkflowProcessTaskBusiness business;
-	@Inject private WorkflowBusiness workflowBusiness;
 	@Inject private WorkflowProcessBusiness workflowProcessBusiness;
 	
 	@Override

@@ -2,15 +2,9 @@ package ci.gouv.dgbf.system.workflow.server.representation.impl.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import org.jboss.arquillian.junit.InSequence;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Test;
 
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessRepresentation;
