@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import ci.gouv.dgbf.system.workflow.business.api.WorkflowProcessTaskBusiness;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
@@ -25,26 +26,26 @@ public class WorkflowProcessTaskBusinessImpl extends AbstractEntityBusinessImpl<
 		return persistence;
 	}
 
-	@Override
+	@Override @Transactional
 	public WorkflowProcessTaskBusiness start(WorkflowProcessTask workflowProcessTask, String userIdentifier) {
 		persistenceHelper.getTaskService().start(workflowProcessTask.getIdentifier(), userIdentifier);
 		return this;
 	}
 
-	@Override
+	@Override @Transactional
 	public WorkflowProcessTaskBusiness complete(WorkflowProcessTask workflowProcessTask, String userIdentifier) {
 		persistenceHelper.getTaskService().complete(workflowProcessTask.getIdentifier(), userIdentifier,null);
 		return this;
 	}
 
-	@Override
+	@Override @Transactional
 	public WorkflowProcessTaskBusiness execute(WorkflowProcessTask workflowProcessTask, String userIdentifier) {
 		start(workflowProcessTask, userIdentifier);
 		complete(workflowProcessTask, userIdentifier);
 		return this;
 	}
 	
-	@Override
+	@Override @Transactional
 	public WorkflowProcessTaskBusiness execute(String workflowCode, String workflowProcessCode, String userIdentifier) {
 		Collection<WorkflowProcessTask> workflowProcessTasks = getPersistence().readByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode, workflowProcessCode, userIdentifier);
 		if(workflowProcessTasks!=null)

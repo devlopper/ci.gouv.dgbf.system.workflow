@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
@@ -33,61 +34,39 @@ public class WorkflowProcessLogPersistenceImpl extends AbstractEntityPersistence
 	
 	@Override
 	public WorkflowProcessLog readByWorkflowByProcessCode(Workflow workflow, String processCode) {
-		WorkflowProcessLog workflowProcessLog = null;
-		WorkflowProcess workflowProcess = workflowProcessPersistence.readByWorkflowByCode(workflow, processCode);
-		RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
-		RuntimeEngine runtimeEngine = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get());
-		KieSession session = runtimeEngine.getKieSession();
-		ProcessInstance processInstance = ((CorrelationAwareProcessRuntime)session).getProcessInstance(KieInternalServices.Factory.get().newCorrelationKeyFactory()
-				.newCorrelationKey(Arrays.asList(workflow.getCode(),processCode)));
-		if(processInstance != null){
-			workflowProcessLog = new WorkflowProcessLog().setWorkflowProcess(workflowProcess)
-					.setJbpmProcessInstanceLog(persistenceHelper.getRuntimeEngine().getAuditService().findProcessInstance(processInstance.getId()));
-		}
-		return workflowProcessLog;
+		return readByWorkflowCodeByProcessCode(workflow.getCode(), processCode);
 	}
 
 	@Override
 	public Collection<WorkflowProcessLog> readByWorkflow(Workflow workflow) {
-		String identifier = businessProcessModelNotationHelper.getIdentifier(workflow.getModel());
-		//RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
-		//RuntimeEngine runtimeEngine = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get());
-		//KieSession session = runtimeEngine.getKieSession();
-		//Collection<WorkflowProcess> workflowProcesses = session.get;
-		Collection<WorkflowProcessLog> workflowProcessLogs = null;
-		@SuppressWarnings("unchecked")
-		Collection<ProcessInstanceLog> processInstanceLogs = (Collection<ProcessInstanceLog>) persistenceHelper.getRuntimeEngine().getAuditService().findProcessInstances(identifier);
-		if(processInstanceLogs != null && !processInstanceLogs.isEmpty()){
-			workflowProcessLogs = new ArrayList<>();
-			for(ProcessInstanceLog index : processInstanceLogs){
-				ProcessInstanceDesc processInstanceDesc = runtimeDataService.getProcessInstanceById(index.getProcessInstanceId());
-				WorkflowProcessLog workflowProcessLog = new WorkflowProcessLog().setWorkflowProcess(new WorkflowProcess().setCode(StringUtils.substringAfter(processInstanceDesc.getCorrelationKey(),":")).setWorkflow(workflow)
-						).setJbpmProcessInstanceLog(index);
-				workflowProcessLogs.add(workflowProcessLog);
-			}
-		}
-		return workflowProcessLogs;
+		return readByWorkflowCode(workflow.getCode());
 	}
 	
 	@Override
 	public WorkflowProcessLog readByWorkflowCodeByProcessCode(String workflowCode, String code) {
-		return readByWorkflowByProcessCode(workflowPersistence.readByCode(workflowCode), code);
+		String correlationKey = KieInternalServices.Factory.get().newCorrelationKeyFactory()
+				.newCorrelationKey(Arrays.asList(workflowCode,code)).toExternalForm();
+		try {
+			return entityManager.createNamedQuery("WorkflowProcessLog.readByCorrelationKey", WorkflowProcessLog.class).setParameter("correlationKey", correlationKey)
+					.getSingleResult();
+		} catch (NoResultException exception) {
+			return null;
+		}
 	}
 
 	@Override
 	public Long countByWorkflow(Workflow workflow) {
-		Collection<WorkflowProcessLog> workflowProcessLogs = readByWorkflow(workflow);
-		return workflowProcessLogs == null ? 0 : new Long(workflowProcessLogs.size());
+		return countByWorkflowCode(workflow.getCode());
 	}
 
 	@Override
 	public Collection<WorkflowProcessLog> readByWorkflowCode(String workflowCode) {
-		return readByWorkflow(workflowPersistence.readByCode(workflowCode));
+		return entityManager.createNamedQuery("WorkflowProcessLog.readByProcessId", WorkflowProcessLog.class).setParameter("processId", workflowCode).getResultList();
 	}
 
 	@Override
 	public Long countByWorkflowCode(String workflowCode) {
-		return countByWorkflow(workflowPersistence.readByCode(workflowCode));
+		return entityManager.createNamedQuery("WorkflowProcessLog.countByProcessId", Long.class).setParameter("processId", workflowCode).getSingleResult();
 	}
 	
 	

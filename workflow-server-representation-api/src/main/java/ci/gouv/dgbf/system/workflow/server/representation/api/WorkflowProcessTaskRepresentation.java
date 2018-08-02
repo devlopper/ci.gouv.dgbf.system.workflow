@@ -18,7 +18,7 @@ public interface WorkflowProcessTaskRepresentation extends PersistenceEntityRepr
 	
 	@GET
 	@Path(PATH+"execute/{workflowCode}/{workflowProcessCode}/{userIdentifier}")
-	@Consumes(MediaType.APPLICATION_XML)
+	@Produces({ MediaType.APPLICATION_XML })
 	Response execute(@PathParam("workflowCode")String workflowCode,@PathParam("workflowProcessCode")String workflowProcessCode,@PathParam("userIdentifier")String userIdentifier);
 	
 	/*
@@ -74,17 +74,19 @@ public interface WorkflowProcessTaskRepresentation extends PersistenceEntityRepr
 	@Path(PATH+"count")
 	@Produces({ MediaType.TEXT_PLAIN })
 	Long countByWorkflowCodeByUserIdentifier();
-	
-	@GET
-	@Path(PATH+"get/all")
-	@Produces({ MediaType.APPLICATION_XML })
-	Collection<WorkflowProcessTaskDto> getByWorkflowCodeByProcessCodeByUserIdentifier();
-	
-	@GET
-	@Path(PATH+"count")
-	@Produces({ MediaType.TEXT_PLAIN })
-	Long countByWorkflowCodeByProcessCodeByUserIdentifier();
 	*/
+	@GET
+	@Path(PATH+"getByWorkflowCodeByProcessCodeByUserIdentifier/{workflowCode}/{processCode}/{userIdentifier}")
+	@Produces({ MediaType.APPLICATION_XML })
+	Collection<WorkflowProcessTaskDto> getByWorkflowCodeByProcessCodeByUserIdentifier(@PathParam("workflowCode")String workflowCode
+			,@PathParam("processCode")String processCode,@PathParam("userIdentifier")String userIdentifier);
+	
+	@GET
+	@Path(PATH+"countByWorkflowCodeByProcessCodeByUserIdentifier/{workflowCode}/{processCode}/{userIdentifier}")
+	@Produces({ MediaType.TEXT_PLAIN })
+	Long countByWorkflowCodeByProcessCodeByUserIdentifier(@PathParam("workflowCode")String workflowCode
+			,@PathParam("processCode")String processCode,@PathParam("userIdentifier")String userIdentifier);
+	
 	/**/
 
 	String PATH = "/workflowprocesstask/";

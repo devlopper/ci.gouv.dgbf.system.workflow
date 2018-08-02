@@ -11,7 +11,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-@Embeddable
+@Embeddable @Deprecated
 public class BusinessProcessModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 

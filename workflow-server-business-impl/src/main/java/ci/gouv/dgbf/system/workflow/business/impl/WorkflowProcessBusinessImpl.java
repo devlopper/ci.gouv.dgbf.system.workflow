@@ -3,6 +3,7 @@ package ci.gouv.dgbf.system.workflow.business.impl;
 import java.io.Serializable;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import ci.gouv.dgbf.system.workflow.business.api.WorkflowProcessBusiness;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
@@ -18,7 +19,7 @@ public class WorkflowProcessBusinessImpl extends AbstractEntityBusinessImpl<Work
 		return persistence.readByWorkflowCodeByCode(workflowCode, code);
 	}
 	
-	@Override
+	@Override @Transactional
 	public WorkflowProcessBusiness deleteByWorkflowCodeByCode(String workflowCode, String code) {
 		persistence.deleteByWorkflowCodeByCode(workflowCode,code);
 		return this;

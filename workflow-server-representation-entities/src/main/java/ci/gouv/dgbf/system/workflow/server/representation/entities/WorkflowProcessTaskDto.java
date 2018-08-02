@@ -10,8 +10,9 @@ import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessT
 public class WorkflowProcessTaskDto extends AbstractPersistenceEntityDto<WorkflowProcessTask> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String code;
-	private String state;
+	private String name;
+	private String status;
+	private String owner;
 	
 	private Long workflowProcessIdentifier;
 	

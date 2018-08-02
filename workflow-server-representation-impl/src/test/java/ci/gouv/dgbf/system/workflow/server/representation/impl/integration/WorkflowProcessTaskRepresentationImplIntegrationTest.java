@@ -2,16 +2,21 @@ package ci.gouv.dgbf.system.workflow.server.representation.impl.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collection;
+
 import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
+import org.kie.api.task.model.Status;
 
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessTaskRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessDto;
+import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessTaskDto;
 
 public class WorkflowProcessTaskRepresentationImplIntegrationTest extends AbstractIntegrationTest {
 	
@@ -27,6 +32,7 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 		WORKFLOW_REPRESENTATION = TARGET.proxy(WorkflowRepresentation.class);
 		
 		WORKFLOW_REPRESENTATION.createOne(new WorkflowDto().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
+		WORKFLOW_REPRESENTATION.createOne(new WorkflowDto().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap001").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap002").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap001").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
@@ -35,15 +41,24 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 	@Test @InSequence(1)
 	public void countWorkflowProcessTaskBeforeExecute(){
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isEqualTo(2);
-		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEqualTo(0);
-		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countAll()).isEqualTo(2);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEqualTo(1);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countAll()).isEqualTo(3);
 	}
 	
 	@Test @InSequence(2)
 	public void readWorkflowProcessTasksBeforeExecute(){
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isNotEmpty();
-		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEmpty();
+		//assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap").iterator().next().getOwner()).isEqualTo("charge_etude");
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isNotEmpty();
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getAll()).isNotEmpty();
+		
+		Collection<WorkflowProcessTaskDto> workflowProcessTaskDtos = WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","pap001","charge_etude");
+		assertThat(workflowProcessTaskDtos).hasSize(1);
+		
+		WorkflowProcessTaskDto workflowProcessTaskDto = workflowProcessTaskDtos.iterator().next();
+		assertThat(workflowProcessTaskDto.getStatus()).isEqualTo(Status.Reserved.name());
+		assertThat(workflowProcessTaskDto.getName()).isEqualTo("Premi�re Validation");
+		assertThat(workflowProcessTaskDto.getOwner()).isEqualTo("charge_etude");
 	}
 	
 	@Test @InSequence(3)
@@ -55,15 +70,15 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 	
 	@Test @InSequence(4)
 	public void countWorkflowProcessTaskAfterExecute(){
-		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isEqualTo(2);
-		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEqualTo(0);
-		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countAll()).isEqualTo(2);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isEqualTo(3);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEqualTo(1);
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countAll()).isEqualTo(4);
 	}
 	
 	@Test @InSequence(5)
 	public void readWorkflowProcessTaskAfterExecute(){
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isNotEmpty();
-		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isEmpty();
+		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isNotEmpty();
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getAll()).isNotEmpty();
 	}
 	/*

@@ -52,6 +52,16 @@ public class WorkflowProcessTaskRepresentationImpl extends AbstractPersistenceEn
 		return getBusiness().countByWorkflowCode(workflowCode);
 	}
 	
+	@Override
+	public Collection<WorkflowProcessTaskDto> getByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode, String userIdentifier) {
+		return getRepresentationFromPersistence(getBusiness().findByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode,processCode,userIdentifier));
+	}
+	
+	@Override
+	public Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode, String processCode,String userIdentifier) {
+		return getBusiness().countByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode, processCode, userIdentifier);
+	}
+	
 	/*@Override
 	public WorkflowProcessTaskDto getByWorkflowCodeByCode(String workflowCode,String code) {
 		return getRepresentationFromPersistence(getBusiness().findByWorkflowCodeByCode(workflowCode,code));

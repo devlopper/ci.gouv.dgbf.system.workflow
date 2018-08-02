@@ -21,6 +21,15 @@ import org.openqa.selenium.WebDriver;
 @RunWith(Arquillian.class)
 public abstract class AbstractIntegrationTest {
 
+	static {
+		Properties properties = new Properties();
+		properties.put("charge_etude", "");
+		properties.put("sous_directeur", "");
+		properties.put("directeur", "");	
+		//PersistenceHelperImpl.USER_GROUP_CALLBACK = new JBossUserGroupCallbackImpl(properties);
+		//System.setProperty("jbpmusers", "u1 , u2");
+	}
+	
 	/* Global variable */
 	protected static Boolean __INITIALISED__;
 	protected static ResteasyClient CLIENT;
@@ -42,11 +51,6 @@ public abstract class AbstractIntegrationTest {
 	}
 	
 	protected void __listenBefore__(){
-		Properties properties = new Properties();
-		properties.put("charge_etude", "");
-		properties.put("sous_directeur", "");
-		properties.put("directeur", "");	
-		//persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 		if(Boolean.TRUE.equals(isAddProcessDefinitionFromClassPathOnListenBefore()))
 			__listenBefore__addProcessDefinitionFromClassPath();
 	}
@@ -72,6 +76,9 @@ public abstract class AbstractIntegrationTest {
 				.addAsResource("project-defaults-test.yml", "project-defaults.yml")
 				.addAsResource("bpmn/withhuman/Validation du PAP.bpmn2", "bpmn/withhuman/Validation du PAP.bpmn2")
 				.addAsResource("bpmn/withhuman/Validation du PAP V01.bpmn2", "bpmn/withhuman/Validation du PAP V01.bpmn2")
+				.addAsWebInfResource("META-INF/beans.xml","beans.xml")
+				.addAsManifestResource("META-INF/beans.xml","beans.xml")
+				.addClass(PersistenceHelperImpl.class)
 				.addAsLibraries(Maven.resolver().loadPomFromFile("pom-test.xml").importRuntimeDependencies().resolve().withTransitivity().asFile())
 		;
 	}

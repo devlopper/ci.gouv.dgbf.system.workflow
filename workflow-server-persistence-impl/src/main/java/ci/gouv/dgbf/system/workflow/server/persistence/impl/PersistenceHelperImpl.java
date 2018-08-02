@@ -59,6 +59,14 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	public void __listenPostConstruct__() {
 		//deploymentIdentifier = "Deployment";
 		//buildKieBase();
+		
+		//FIXME find a way to get user identifiers
+		java.util.Properties properties = new java.util.Properties();
+		properties.put("charge_etude", "");
+		properties.put("sous_directeur", "");
+		properties.put("directeur", "");	
+		setUserGroupCallback(new org.jbpm.services.task.identity.JBossUserGroupCallbackImpl(properties));
+		
 	}
 	
 	@Override
@@ -120,8 +128,9 @@ public class PersistenceHelperImpl implements PersistenceHelper, Serializable {
 	
 	@Override
 	public PersistenceHelper buildRuntimeEnvironment() {
+		UserGroupCallback userGroupCallback = getUserGroupCallback();
 		RuntimeEnvironmentBuilder runtimeEnvironmentBuilder = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder().entityManagerFactory(getEntityManagerFactory())
-				.knowledgeBase(getKieBase()).userGroupCallback(getUserGroupCallback());
+				.knowledgeBase(getKieBase()).userGroupCallback(userGroupCallback);
 		if(processDefinitions!=null)
 			for(byte[] index : processDefinitions){
 				runtimeEnvironmentBuilder.addAsset(ResourceFactory.newByteArrayResource(index), ResourceType.BPMN2);
