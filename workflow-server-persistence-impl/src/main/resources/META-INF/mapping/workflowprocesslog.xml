@@ -8,7 +8,9 @@
 	
 	<named-query name="WorkflowProcessLog.readByCorrelationKey">
 		<query>
-			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(log.id)
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(
+			log.processInstanceId,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
+			)
 			FROM ProcessInstanceLog log
 			WHERE log.correlationKey = :correlationKey
 		</query>
@@ -16,19 +18,21 @@
 	
 	<!-- read many -->
 	
-	<!--named-query name="WorkflowProcessLog.readByProcessId">
+	<named-query name="WorkflowProcessLog.readByProcessId">
 		<query>
-			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess(
-			info.processInstanceId,log.correlationKey,info.processId,workflow.model,info.startDate,log.end,log.duration,info.state
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(
+			log.processInstanceId,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
 			)
 			FROM ProcessInstanceLog log
-			WHERE info.processInstanceId = log.processInstanceId AND info.processId = workflow.code AND log.processId = workflow.code AND info.processId = :processId
+			WHERE log.processId = :processId
 		</query>
-	</named-query-->
+	</named-query>
 	
 	<named-query name="WorkflowProcessLog.readAll">
 		<query>
-			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(log.id)
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(
+			log.processInstanceId,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
+			)
 			FROM ProcessInstanceLog log
 		</query>
 	</named-query>
@@ -39,6 +43,14 @@
 		<query>
 			SELECT COUNT(log)
 			FROM ProcessInstanceLog log
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessLog.countByProcessId">
+		<query>
+			SELECT COUNT(log)
+			FROM ProcessInstanceLog log
+			WHERE log.processId = :processId
 		</query>
 	</named-query>
 	
