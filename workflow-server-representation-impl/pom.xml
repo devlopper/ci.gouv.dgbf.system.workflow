@@ -26,12 +26,27 @@
 			<version>0.0.1</version>
 		</dependency>
 		
-		<dependency>
+		<!--dependency>
 			<groupId>org.cyk.pom.jee.server.representation.main.jboss.swarm</groupId>
 			<artifactId>pom-jee-server-representation-main-jboss-swarm</artifactId>
 			<version>0.0.1</version>
 			<type>pom</type>
 			<scope>compile</scope>
+		</dependency-->
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>jaxrs</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>cdi</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>jpa</artifactId>
 		</dependency>
 		
 		<dependency>
@@ -43,5 +58,14 @@
 		</dependency>
 					
 	</dependencies>		
-
+	
+	<profiles>
+		<profile>
+			<id>org.cyk.test</id>
+			<properties>
+				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+			</properties>
+		</profile>
+	</profiles>	
+	
 </project>

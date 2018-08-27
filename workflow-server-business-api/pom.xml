@@ -20,12 +20,6 @@
 			<artifactId>workflow-server-business-entities</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>ci.gouv.dgbf.system.workflow.server.persistence</groupId>
-			<artifactId>workflow-server-persistence-api</artifactId>
-			<version>0.0.1</version>
-		</dependency>
 	</dependencies>	
 
 </project>

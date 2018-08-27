@@ -1,10 +1,15 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl.integration;
 
+import java.util.Properties;
+
 import javax.inject.Inject;
 
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram;
+import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
@@ -12,12 +17,37 @@ import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
 
-public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractIntegrationTest {
+public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcessTask> {
 
+	private static final long serialVersionUID = 1L;
+	
 	@Inject private WorkflowPersistence workflowPersistence;
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
 	@Inject private WorkflowProcessTaskPersistence workflowProcessTaskPersistence;
-		
+	@Inject private PersistenceHelper persistenceHelper;
+	
+	@Override
+	protected void __listenBeforeCallCountIsZero__() throws Exception {
+		super.__listenBeforeCallCountIsZero__();
+		Properties properties = new Properties();
+		properties.put("charge_etude", "");
+		properties.put("sous_directeur", "");
+		properties.put("directeur", "");	
+		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+	}
+	
+	@Override public void createOne() throws Exception {}
+	
+	@Override public void createMany() throws Exception {}
+	
+	@Override public void readOneByBusinessIdentifier() throws Exception {}
+	
+	@Override public void readOneBySystemIdentifier() throws Exception {}
+	
+	@Override public void updateOne() throws Exception {}
+	
+	@Override public void deleteOne() throws Exception {}
+	
 	@Test
 	public void readByWorkflowByUserIdentifier() throws Exception{
 		userTransaction.begin();
@@ -30,7 +60,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractI
 		for(WorkflowProcessTask task : workflowProcessTaskPersistence.readAll())
 			System.out.println(task);
 		*/
-		Assert.assertEquals(new Long(1), workflowProcessPersistence.countAll());
+		Assert.assertEquals(new Long(1), workflowProcessPersistence.count());
 		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","charge_etude"));
@@ -40,7 +70,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractI
 		
 		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP002").setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap")));
 		
-		Assert.assertEquals(new Long(2), workflowProcessPersistence.countAll());
+		Assert.assertEquals(new Long(2), workflowProcessPersistence.count());
 		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP002"));
 		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","charge_etude"));
@@ -50,7 +80,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractI
 		
 		workflowProcessPersistence.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap.v01")));
 		
-		Assert.assertEquals(new Long(3), workflowProcessPersistence.countAll());
+		Assert.assertEquals(new Long(3), workflowProcessPersistence.count());
 		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap.v01","PAP001"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap.v01","charge_etude"));
@@ -65,7 +95,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractI
 		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "charge_etude", null);
 		userTransaction.commit();
 		
-		Assert.assertEquals(new Long(3), workflowProcessPersistence.countAll());
+		Assert.assertEquals(new Long(3), workflowProcessPersistence.count());
 		Assert.assertEquals(new Long(3), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
 		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","charge_etude"));
@@ -85,7 +115,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractI
 		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "directeur", null);
 		userTransaction.commit();
 		
-		Assert.assertEquals(new Long(3), workflowProcessPersistence.countAll());
+		Assert.assertEquals(new Long(2), workflowProcessPersistence.count());
 		
 	}
 	

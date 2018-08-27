@@ -31,7 +31,7 @@ public class BusinessProcessModelNotationHelperImplIntegrationTest {
 	@org.jboss.arquillian.container.test.api.Deployment
 	public static WebArchive createArchive(){
 		return ShrinkWrap.create(WebArchive.class)
-				.addAsResource("project-defaults-test.yml", "project-defaults.yml")
+				.addAsResource("project-defaults.yml", "project-defaults.yml")
 				//.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")	
 				.addAsResource("bpmn/demo.bpmn", "bpmn/demo.bpmn")	
 				.addAsResource("bpmn/demo_another_name.bpmn", "bpmn/demo_another_name.bpmn")	

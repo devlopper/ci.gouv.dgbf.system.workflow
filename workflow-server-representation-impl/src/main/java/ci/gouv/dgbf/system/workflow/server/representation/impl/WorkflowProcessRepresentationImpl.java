@@ -2,42 +2,22 @@ package ci.gouv.dgbf.system.workflow.server.representation.impl;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
-import ci.gouv.dgbf.system.workflow.business.api.WorkflowProcessBusiness;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
+import org.cyk.utility.server.representation.AbstractRepresentationEntityImpl;
+
+import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowProcessBusiness;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessDto;
-import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessEntityMapper;
+import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessDtoCollection;
 
-public class WorkflowProcessRepresentationImpl extends AbstractPersistenceEntityRepresentationImpl<WorkflowProcess,WorkflowProcessDto> implements WorkflowProcessRepresentation,Serializable {
+public class WorkflowProcessRepresentationImpl extends AbstractRepresentationEntityImpl<WorkflowProcess, WorkflowProcessBusiness, WorkflowProcessDto,WorkflowProcessDtoCollection> implements WorkflowProcessRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private WorkflowProcessBusiness business;
-	@Inject private WorkflowPersistence workflowPersistence;
-	
-	@Override
-	protected WorkflowProcess getPersistenceFromRepresentation(WorkflowProcessDto dto) {
-		return super.getPersistenceFromRepresentation(dto).setWorkflow(workflowPersistence.readByCode(dto.getWorkflowCode()));
-	}
-	
-	@Override
-	protected WorkflowProcessDto getRepresentationFromPersistence(WorkflowProcess entity) {
-		if(entity == null)
-			return null;
-		return super.getRepresentationFromPersistence(entity).setWorkflowCode(entity.getWorkflow() == null ? null : entity.getWorkflow().getCode());
-	}
-	
-	@Override
-	public WorkflowProcessDto getByIdentifier(Long identifier) {
-		return super.getByIdentifier(identifier);
-	}
-	
 	@Override
 	public WorkflowProcessDto getByWorkflowCodeByCode(String workflowCode,String code) {
-		return getRepresentationFromPersistence(getBusiness().findByWorkflowCodeByCode(workflowCode,code));
+		return null;//getRepresentationFromPersistence(getBusiness().findByWorkflowCodeByCode(workflowCode,code));
 	}
 	
 	@Override
@@ -47,18 +27,5 @@ public class WorkflowProcessRepresentationImpl extends AbstractPersistenceEntity
 	}
 	
 	/**/
-	
-	@Override
-	protected WorkflowProcessBusiness getBusiness() {
-		return business;
-	}
-	
-	@Override
-	protected WorkflowProcessEntityMapper getEntityMapper() {
-		return WorkflowProcessEntityMapper.INSTANCE;
-	}
-	
-	
-	
 	
 }

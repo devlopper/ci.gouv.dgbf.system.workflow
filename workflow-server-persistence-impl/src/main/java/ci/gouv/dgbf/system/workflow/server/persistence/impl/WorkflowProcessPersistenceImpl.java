@@ -4,18 +4,27 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.kie.internal.KieInternalServices;
 import org.kie.internal.process.CorrelationAwareProcessRuntime;
 
+import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 
-public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImpl<WorkflowProcess> implements WorkflowProcessPersistence,Serializable {
+@Singleton
+public class WorkflowProcessPersistenceImpl extends AbstractPersistenceEntityImpl<WorkflowProcess> implements WorkflowProcessPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Inject private PersistenceHelper persistenceHelper;
+	@Inject private EntityManager entityManager;
+		
 	@Override
 	public WorkflowProcessPersistence create(WorkflowProcess workflowProcess) {
 		String identifier = workflowProcess.getWorkflow().getCode();// businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModel());
@@ -57,12 +66,12 @@ public class WorkflowProcessPersistenceImpl extends AbstractEntityPersistenceImp
 	}
 	
 	@Override
-	public Collection<WorkflowProcess> readAll() {
+	public Collection<WorkflowProcess> read() {
 		return entityManager.createNamedQuery("WorkflowProcess.readAll", WorkflowProcess.class).getResultList();
 	}
 	
 	@Override
-	public Long countAll() {
+	public Long count() {
 		return entityManager.createNamedQuery("WorkflowProcess.countAll", Long.class).getSingleResult();
 	}
 	

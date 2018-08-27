@@ -15,8 +15,7 @@
 	<packaging>pom</packaging>
 
 	<name>workflow system server</name>
-	<url>http://www.cykcorp.org</url>
-
+	
 	<properties>
 		<jbpm-bom.version>7.7.0.Final</jbpm-bom.version>
 	</properties>

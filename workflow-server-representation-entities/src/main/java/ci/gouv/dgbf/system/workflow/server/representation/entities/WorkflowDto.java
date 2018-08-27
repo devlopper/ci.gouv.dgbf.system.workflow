@@ -6,16 +6,29 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.server.representation.AbstractDto;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.bpmn.Bpmn;
 
-@XmlRootElement @lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true) @lombok.NoArgsConstructor
-public class WorkflowDto extends AbstractPersistenceEntityDto<Workflow> implements Serializable {
+@XmlRootElement
+@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true) @lombok.NoArgsConstructor
+public class WorkflowDto extends AbstractDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String code;
 	private String name;
 	private String model;
+	
+	@Override
+	public WorkflowDto setCode(String code) {
+		return (WorkflowDto) super.setCode(code);
+	}
+	
+	public WorkflowDto setModel(String model){
+		this.model = model;
+		setCodeAndNameFromModel();
+		return this;
+	}
 	
 	public WorkflowDto setModelFromResourceAsStream(String name){
 		try {
@@ -26,8 +39,27 @@ public class WorkflowDto extends AbstractPersistenceEntityDto<Workflow> implemen
 		return this;
 	}
 	
-	@Override
-	public WorkflowDto setIdentifier(Long identifier) {
-		return (WorkflowDto) super.setIdentifier(identifier);
+	public WorkflowDto setCodeAndNameFromModel(){
+		if(StringUtils.isBlank(model)) {
+			setCode(null);
+			setName(null);
+		}else {
+			Bpmn bpmn = Bpmn.__executeWithContent__(model);
+			if(bpmn.getProcess()!=null) {
+				setCode(bpmn.getProcess().getId());
+				setName(bpmn.getProcess().getName());
+			}
+		}
+		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString()+" , "+FIELD_NAME+"="+name+" , "+FIELD_MODEL+"="+model;
+	}
+	
+	/**/
+	
+	public static final String FIELD_NAME = "name";
+	public static final String FIELD_MODEL = "model";
 }

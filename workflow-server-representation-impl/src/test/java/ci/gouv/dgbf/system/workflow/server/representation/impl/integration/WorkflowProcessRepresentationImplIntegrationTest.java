@@ -13,7 +13,7 @@ import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessDto;
 
 public class WorkflowProcessRepresentationImplIntegrationTest extends AbstractIntegrationTest {
-	
+	/*
 	private static WorkflowProcessRepresentation WORKFLOW_PROCESS_REPRESENTATION;
 	private static WorkflowRepresentation WORKFLOW_REPRESENTATION;
 	
@@ -57,5 +57,5 @@ public class WorkflowProcessRepresentationImplIntegrationTest extends AbstractIn
 		assertThat(workflowProcessDto.getWorkflowCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap");
 		assertThat(workflowProcessDto.getState()).isEqualTo("1");
 	}
-	
+	*/
 }

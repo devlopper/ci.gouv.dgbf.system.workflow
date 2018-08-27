@@ -2,10 +2,12 @@ package ci.gouv.dgbf.system.workflow.server.persistence.api;
 
 import java.util.Collection;
 
+import org.cyk.utility.server.persistence.PersistenceEntity;
+
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 
-public interface WorkflowProcessPersistence extends EntityPersistence<WorkflowProcess> {
+public interface WorkflowProcessPersistence extends PersistenceEntity<WorkflowProcess> {
 
 	Collection<WorkflowProcess> readByWorkflow(Workflow workflow);
 	Long countByWorkflow(Workflow workflow);

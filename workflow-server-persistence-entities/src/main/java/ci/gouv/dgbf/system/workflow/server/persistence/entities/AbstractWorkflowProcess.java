@@ -3,6 +3,8 @@ package ci.gouv.dgbf.system.workflow.server.persistence.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.cyk.utility.server.persistence.jpa.AbstractEntity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +14,6 @@ import lombok.experimental.Accessors;
 public abstract class AbstractWorkflowProcess extends AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private String code;
 	private Integer state;
 	
 	private Date startDate,endDate;
@@ -25,7 +26,7 @@ public abstract class AbstractWorkflowProcess extends AbstractEntity implements 
 	
 	public AbstractWorkflowProcess(Long identifier,String code,String workflowCode,String workflowModel,Date startDate,Date endDate,Long duration,Integer state){
 		this.identifier = identifier;
-		this.code = code == null ? null : code.substring(code.indexOf(':')+1);
+		setCode(code == null ? null : code.substring(code.indexOf(':')+1));
 		if(workflowCode!=null){
 			this.workflow = new Workflow().setCode(workflowCode).setModel(workflowModel);
 		}

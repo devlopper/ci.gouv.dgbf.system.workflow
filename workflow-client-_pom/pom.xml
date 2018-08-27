@@ -14,7 +14,6 @@
 	<packaging>pom</packaging>
 
 	<name>workflow system client</name>
-	<url>http://www.cykcorp.org</url>
 	
 	<modules>
 		<!-- Controller Layer -->

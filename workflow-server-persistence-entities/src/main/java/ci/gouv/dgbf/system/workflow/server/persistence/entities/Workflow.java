@@ -3,20 +3,22 @@ package ci.gouv.dgbf.system.workflow.server.persistence.entities;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.io.IOUtils;
-import org.jbpm.services.api.model.ProcessDefinition;
+import org.cyk.utility.server.persistence.jpa.AbstractEntity;
 
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.bpmn.Bpmn;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-@Entity
+@Entity @Access(AccessType.FIELD)
 public class Workflow extends AbstractEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -31,10 +33,7 @@ public class Workflow extends AbstractEntity implements Serializable {
 	/**
 	 * Code of the workflow. This code must be equals to the one defined in the model
 	 */
-	@Column(nullable=false,unique=true)
-	@NotNull
-	private String code;
-	
+
 	/**
 	 * Name of the workflow. This name must be equals to the one defined in the model
 	 */
@@ -42,13 +41,18 @@ public class Workflow extends AbstractEntity implements Serializable {
 	@NotNull
 	private String name;
 	
-	/**
-	 * This is a helper object to read attributes
-	 */
-	@Transient
-	private ProcessDefinition jbpmProcessDefinition;
-	
 	/**/
+	
+	@Override
+	public Workflow setCode(String code) {
+		return (Workflow) super.setCode(code);
+	}
+	
+	public Workflow setModel(String model){
+		this.model = model;
+		setCodeAndNameFromModel();
+		return this;
+	}
 	
 	public Workflow setModelFromResourceAsStream(String name){
 		try {
@@ -64,4 +68,12 @@ public class Workflow extends AbstractEntity implements Serializable {
 		return (Workflow) super.setIdentifier(identifier);
 	}
 	
+	public Workflow setCodeAndNameFromModel(){
+		Bpmn bpmn = Bpmn.__executeWithContent__(model);
+		if(bpmn.getProcess()!=null) {
+			setCode(bpmn.getProcess().getId());
+			setName(bpmn.getProcess().getName());	
+		}
+		return this;
+	}
 }

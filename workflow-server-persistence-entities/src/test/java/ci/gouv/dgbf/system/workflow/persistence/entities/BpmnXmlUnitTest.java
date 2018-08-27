@@ -13,4 +13,10 @@ public class BpmnXmlUnitTest {
 		Assert.assertEquals("charge_etude", bpmnXml.getProcessFirstUserTaskPotentialOwner());
 	}
 	
+	@Test
+	public void unmarshallProcess02(){
+		Bpmn bpmn = Bpmn.__execute__(System.getProperty("user.dir")+"/src/test/resources/bpmn/withhuman/process02.bpmn");
+		Assert.assertNotNull(bpmn);
+		Assert.assertNotNull(bpmn.getProcess());
+	}
 }

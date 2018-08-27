@@ -2,19 +2,21 @@ package ci.gouv.dgbf.system.workflow.server.representation.api;
 
 import java.util.Collection;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessTaskDto;
+import org.cyk.utility.server.representation.RepresentationEntity;
 
-@Path(WorkflowRepresentation.PATH)
-public interface WorkflowProcessTaskRepresentation extends PersistenceEntityRepresentation<WorkflowProcessTaskDto> {
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
+import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessTaskDto;
+import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessTaskDtoCollection;
+
+//@Path(WorkflowRepresentation.PATH)
+public interface WorkflowProcessTaskRepresentation extends RepresentationEntity<WorkflowProcessTask,WorkflowProcessTaskDto,WorkflowProcessTaskDtoCollection> {
 	
 	@GET
 	@Path(PATH+"execute/{workflowCode}/{workflowProcessCode}/{userIdentifier}")
@@ -25,26 +27,6 @@ public interface WorkflowProcessTaskRepresentation extends PersistenceEntityRepr
 	 * Redeclarations
 	 */
 	
-	@POST
-	@Path(PATH+"create")
-	@Consumes(MediaType.APPLICATION_XML)
-	Response createOne(WorkflowProcessTaskDto dto);
-	/*
-	@GET
-	@Path(PATH+"get/identifier/{identifier}")
-	@Produces({ MediaType.APPLICATION_XML })
-	WorkflowProcessTaskDto getByIdentifier(@PathParam("identifier") Long identifier);
-	*/
-	@GET
-	@Path(PATH+"get/all")
-	@Produces({ MediaType.APPLICATION_XML })
-	Collection<WorkflowProcessTaskDto> getAll();
-	
-	@GET
-	@Path(PATH+"count")
-	@Produces({ MediaType.TEXT_PLAIN })
-	Long countAll();
-	
 	@GET
 	@Path(PATH+"getByWorkflowCode/{workflowCode}")
 	@Produces({ MediaType.APPLICATION_XML })
@@ -54,27 +36,7 @@ public interface WorkflowProcessTaskRepresentation extends PersistenceEntityRepr
 	@Path(PATH+"count/workflow/{workflowCode}")
 	@Produces({ MediaType.TEXT_PLAIN })
 	Long countByWorkflowCode(@PathParam("workflowCode") String workflowCode);
-	/*
-	@GET
-	@Path(PATH+"get/workflow/process/{workflowCode}")
-	@Produces({ MediaType.APPLICATION_XML })
-	Collection<WorkflowProcessTaskDto> getByWorkflowCodeByProcessCode();
 	
-	@GET
-	@Path(PATH+"count")
-	@Produces({ MediaType.TEXT_PLAIN })
-	Long countByWorkflowCodeByProcessCode();
-	
-	@GET
-	@Path(PATH+"get/all")
-	@Produces({ MediaType.APPLICATION_XML })
-	Collection<WorkflowProcessTaskDto> getByWorkflowCodeByUserIdentifier();
-	
-	@GET
-	@Path(PATH+"count")
-	@Produces({ MediaType.TEXT_PLAIN })
-	Long countByWorkflowCodeByUserIdentifier();
-	*/
 	@GET
 	@Path(PATH+"getByWorkflowCodeByProcessCodeByUserIdentifier/{workflowCode}/{processCode}/{userIdentifier}")
 	@Produces({ MediaType.APPLICATION_XML })

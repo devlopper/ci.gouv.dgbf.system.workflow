@@ -49,7 +49,7 @@ public class JbpmDeploymentServiceIntegrationTest {
 	@org.jboss.arquillian.container.test.api.Deployment
 	public static WebArchive createArchive(){
 		return ShrinkWrap.create(WebArchive.class)
-				.addAsResource("project-defaults-test.yml", "project-defaults.yml")
+				.addAsResource("project-defaults.yml", "project-defaults.yml")
 				.addAsResource("bpmn/demo.bpmn", "bpmn/demo.bpmn")	
 				.addAsResource("bpmn/demo_another_name.bpmn", "bpmn/demo_another_name.bpmn")	
 				.addAsResource("bpmn/withhuman/process01.bpmn", "bpmn/withhuman/process01.bpmn")

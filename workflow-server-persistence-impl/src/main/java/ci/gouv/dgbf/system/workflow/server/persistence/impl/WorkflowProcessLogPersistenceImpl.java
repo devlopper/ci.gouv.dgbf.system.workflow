@@ -4,17 +4,24 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.kie.internal.KieInternalServices;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog;
 
-public class WorkflowProcessLogPersistenceImpl extends AbstractEntityPersistenceImpl<WorkflowProcessLog> implements WorkflowProcessLogPersistence,Serializable {
+@Singleton
+public class WorkflowProcessLogPersistenceImpl extends AbstractPersistenceEntityImpl<WorkflowProcessLog> implements WorkflowProcessLogPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Inject private EntityManager entityManager;
+	
 	@Override
 	public WorkflowProcessLog readByWorkflowByProcessCode(Workflow workflow, String processCode) {
 		return readByWorkflowCodeByProcessCode(workflow.getCode(), processCode);

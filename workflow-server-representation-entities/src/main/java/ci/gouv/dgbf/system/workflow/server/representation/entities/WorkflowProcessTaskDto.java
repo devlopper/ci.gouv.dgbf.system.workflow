@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
+import org.cyk.utility.server.representation.AbstractDto;
 
 @XmlRootElement @lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true) @lombok.NoArgsConstructor
-public class WorkflowProcessTaskDto extends AbstractPersistenceEntityDto<WorkflowProcessTask> implements Serializable {
+public class WorkflowProcessTaskDto extends AbstractDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
@@ -16,8 +16,4 @@ public class WorkflowProcessTaskDto extends AbstractPersistenceEntityDto<Workflo
 	
 	private Long workflowProcessIdentifier;
 	
-	@Override
-	public WorkflowProcessTaskDto setIdentifier(Long identifier) {
-		return (WorkflowProcessTaskDto) super.setIdentifier(identifier);
-	}
 }

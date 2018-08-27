@@ -37,7 +37,7 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap002").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap001").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 	}
-	
+	/*
 	@Test @InSequence(1)
 	public void countWorkflowProcessTaskBeforeExecute(){
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap")).isEqualTo(2);
@@ -81,6 +81,7 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isNotEmpty();
 		assertThat(WORKFLOW_PROCESS_TASK_REPRESENTATION.getAll()).isNotEmpty();
 	}
+	*/
 	/*
 	@Test @InSequence(6)
 	public void readWorkflowByIdentifierAfterCreate(){

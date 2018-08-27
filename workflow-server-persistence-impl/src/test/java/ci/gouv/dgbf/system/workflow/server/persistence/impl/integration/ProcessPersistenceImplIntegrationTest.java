@@ -106,7 +106,7 @@ public class ProcessPersistenceImplIntegrationTest {
 	@org.jboss.arquillian.container.test.api.Deployment
 	public static WebArchive createArchive(){
 		return ShrinkWrap.create(WebArchive.class)
-				.addAsResource("project-defaults-test.yml", "project-defaults.yml")
+				.addAsResource("project-defaults.yml", "project-defaults.yml")
 				.addAsResource("bpmn/withhuman/Validation du PAP.bpmn2", "bpmn/withhuman/Validation du PAP.bpmn2")
 				.addAsLibraries(Maven.resolver().loadPomFromFile("pom-test.xml").importRuntimeDependencies().resolve().withTransitivity().asFile())
 		;

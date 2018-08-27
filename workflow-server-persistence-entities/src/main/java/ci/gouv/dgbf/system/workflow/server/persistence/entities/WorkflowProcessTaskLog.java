@@ -2,6 +2,8 @@ package ci.gouv.dgbf.system.workflow.server.persistence.entities;
 
 import java.io.Serializable;
 
+import org.cyk.utility.server.persistence.jpa.AbstractEntity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.jboss.arquillian.junit.InSequence;
+import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.server.persistence.PersistenceEntity;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,18 +16,51 @@ import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersis
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 
-public class WorkflowProcessPersistenceImplIntegrationTest extends AbstractIntegrationTest {
+public class WorkflowProcessPersistenceImplIntegrationTest extends AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcess> {
 
+	private static final long serialVersionUID = 1L;
+	
 	@Inject private WorkflowPersistence workflowPersistence;
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
 	
-	@Test @InSequence(1)
-	public void createWorkflowProcess() throws Exception{
+	@Override
+	protected void __listenBeforeCallCountIsZero__() throws Exception {
+		super.__listenBeforeCallCountIsZero__();
 		userTransaction.begin();
 		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
 		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
 		userTransaction.commit();
-		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <T> T __instanciate__(Class<T> aClass, Object action) throws Exception {
+		WorkflowProcess workflowProcess = (WorkflowProcess) super.__instanciate__(aClass, action);
+		workflowProcess.setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap"));
+		workflowProcess.setCode(__inject__(RandomHelper.class).getAlphabetic(5));
+		return (T) workflowProcess;
+	}
+	
+	@Override
+	protected <ENTITY> void ____assertThatEntityHasBeenPersisted____(ENTITY entity,@SuppressWarnings("rawtypes") PersistenceEntity layerEntityInterface) {
+		WorkflowProcess workflowProcess = (WorkflowProcess) entity;
+		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode(workflowProcess.getWorkflow().getCode(), workflowProcess.getCode()));
+	}
+	
+	@Override public void createOne() throws Exception {}
+	
+	@Override public void createMany() throws Exception {}
+	
+	@Override public void readOneByBusinessIdentifier() throws Exception {}
+	
+	@Override public void readOneBySystemIdentifier() throws Exception {}
+	
+	@Override public void updateOne() throws Exception {}
+	
+	@Override public void deleteOne() throws Exception {}
+	
+	@Test //@InSequence(1)
+	public void createWorkflowProcess() throws Exception{
 		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001"));
 		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP002"));
 		Assert.assertNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap.v01", "PAP001"));

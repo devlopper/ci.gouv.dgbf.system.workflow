@@ -4,16 +4,22 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.persistence.EntityManager;
+
+import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
 
-public class WorkflowProcessTaskPersistenceImpl extends AbstractEntityPersistenceImpl<WorkflowProcessTask> implements WorkflowProcessTaskPersistence,Serializable {
+@Singleton
+public class WorkflowProcessTaskPersistenceImpl extends AbstractPersistenceEntityImpl<WorkflowProcessTask> implements WorkflowProcessTaskPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
+	@Inject private EntityManager entityManager;
 	
 	@Override
 	public Collection<WorkflowProcessTask> readByWorkflowCode(String workflowCode) {
@@ -82,12 +88,12 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractEntityPersistenc
 	}
 
 	@Override
-	public Collection<WorkflowProcessTask> readAll() {
+	public Collection<WorkflowProcessTask> read() {
 		return entityManager.createNamedQuery("WorkflowProcessTask.readAll", WorkflowProcessTask.class).getResultList();
 	}
 	
 	@Override
-	public Long countAll() {
+	public Long count() {
 		return entityManager.createNamedQuery("WorkflowProcessTask.countAll", Long.class).getSingleResult();
 	}
 }

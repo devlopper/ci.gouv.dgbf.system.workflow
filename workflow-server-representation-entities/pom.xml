@@ -18,7 +18,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.business</groupId>
-			<artifactId>workflow-server-business-entities</artifactId>
+			<artifactId>workflow-server-business-api</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.server.representation</groupId>
+			<artifactId>jee-utility-server-representation</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>

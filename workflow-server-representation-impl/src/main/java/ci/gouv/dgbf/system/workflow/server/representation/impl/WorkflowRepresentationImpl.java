@@ -2,49 +2,24 @@ package ci.gouv.dgbf.system.workflow.server.representation.impl;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
-import ci.gouv.dgbf.system.workflow.business.api.WorkflowBusiness;
+import org.cyk.utility.server.representation.AbstractRepresentationEntityImpl;
+
+import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowBusiness;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
-import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowEntityMapper;
+import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDtoCollection;
 
-public class WorkflowRepresentationImpl extends AbstractPersistenceEntityRepresentationImpl<Workflow,WorkflowDto> implements WorkflowRepresentation,Serializable {
+public class WorkflowRepresentationImpl extends AbstractRepresentationEntityImpl<Workflow, WorkflowBusiness, WorkflowDto,WorkflowDtoCollection> implements WorkflowRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private WorkflowBusiness workflowBusiness;
-	
+
 	@Override
-	public WorkflowDto getByIdentifier(Long identifier) {
-		return super.getByIdentifier(identifier);
+	public Response getOne(String identifier, String type) {
+		System.out.println("WorkflowRepresentationImpl.getOne() "+identifier+" , "+type);
+		return super.getOne(identifier, type);
 	}
-	
-	@Override
-	public WorkflowDto getByCode(String code) {
-		return getEntityMapper().getRepresentationFromPersistence(getBusiness().findByCode(code));
-	}
-	
-	@Override
-	public Response deleteByCode(String code) {
-		getBusiness().deleteByCode(code);
-		return Response.ok().status(Response.Status.OK).build();
-	}
-	
-	/**/
-	
-	@Override
-	protected WorkflowBusiness getBusiness() {
-		return workflowBusiness;
-	}
-	
-	@Override
-	protected WorkflowEntityMapper getEntityMapper() {
-		return WorkflowEntityMapper.INSTANCE;
-	}
-	
-	
-	
 	
 }

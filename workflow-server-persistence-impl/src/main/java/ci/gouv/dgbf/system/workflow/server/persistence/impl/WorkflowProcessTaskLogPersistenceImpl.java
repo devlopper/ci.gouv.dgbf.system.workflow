@@ -1,22 +1,25 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.persistence.EntityManager;
 
-import org.jbpm.services.api.model.UserTaskInstanceDesc;
+import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog;
 
-public class WorkflowProcessTaskLogPersistenceImpl extends AbstractEntityPersistenceImpl<WorkflowProcessTaskLog> implements WorkflowProcessTaskLogPersistence,Serializable {
+@Singleton
+public class WorkflowProcessTaskLogPersistenceImpl extends AbstractPersistenceEntityImpl<WorkflowProcessTaskLog> implements WorkflowProcessTaskLogPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
+	@Inject private EntityManager entityManager;
 	
 	@Override
 	public Collection<WorkflowProcessTaskLog> readByWorkflowCode(String workflowCode) {
@@ -30,7 +33,7 @@ public class WorkflowProcessTaskLogPersistenceImpl extends AbstractEntityPersist
 	
 	@Override
 	public Collection<WorkflowProcessTaskLog> readByWorkflowProcess(WorkflowProcess workflowProcess) {
-		Collection<WorkflowProcessTaskLog> workflowProcessTaskLogs =  null;
+		/*Collection<WorkflowProcessTaskLog> workflowProcessTaskLogs =  null;
 		Collection<Long> identifiers = runtimeDataService.getTasksByProcessInstanceId(workflowProcess.getIdentifier());
 		if(identifiers!=null){
 			workflowProcessTaskLogs = new ArrayList<>();
@@ -39,8 +42,8 @@ public class WorkflowProcessTaskLogPersistenceImpl extends AbstractEntityPersist
 				WorkflowProcessTaskLog workflowProcessTaskLog = new WorkflowProcessTaskLog();
 				workflowProcessTaskLogs.add(workflowProcessTaskLog);
 			}
-		}
-		return workflowProcessTaskLogs;
+		}*/
+		return null;
 	}
 	
 	@Override
