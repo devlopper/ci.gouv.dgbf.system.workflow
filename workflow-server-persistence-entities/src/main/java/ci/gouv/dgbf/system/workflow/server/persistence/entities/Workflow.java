@@ -73,6 +73,8 @@ public class Workflow extends AbstractEntity implements Serializable {
 		if(bpmn.getProcess()!=null) {
 			setCode(bpmn.getProcess().getId());
 			setName(bpmn.getProcess().getName());	
+		}else {
+			
 		}
 		return this;
 	}

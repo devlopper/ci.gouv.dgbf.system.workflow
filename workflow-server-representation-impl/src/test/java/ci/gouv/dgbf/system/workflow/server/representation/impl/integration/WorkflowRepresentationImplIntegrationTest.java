@@ -57,10 +57,7 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	public void readWorkflowByCodeBeforeCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
 		Response response = workflowRepresentation.getOne("ci.gouv.dgbf.workflow.validation.pap","business");
-		Object object = response.getEntity();
-		//TODO use something to materialise NULL value entity response
-		WorkflowDto workflowDto = response.readEntity(WorkflowDto.class);
-		assertThat(workflowDto).isNull();
+		assertThat(response.getStatus()).isEqualTo(Response.Status.NO_CONTENT.getStatusCode());
 		response.close();
 	}
 	/*

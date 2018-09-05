@@ -25,9 +25,6 @@
 	<profiles>
 		<profile>
 			<id>org.cyk.test</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.resources.folders>bpmn</org.cyk.test.resources.folders>
