@@ -8,7 +8,7 @@
 		<mapping-file>META-INF/JBPMorm.xml</mapping-file>
 		<mapping-file>META-INF/Taskorm.xml</mapping-file>
 		<mapping-file>META-INF/TaskAuditorm.xml</mapping-file>
-		<mapping-file>META-INF/Servicesorm.xml</mapping-file>
+		<!--mapping-file>META-INF/Servicesorm.xml</mapping-file-->
 		
 		<mapping-file>META-INF/mapping/workflow.xml</mapping-file>
 		<mapping-file>META-INF/mapping/workflowprocess.xml</mapping-file>

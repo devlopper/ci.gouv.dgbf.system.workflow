@@ -13,7 +13,6 @@ import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.kie.internal.KieInternalServices;
 import org.kie.internal.process.CorrelationAwareProcessRuntime;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
@@ -22,13 +21,12 @@ import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 public class WorkflowProcessPersistenceImpl extends AbstractPersistenceEntityImpl<WorkflowProcess> implements WorkflowProcessPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private PersistenceHelper persistenceHelper;
 	@Inject private EntityManager entityManager;
 		
 	@Override
 	public WorkflowProcessPersistence create(WorkflowProcess workflowProcess) {
-		String identifier = workflowProcess.getWorkflow().getCode();// businessProcessModelNotationHelper.getIdentifier(workflowProcess.getWorkflow().getModel());
-		((CorrelationAwareProcessRuntime)persistenceHelper.getKieSession()).startProcess(identifier,KieInternalServices.Factory.get().newCorrelationKeyFactory()
+		String identifier = workflowProcess.getWorkflow().getCode();
+		((CorrelationAwareProcessRuntime)__inject__(JbpmHelper.class).getRuntimeEngine().getKieSession()).startProcess(identifier,KieInternalServices.Factory.get().newCorrelationKeyFactory()
 				.newCorrelationKey(Arrays.asList(workflowProcess.getWorkflow().getCode(),workflowProcess.getCode())),null);
 		return this;
 	}

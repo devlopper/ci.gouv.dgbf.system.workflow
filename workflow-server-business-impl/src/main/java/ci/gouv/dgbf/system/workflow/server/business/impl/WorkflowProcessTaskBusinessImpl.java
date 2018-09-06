@@ -10,26 +10,26 @@ import javax.transaction.Transactional;
 import org.cyk.utility.server.business.AbstractBusinessEntityImpl;
 
 import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowProcessTaskBusiness;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
+import ci.gouv.dgbf.system.workflow.server.persistence.impl.JbpmHelper;
 
 @Singleton
 public class WorkflowProcessTaskBusinessImpl extends AbstractBusinessEntityImpl<WorkflowProcessTask,WorkflowProcessTaskPersistence> implements WorkflowProcessTaskBusiness,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private PersistenceHelper persistenceHelper;
+	@Inject private JbpmHelper jbpmHelper;
 	
 	@Override @Transactional
 	public WorkflowProcessTaskBusiness start(WorkflowProcessTask workflowProcessTask, String userIdentifier) {
-		persistenceHelper.getTaskService().start(workflowProcessTask.getIdentifier(), userIdentifier);
+		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), userIdentifier);
 		return this;
 	}
 
 	@Override @Transactional
 	public WorkflowProcessTaskBusiness complete(WorkflowProcessTask workflowProcessTask, String userIdentifier) {
-		persistenceHelper.getTaskService().complete(workflowProcessTask.getIdentifier(), userIdentifier,null);
+		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), userIdentifier,null);
 		return this;
 	}
 

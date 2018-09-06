@@ -28,12 +28,12 @@ import org.kie.api.task.TaskService;
 import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
+import ci.gouv.dgbf.system.workflow.server.persistence.impl.JbpmHelper;
 
 @RunWith(Arquillian.class)
 public class ValidationPapPersistenceImplIntegrationTest {
 	
-	@Inject private PersistenceHelper persistenceHelper;
+	@Inject private JbpmHelper jbpmHelper;
 	//@Inject @PerRequest private RuntimeManager runtimeManager;
 	
 	@Before
@@ -42,16 +42,16 @@ public class ValidationPapPersistenceImplIntegrationTest {
 		properties.put("charge_etude", "");
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
-		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		jbpmHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 		
-		persistenceHelper.addProcessDefinitionFromClassPath("/bpmn/withhuman/Validation du PAP.bpmn2");
+		//persistenceHelper.addProcessDefinitionFromClassPath("/bpmn/withhuman/Validation du PAP.bpmn2");
 	}
 	
 	/**/
 	
 	@Test
 	public void isChargeEtudeEstPremierIntervenant() {
-		RuntimeManager runtimeManager = persistenceHelper.getRuntimeManager();
+		RuntimeManager runtimeManager = jbpmHelper.getRuntimeManager();
 		RuntimeEngine runtimeEngine = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get());
 		KieSession session = runtimeEngine.getKieSession();
 		TaskService taskService = runtimeEngine.getTaskService();

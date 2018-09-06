@@ -50,7 +50,7 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractPersistenceE
 		userTransaction.begin();
 		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
 		userTransaction.commit();
-		Workflow workflow = workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap");
+		Workflow workflow = workflowPersistence.readOneByBusinessIdentifier("ci.gouv.dgbf.workflow.validation.pap");
 		Assert.assertNotNull(workflow);
 		Assert.assertNotNull(workflow.getIdentifier());
 		//Assert.assertNotNull(workflow.getJbpmProcessDefinition());
@@ -68,7 +68,7 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractPersistenceE
 		userTransaction.begin();
 		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2"));
 		userTransaction.commit();
-		Workflow workflow = workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap");
+		Workflow workflow = workflowPersistence.readOneByBusinessIdentifier("ci.gouv.dgbf.workflow.validation.pap");
 		Assert.assertEquals("Validation du PAP", workflow.getName());
 		
 		workflow.setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2");
@@ -76,7 +76,7 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractPersistenceE
 		workflowPersistence.update(workflow);
 		userTransaction.commit();
 		
-		workflow = workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap");
+		workflow = workflowPersistence.readOneByBusinessIdentifier("ci.gouv.dgbf.workflow.validation.pap");
 		Assert.assertEquals("Validation du PAP V01", workflow.getName());
 		
 		/* cleaning */
@@ -100,6 +100,18 @@ public class WorkflowPersistenceImplIntegrationTest extends AbstractPersistenceE
 		userTransaction.commit();
 		
 		Assert.assertEquals(new Long(0), workflowPersistence.count());
+	}
+	
+	@Test
+	public void createWorkflowWithCodeDifferentToModelId() throws Exception{
+		userTransaction.begin();
+		workflowPersistence.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2").setCode("mycode"));
+		userTransaction.commit();
+		
+		/* cleaning */
+		userTransaction.begin();
+		workflowPersistence.deleteByCode("mycode");
+		userTransaction.commit();
 	}
 	
 }

@@ -1,12 +1,10 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Enumeration;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import javax.inject.Singleton;
@@ -41,6 +39,13 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	private RuntimeManager runtimeManager;
 	private RuntimeEngine runtimeEngine;
 	private String processesMavenRepositoryFolder;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setProcessesMavenRepositoryFolder(System.getProperty("ci.gouv.dgbf.system.workflow.jbpm.maven.repository.path"));
+		System.out.println("JBPM Processes Maven Repository Path : "+getProcessesMavenRepositoryFolder());
+	}
 	
 	@Override
 	public RuntimeEnvironment getRuntimeEnvironment() {
@@ -121,22 +126,22 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 				if(indexFile.getAbsolutePath().endsWith(".jar")) {
 					try {
 						ZipFile zipFile = new ZipFile(indexFile.getAbsoluteFile());
-						//zipFile.stream().map(ZipEntry::getName).forEach(System.out::println);
-						Enumeration zipEntries = zipFile.entries();
-					    while (zipEntries.hasMoreElements()) {
-					    	ZipEntry entry = ((ZipEntry) zipEntries.nextElement());
-					        String fileName = entry.getName();
-					        if(fileName.endsWith(".bpmn2")) {
-					        	String content = IOUtils.toString(zipFile.getInputStream(entry), "UTF-8");
-					        	__addProcess__(runtimeEnvironmentBuilder, content);
-					        }
-					    }
+						zipFile.stream().filter(entry -> entry.getName().endsWith(".bpmn2")).forEach(new Consumer<ZipEntry>() {
+							@Override
+							public void accept(ZipEntry entry) {
+								try {
+									__addProcess__(runtimeEnvironmentBuilder, IOUtils.toString(zipFile.getInputStream(entry), "UTF-8"));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+					        	
+							}
+						});
+					    zipFile.close();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				//resources.add(StringUtils.substringAfter(indexFile.getPath(), javaResourceFolder));
 			}
 		}
 		

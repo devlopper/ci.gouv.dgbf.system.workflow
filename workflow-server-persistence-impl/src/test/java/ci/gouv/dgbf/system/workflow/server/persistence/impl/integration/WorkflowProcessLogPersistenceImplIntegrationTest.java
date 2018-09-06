@@ -10,7 +10,6 @@ import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
@@ -18,6 +17,7 @@ import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPe
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog;
+import ci.gouv.dgbf.system.workflow.server.persistence.impl.JbpmHelper;
 
 public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcessLog> {
 
@@ -27,7 +27,7 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
 	@Inject private WorkflowProcessTaskPersistence workflowProcessTaskPersistence;
 	@Inject private WorkflowProcessLogPersistence workflowProcessLogPersistence;
-	@Inject private PersistenceHelper persistenceHelper;
+	@Inject private JbpmHelper jbpmHelper;
 	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
@@ -36,7 +36,7 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 		properties.put("charge_etude", "");
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
-		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		jbpmHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 	}
 	
 	@Override public void createOne() throws Exception {}
@@ -68,8 +68,8 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 		Long workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001"
 				,userIdentifier).iterator().next().getIdentifier();
 		userTransaction.begin();
-		persistenceHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
-		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTaskIdentifier, userIdentifier, null);
+		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
+		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTaskIdentifier, userIdentifier, null);
 		userTransaction.commit();
 		Assert.assertEquals(new Long(3), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(3), workflowProcessLogPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
@@ -78,8 +78,8 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 		workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001"
 				,userIdentifier).iterator().next().getIdentifier();
 		userTransaction.begin();
-		persistenceHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
-		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTaskIdentifier, userIdentifier, null);
+		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
+		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTaskIdentifier, userIdentifier, null);
 		userTransaction.commit();
 		Assert.assertEquals(new Long(3), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(3), workflowProcessLogPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
@@ -88,8 +88,8 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 		workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001"
 				,userIdentifier).iterator().next().getIdentifier();
 		userTransaction.begin();
-		persistenceHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
-		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTaskIdentifier, userIdentifier, null);
+		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
+		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTaskIdentifier, userIdentifier, null);
 		userTransaction.commit();
 		Assert.assertEquals(new Long(2), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(3), workflowProcessLogPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));

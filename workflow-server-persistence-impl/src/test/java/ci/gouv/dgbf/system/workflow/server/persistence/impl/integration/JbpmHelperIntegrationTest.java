@@ -16,7 +16,6 @@ public class JbpmHelperIntegrationTest extends AbstractPersistenceArquillianInte
 	
 	@Test
 	public void createProcessInstanceWithOneProcessIdFound() throws Exception{
-		//jbpmHelper.setProcessesMavenRepositoryFolder("E:\\Servers\\Process\\JBPM\\jbpm-installer-7.7.0.Final\\repositories\\kie\\global\\com\\myteam");
 		Workflow workflow = new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2");
 		userTransaction.begin();
 		__inject__(WorkflowPersistence.class).create(workflow);

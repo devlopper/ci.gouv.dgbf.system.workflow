@@ -8,7 +8,6 @@ import java.util.Properties;
 import javax.inject.Inject;
 
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeploymentAsSwram;
-import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.task.model.Status;
@@ -16,7 +15,6 @@ import org.kie.api.task.model.Status;
 import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowBusiness;
 import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowProcessBusiness;
 import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowProcessTaskBusiness;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
@@ -29,7 +27,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 	@Inject private WorkflowProcessBusiness workflowProcessBusiness;
 	@Inject private WorkflowProcessTaskBusiness workflowProcessTaskBusiness;
 	
-	@Inject private PersistenceHelper persistenceHelper;
+	//@Inject private PersistenceHelper persistenceHelper;
 	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
@@ -38,7 +36,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 		properties.put("charge_etude", "");
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
-		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		//persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 	}
 	
 	@Override public void createOne() throws Exception {}
@@ -61,7 +59,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 		workflowBusiness.create(new Workflow().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2"));
 		
 		//persistenceHelper.buildKieBase();
-		persistenceHelper.buildRuntimeEnvironment();
+		//persistenceHelper.buildRuntimeEnvironment();
 		
 		workflowProcessBusiness.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowBusiness.findByCode("ci.gouv.dgbf.workflow.validation.pap")));
 		

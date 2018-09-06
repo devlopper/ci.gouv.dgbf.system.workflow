@@ -5,11 +5,9 @@ import java.util.Properties;
 import javax.inject.Inject;
 
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram;
-import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskLogPersistence;
@@ -24,7 +22,7 @@ public class WorkflowProcessTaskLogPersistenceImplIntegrationTest extends Abstra
 	@Inject private WorkflowPersistence workflowPersistence;
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
 	@Inject private WorkflowProcessTaskLogPersistence workflowProcessTaskLogPersistence;	
-	@Inject private PersistenceHelper persistenceHelper;
+	//@Inject private PersistenceHelper persistenceHelper;
 	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
@@ -33,7 +31,7 @@ public class WorkflowProcessTaskLogPersistenceImplIntegrationTest extends Abstra
 		properties.put("charge_etude", "");
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
-		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		//persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 	}
 	
 	@Override public void createOne() throws Exception {}

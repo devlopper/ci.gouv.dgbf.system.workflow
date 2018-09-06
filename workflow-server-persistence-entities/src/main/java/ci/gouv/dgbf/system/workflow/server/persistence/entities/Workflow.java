@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.io.IOUtils;
@@ -26,20 +27,7 @@ public class Workflow extends AbstractEntity implements Serializable {
 	@NotNull
 	private String model;
 	
-	/*
-	 * Following read only value from model
-	 */
-	
-	/**
-	 * Code of the workflow. This code must be equals to the one defined in the model
-	 */
-
-	/**
-	 * Name of the workflow. This name must be equals to the one defined in the model
-	 */
-	@Column(nullable=false)
-	@NotNull
-	private String name;
+	@Transient private Bpmn bpmn;
 	
 	/**/
 	
@@ -50,7 +38,12 @@ public class Workflow extends AbstractEntity implements Serializable {
 	
 	public Workflow setModel(String model){
 		this.model = model;
-		setCodeAndNameFromModel();
+		bpmn = Bpmn.__executeWithContent__(this.model);
+		if(bpmn==null) {
+			
+		}else {
+			setCode(bpmn.getProcess().getId());		
+		}
 		return this;
 	}
 	
@@ -68,14 +61,10 @@ public class Workflow extends AbstractEntity implements Serializable {
 		return (Workflow) super.setIdentifier(identifier);
 	}
 	
-	public Workflow setCodeAndNameFromModel(){
-		Bpmn bpmn = Bpmn.__executeWithContent__(model);
-		if(bpmn.getProcess()!=null) {
-			setCode(bpmn.getProcess().getId());
-			setName(bpmn.getProcess().getName());	
-		}else {
-			
-		}
-		return this;
+	/**/
+	
+	public String getName() {
+		return bpmn == null ? null : bpmn.getProcess().getName();
 	}
+	
 }

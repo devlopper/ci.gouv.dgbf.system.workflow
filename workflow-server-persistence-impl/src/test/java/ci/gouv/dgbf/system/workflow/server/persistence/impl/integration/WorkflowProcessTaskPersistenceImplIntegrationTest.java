@@ -5,17 +5,16 @@ import java.util.Properties;
 import javax.inject.Inject;
 
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram;
-import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.api.PersistenceHelper;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
+import ci.gouv.dgbf.system.workflow.server.persistence.impl.JbpmHelper;
 
 public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcessTask> {
 
@@ -24,7 +23,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractP
 	@Inject private WorkflowPersistence workflowPersistence;
 	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
 	@Inject private WorkflowProcessTaskPersistence workflowProcessTaskPersistence;
-	@Inject private PersistenceHelper persistenceHelper;
+	@Inject private JbpmHelper jbpmHelper;
 	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
@@ -33,7 +32,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractP
 		properties.put("charge_etude", "");
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
-		persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		//persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 	}
 	
 	@Override public void createOne() throws Exception {}
@@ -91,8 +90,8 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractP
 		WorkflowProcessTask workflowProcessTask = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","charge_etude").iterator().next();
 		
 		userTransaction.begin();
-		persistenceHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "charge_etude");
-		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "charge_etude", null);
+		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "charge_etude");
+		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "charge_etude", null);
 		userTransaction.commit();
 		
 		Assert.assertEquals(new Long(3), workflowProcessPersistence.count());
@@ -105,14 +104,14 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractP
 		
 		workflowProcessTask = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","sous_directeur").iterator().next();
 		userTransaction.begin();
-		persistenceHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "sous_directeur");
-		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "sous_directeur", null);
+		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "sous_directeur");
+		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "sous_directeur", null);
 		userTransaction.commit();
 		
 		workflowProcessTask = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","directeur").iterator().next();
 		userTransaction.begin();
-		persistenceHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "directeur");
-		persistenceHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "directeur", null);
+		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "directeur");
+		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "directeur", null);
 		userTransaction.commit();
 		
 		Assert.assertEquals(new Long(2), workflowProcessPersistence.count());
