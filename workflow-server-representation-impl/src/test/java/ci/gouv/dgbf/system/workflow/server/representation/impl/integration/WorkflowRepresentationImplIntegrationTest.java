@@ -41,7 +41,7 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	
 	@Override
 	public <ENTITY> void __createEntity__(ENTITY entity, @SuppressWarnings("rawtypes") RepresentationEntity layerEntityInterface) {
-		((WorkflowDto)entity).setModel(XML).setCode("ci.gouv.dgbf.workflow.validation.pap").setName("Validation du PAP");
+		((WorkflowDto)entity).setModel(XML);
 		super.__createEntity__(entity, layerEntityInterface);
 	}
 	

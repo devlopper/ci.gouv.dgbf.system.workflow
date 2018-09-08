@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.inject.Inject;
 
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram;
+import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +33,7 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractP
 		properties.put("charge_etude", "");
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
-		//persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		jbpmHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 	}
 	
 	@Override public void createOne() throws Exception {}

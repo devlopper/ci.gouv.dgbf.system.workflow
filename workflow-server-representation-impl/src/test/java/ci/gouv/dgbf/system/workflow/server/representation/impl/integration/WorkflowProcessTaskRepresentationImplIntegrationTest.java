@@ -6,6 +6,8 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.server.representation.AbstractEntityCollection;
+import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram;
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.kie.api.task.model.Status;
@@ -18,13 +20,14 @@ import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessDto;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessTaskDto;
 
-public class WorkflowProcessTaskRepresentationImplIntegrationTest extends AbstractIntegrationTest {
+public class WorkflowProcessTaskRepresentationImplIntegrationTest extends AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcessTask> {
+	private static final long serialVersionUID = 1L;
 	
 	private static WorkflowProcessTaskRepresentation WORKFLOW_PROCESS_TASK_REPRESENTATION;
 	private static WorkflowProcessRepresentation WORKFLOW_PROCESS_REPRESENTATION;
 	private static WorkflowRepresentation WORKFLOW_REPRESENTATION;
 		
-	@Override
+	/*@Override
 	protected void __initialise__() {
 		super.__initialise__();
 		WORKFLOW_PROCESS_TASK_REPRESENTATION = TARGET.proxy(WorkflowProcessTaskRepresentation.class);
@@ -36,7 +39,7 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap001").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap002").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		WORKFLOW_PROCESS_REPRESENTATION.createOne(new WorkflowProcessDto().setCode("pap001").setWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
-	}
+	}*/
 	/*
 	@Test @InSequence(1)
 	public void countWorkflowProcessTaskBeforeExecute(){
@@ -210,4 +213,11 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 			+ " </workflowDto>"
 			+ "";
 	*/
+
+	@Override
+	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(
+			Class<ENTITY> arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

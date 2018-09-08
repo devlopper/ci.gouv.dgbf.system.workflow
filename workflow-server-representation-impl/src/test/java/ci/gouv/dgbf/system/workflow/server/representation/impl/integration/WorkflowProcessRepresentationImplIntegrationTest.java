@@ -1,18 +1,18 @@
 package ci.gouv.dgbf.system.workflow.server.representation.impl.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.cyk.utility.server.representation.AbstractEntityCollection;
+import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram;
 
-import javax.ws.rs.core.Response;
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 
-import org.jboss.arquillian.junit.InSequence;
-import org.junit.Test;
+public class WorkflowProcessRepresentationImplIntegrationTest extends AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcess> {
+	private static final long serialVersionUID = 1L;
 
-import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessRepresentation;
-import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowRepresentation;
-import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
-import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProcessDto;
-
-public class WorkflowProcessRepresentationImplIntegrationTest extends AbstractIntegrationTest {
+	@Override
+	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	/*
 	private static WorkflowProcessRepresentation WORKFLOW_PROCESS_REPRESENTATION;
 	private static WorkflowRepresentation WORKFLOW_REPRESENTATION;

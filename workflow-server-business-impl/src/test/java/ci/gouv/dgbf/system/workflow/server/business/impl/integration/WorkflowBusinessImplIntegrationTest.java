@@ -1,7 +1,6 @@
 package ci.gouv.dgbf.system.workflow.server.business.impl.integration;
 
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeploymentAsSwram;
-import org.junit.Test;
 
 import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowBusiness;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
