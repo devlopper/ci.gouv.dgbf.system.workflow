@@ -8,6 +8,7 @@ import java.util.Properties;
 import javax.inject.Inject;
 
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeploymentAsSwram;
+import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.kie.api.task.model.Status;
@@ -18,6 +19,7 @@ import ci.gouv.dgbf.system.workflow.server.business.api.WorkflowProcessTaskBusin
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
+import ci.gouv.dgbf.system.workflow.server.persistence.impl.JbpmHelper;
 
 public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusinessEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcessTask> {
 
@@ -27,7 +29,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 	@Inject private WorkflowProcessBusiness workflowProcessBusiness;
 	@Inject private WorkflowProcessTaskBusiness workflowProcessTaskBusiness;
 	
-	//@Inject private PersistenceHelper persistenceHelper;
+	@Inject private JbpmHelper jbpmHelper;
 	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
@@ -36,7 +38,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 		properties.put("charge_etude", "");
 		properties.put("sous_directeur", "");
 		properties.put("directeur", "");	
-		//persistenceHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
+		jbpmHelper.setUserGroupCallback(new JBossUserGroupCallbackImpl(properties));
 	}
 	
 	@Override public void createOne() throws Exception {}
