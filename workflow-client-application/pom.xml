@@ -15,50 +15,26 @@
 	<artifactId>workflow-client-application</artifactId>
 	<packaging>war</packaging>
 
-	<!--build>
-		<plugins>
-			<plugin>
-				<groupId>org.wildfly.swarm</groupId>
-				<artifactId>wildfly-swarm-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>multistart</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>multistart</goal>
-						</goals>
-						<configuration>
-							<processes>
-								<process>
-									<artifactId>my-frontend-app</artifactId>
-								</process>
-								<process>
-									<artifactId>my-auth-app</artifactId>
-									<properties>
-										<swarm.http.port>8081</swarm.http.port>
-									</properties>
-									<mainClass>com.example.auth.Main</mainClass>
-								</process>
-								<process>
-									<artifactId>my-indexing-app</artifactId>
-									<properties>
-										<swarm.http.port>8082</swarm.http.port>
-									</properties>
-								</process>
-							</processes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build-->
-
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.client.controller.impl</groupId>
 			<artifactId>workflow-client-controller-impl</artifactId>
 			<version>0.0.1</version>			
 		</dependency>	
+		
+		<dependency>
+			<groupId>org.cyk.pom.jee.client.controller.web.jsf.primefaces.main.jboss.swarm</groupId>
+			<artifactId>pom-jee-client-controller-web-jsf-primefaces-main-jboss-swarm</artifactId>
+			<version>0.0.1</version>
+			<type>pom</type>
+		</dependency>
+		
+		<!-- Need to be redeclare here to enable detection of primefaces. WHY ??? -->
+		<dependency>
+			<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces</groupId>
+			<artifactId>jee-utility-client-controller-web-jsf-primefaces</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 
 </project>

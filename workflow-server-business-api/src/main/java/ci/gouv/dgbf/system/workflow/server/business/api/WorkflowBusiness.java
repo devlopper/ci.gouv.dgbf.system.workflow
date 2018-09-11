@@ -10,4 +10,5 @@ public interface WorkflowBusiness extends BusinessEntity<Workflow> {
 	//TODO should be removed and use delete(identifier,valueusagetype)
 	WorkflowBusiness deleteByCode(String code);
 	
+	WorkflowBusiness synchroniseWithJbpmMavenRepository();
 }

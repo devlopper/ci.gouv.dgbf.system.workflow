@@ -2,6 +2,7 @@ package ci.gouv.dgbf.system.workflow.server.persistence.impl;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
@@ -45,6 +46,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 		super.__listenPostConstruct__();
 		setProcessesMavenRepositoryFolder(System.getProperty("ci.gouv.dgbf.system.workflow.jbpm.maven.repository.path"));
 		System.out.println("JBPM Processes Maven Repository Path : "+getProcessesMavenRepositoryFolder());
+		System.out.println(System.getProperties());
 	}
 	
 	@Override
@@ -101,6 +103,36 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	}
 	
 	@Override
+	public Collection<String> getProcessesFromMavenRepository() {
+		Collection<String> collection = new ArrayList<>();
+		String processesMavenRepositoryFolder  = getProcessesMavenRepositoryFolder();
+		if(__inject__(StringHelper.class).isNotBlank(processesMavenRepositoryFolder)) {
+			//System.out.println("Processes maven repository folder is "+processesMavenRepositoryFolder);
+			for(File indexFile : FileUtils.listFiles(new File(processesMavenRepositoryFolder), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
+				if(indexFile.getAbsolutePath().endsWith(".jar")) {
+					try {
+						ZipFile zipFile = new ZipFile(indexFile.getAbsoluteFile());
+						zipFile.stream().filter(entry -> entry.getName().endsWith(".bpmn2")).forEach(new Consumer<ZipEntry>() {
+							@Override
+							public void accept(ZipEntry entry) {
+								try {
+									collection.add(IOUtils.toString(zipFile.getInputStream(entry), "UTF-8"));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					    zipFile.close();
+					} catch (Exception exception) {
+						throw new RuntimeException(exception);
+					}
+				}
+			}
+		}
+		return collection;
+	}
+	
+	@Override
 	public JbpmHelper buildRuntimeEnvironment() {
 		System.out.println("Runtime environment build started.");
 		//KieServices kieServices = KieServices.Factory.get();
@@ -119,7 +151,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 				__addProcess__(runtimeEnvironmentBuilder,index.getModel());
 		
 		// Get all workflow from maven repository
-		String processesMavenRepositoryFolder  = getProcessesMavenRepositoryFolder();
+		/*String processesMavenRepositoryFolder  = getProcessesMavenRepositoryFolder();
 		if(__inject__(StringHelper.class).isNotBlank(processesMavenRepositoryFolder)) {
 			System.out.println("Processes maven repository folder is "+processesMavenRepositoryFolder);
 			for(File indexFile : FileUtils.listFiles(new File(processesMavenRepositoryFolder), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
@@ -143,7 +175,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 					}
 				}
 			}
-		}
+		}*/
 		
 		setRuntimeEnvironment(runtimeEnvironmentBuilder.get());
 		System.out.println("Runtime environment build done.");

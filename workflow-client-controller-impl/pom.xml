@@ -87,21 +87,6 @@
 			</exclusions>
 		</dependency>
 		
-		<!--dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs</artifactId>
-		</dependency-->
-		
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>cdi</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jsf</artifactId>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
@@ -114,6 +99,12 @@
 			<version>${graphene-webdriver.version}</version>
 			<type>pom</type>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces</groupId>
+			<artifactId>jee-utility-client-controller-web-jsf-primefaces</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 		
 	</dependencies>

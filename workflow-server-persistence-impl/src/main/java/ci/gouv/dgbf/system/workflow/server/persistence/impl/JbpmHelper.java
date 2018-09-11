@@ -1,5 +1,7 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl;
 
+import java.util.Collection;
+
 import org.cyk.utility.helper.Helper;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeEnvironment;
@@ -23,4 +25,7 @@ public interface JbpmHelper extends Helper {
 	
 	String getProcessesMavenRepositoryFolder();
 	JbpmHelper setProcessesMavenRepositoryFolder(String processesMavenRepositoryFolder);
+	
+	Collection<String> getProcessesFromMavenRepository();
+
 }

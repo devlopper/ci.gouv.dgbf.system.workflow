@@ -20,6 +20,13 @@
 			<artifactId>workflow-server-representation-api</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		
+		<!--dependency>
+			<groupId>org.cyk.pom.jee.client.controller.web.jsf.primefaces.main.jboss</groupId>
+			<artifactId>pom-jee-client-controller-web-jsf-primefaces-main-jboss</artifactId>
+			<version>0.0.1</version>
+			<type>pom</type>
+		</dependency-->
 	</dependencies>		
 
 </project>
