@@ -32,19 +32,18 @@ public class WorkflowBusinessImpl extends AbstractBusinessEntityImpl<Workflow,Wo
 	
 	@Override
 	public WorkflowBusiness synchroniseWithJbpmMavenRepository() {
-		//__inject__(JbpmHelper.class).setProcessesMavenRepositoryFolder("E:\\Servers\\Process\\JBPM\\jbpm-installer-7.7.0.Final");
 		Collection<String> strings = __inject__(JbpmHelper.class).getProcessesFromMavenRepository();
 		if(__injectCollectionHelper__().isNotEmpty(strings)) {
 			Collection<Workflow> workflows = new ArrayList<>();
 			for(String index : strings) {
 				Bpmn bpmn = Bpmn.__executeWithContent__(index);
 				Workflow workflow = getPersistence().readByCode(bpmn.getProcess().getId());
-				if(workflow == null) {
-					workflow = new Workflow().setModel(index);
-					workflows.add(workflow);
-				}
+				if(workflow == null)
+					workflow = new Workflow();
+				workflow.setModel(index);
+				workflows.add(workflow);
 			}
-			createMany(workflows);
+			saveMany(workflows);
 			__inject__(JbpmHelper.class).buildRuntimeEnvironment();
 		}
 		return this;

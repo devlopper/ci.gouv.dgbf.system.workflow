@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ci.gouv.dgbf.system.workflow.client</groupId>
+		<artifactId>workflow-client-_pom</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<name>Deployment based on JEE</name>
+	
+	<groupId>ci.gouv.dgbf.system.workflow.client.deployment</groupId>
+	<artifactId>workflow-client-deployment-web</artifactId>
+	<packaging>war</packaging>
+	
+	<dependencies>
+		<dependency>
+			<groupId>ci.gouv.dgbf.system.workflow.client.controller.impl</groupId>
+			<artifactId>workflow-client-controller-impl</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>	
+	
+	<profiles>
+		<profile>
+			<id>org.cyk.test</id>
+			<properties>
+				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+			</properties>
+		</profile>
+	</profiles>	
+
+</project>

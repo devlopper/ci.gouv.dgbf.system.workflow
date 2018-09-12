@@ -28,4 +28,7 @@ public interface JbpmHelper extends Helper {
 	
 	Collection<String> getProcessesFromMavenRepository();
 
+	/**/
+	
+	String PROCESSES_MAVEN_REPOSITORY_FOLDER_ENVIRONMENT_VARIABLE = "ci.gouv.dgbf.system.workflow.jbpm.maven.repository.path";
 }

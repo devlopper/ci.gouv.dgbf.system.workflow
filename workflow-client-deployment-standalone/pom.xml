@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ci.gouv.dgbf.system.workflow.client</groupId>
+		<artifactId>workflow-client-_pom</artifactId>
+		<version>0.0.1</version>
+	</parent>
+
+	<name>Deployment based on Jboss Swarm</name>
+	
+	<groupId>ci.gouv.dgbf.system.workflow.client.deployment</groupId>
+	<artifactId>workflow-client-deployment-standalone</artifactId>
+	<packaging>war</packaging>
+	
+	<properties>
+		<org.wildfly.swarm.bom-all.version>2017.2.0</org.wildfly.swarm.bom-all.version>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>bom-all</artifactId>
+				<version>${org.wildfly.swarm.bom-all.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>ci.gouv.dgbf.system.workflow.client.controller.impl</groupId>
+			<artifactId>workflow-client-controller-impl</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>jaxrs</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>cdi</artifactId>
+		</dependency>
+	</dependencies>	
+	
+	<profiles>
+		<profile>
+			<id>org.cyk.test</id>
+			<properties>
+				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+			</properties>
+		</profile>
+	</profiles>	
+
+</project>

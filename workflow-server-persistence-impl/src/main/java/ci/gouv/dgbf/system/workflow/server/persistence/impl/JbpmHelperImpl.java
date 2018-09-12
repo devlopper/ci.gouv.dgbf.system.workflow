@@ -14,8 +14,11 @@ import javax.persistence.EntityManagerFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.log.Log;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.SystemHelper;
 import org.kie.api.KieBase;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.manager.RuntimeEngine;
@@ -44,9 +47,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setProcessesMavenRepositoryFolder(System.getProperty("ci.gouv.dgbf.system.workflow.jbpm.maven.repository.path"));
-		System.out.println("JBPM Processes Maven Repository Path : "+getProcessesMavenRepositoryFolder());
-		System.out.println(System.getProperties());
+		setProcessesMavenRepositoryFolder(__inject__(SystemHelper.class).getProperty(PROCESSES_MAVEN_REPOSITORY_FOLDER_ENVIRONMENT_VARIABLE,Boolean.TRUE));
 	}
 	
 	@Override
@@ -99,6 +100,8 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	@Override
 	public JbpmHelper setProcessesMavenRepositoryFolder(String processesMavenRepositoryFolder) {
 		this.processesMavenRepositoryFolder = processesMavenRepositoryFolder;
+		System.out.println("JBPM Processes Maven Repository Path : "+getProcessesMavenRepositoryFolder());
+		//TODO we could set up directory changes listener here
 		return this;
 	}
 	
@@ -106,6 +109,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	public Collection<String> getProcessesFromMavenRepository() {
 		Collection<String> collection = new ArrayList<>();
 		String processesMavenRepositoryFolder  = getProcessesMavenRepositoryFolder();
+		__inject__(Log.class).executeInfo("Scan JBPM maven repository folder for processes started. Folder is "+processesMavenRepositoryFolder);
 		if(__inject__(StringHelper.class).isNotBlank(processesMavenRepositoryFolder)) {
 			//System.out.println("Processes maven repository folder is "+processesMavenRepositoryFolder);
 			for(File indexFile : FileUtils.listFiles(new File(processesMavenRepositoryFolder), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
@@ -129,6 +133,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 				}
 			}
 		}
+		__inject__(Log.class).executeInfo("Scan JBPM maven repository folder for processes done. "+__inject__(CollectionHelper.class).getSize(collection)+" Found");
 		return collection;
 	}
 	
