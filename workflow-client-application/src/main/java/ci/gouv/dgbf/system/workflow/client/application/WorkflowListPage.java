@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
 
@@ -14,7 +15,9 @@ import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter @Named
+@Getter @Setter 
+@ManagedBean
+//@Named
 public class WorkflowListPage extends AbstractPageImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
