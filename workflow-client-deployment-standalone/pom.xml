@@ -14,22 +14,6 @@
 	<artifactId>workflow-client-deployment-standalone</artifactId>
 	<packaging>war</packaging>
 	
-	<properties>
-		<org.wildfly.swarm.bom-all.version>2017.2.0</org.wildfly.swarm.bom-all.version>
-	</properties>
-	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.wildfly.swarm</groupId>
-				<artifactId>bom-all</artifactId>
-				<version>${org.wildfly.swarm.bom-all.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.client.controller.impl</groupId>
@@ -38,15 +22,22 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs</artifactId>
+			<groupId>org.cyk.pom.jee.client.controller.web.jsf.primefaces.main.jboss.swarm</groupId>
+			<artifactId>pom-jee-client-controller-web-jsf-primefaces-main-jboss-swarm</artifactId>
+			<version>0.0.1</version>
+			<type>pom</type>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>cdi</artifactId>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
 		</dependency>
-	</dependencies>	
+		
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-jaxb-provider</artifactId>
+		</dependency>
+	</dependencies>		
 	
 	<profiles>
 		<profile>

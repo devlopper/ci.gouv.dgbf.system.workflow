@@ -14,6 +14,10 @@
 	<artifactId>workflow-server-representation-impl</artifactId>
 	<packaging>jar</packaging>
 	
+	<properties>
+		<org.jboss.resteasy.resteasy-bom.version>3.5.1.Final</org.jboss.resteasy.resteasy-bom.version>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.representation</groupId>
@@ -25,6 +29,20 @@
 			<artifactId>workflow-server-business-impl</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-jaxb-provider</artifactId>
+		    <version>${org.jboss.resteasy.resteasy-bom.version}</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>		
 	
 	<profiles>
@@ -33,6 +51,7 @@
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.resources.folders>bpmn</org.cyk.test.resources.folders>
+				<org.cyk.test.classes>ci.gouv.dgbf.system.workflow.server.representation.impl.integration.MyEntityDto,ci.gouv.dgbf.system.workflow.server.representation.impl.integration.MyRepresentation,ci.gouv.dgbf.system.workflow.server.representation.impl.integration.MyRepresentationImpl,ci.gouv.dgbf.system.workflow.server.representation.impl.integration.RepresentationGeneric</org.cyk.test.classes>
 			</properties>
 		</profile>
 	</profiles>	

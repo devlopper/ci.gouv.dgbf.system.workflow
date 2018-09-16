@@ -1,0 +1,7 @@
+ci:
+  gouv:
+    dgbf:
+      system:
+        workflow:
+          server:
+            uri: http://localhost:8081

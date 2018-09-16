@@ -17,7 +17,7 @@
 	<properties>
 		<org.wildfly.swarm.bom-all.version>2017.2.0</org.wildfly.swarm.bom-all.version>
 	</properties>
-	
+	<!-- Deployment error occur when removing swarm bom : To be solved -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -29,8 +29,9 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	
 	<dependencies>
+		
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.representation</groupId>
 			<artifactId>workflow-server-representation-impl</artifactId>
@@ -38,26 +39,19 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jaxrs</artifactId>
+			<groupId>org.cyk.pom.jee.server.representation.main.jboss.swarm</groupId>
+			<artifactId>pom-jee-server-representation-main-jboss-swarm</artifactId>
+			<version>pom.jee.server.representation.main.jboss.swarm.0.0.1</version>
+			<type>pom</type>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>cdi</artifactId>
-		</dependency>
+		<!-- Datasource jar not bundle with wildfly are required to be declared -->
+		<!--  -->
 		
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>jpa</artifactId>
-		</dependency>
-		
-		<!-- how to handle this -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.4.197</version>
-			<!--scope>test</scope-->
 		</dependency>
 		
 	</dependencies>	

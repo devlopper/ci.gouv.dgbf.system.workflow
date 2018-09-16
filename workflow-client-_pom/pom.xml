@@ -21,8 +21,9 @@
 		<module>../workflow-client-controller-api</module>
 		<module>../workflow-client-controller-impl</module>
 		
-		<!-- Application Layer -->
-		<module>../workflow-client-application</module>
+		<!-- Deployment -->
+		<module>../workflow-client-deployment-standalone</module>
+		<module>../workflow-client-deployment-web</module>
 				
 	</modules>
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -9,10 +11,14 @@
 	</parent>
 
 	<name>Deployment based on JEE</name>
-	
+
 	<groupId>ci.gouv.dgbf.system.workflow.client.deployment</groupId>
 	<artifactId>workflow-client-deployment-web</artifactId>
 	<packaging>war</packaging>
+	
+	<properties>
+		<org.wildfly.plugins.wildfly-maven-plugin.version>1.2.2.Final</org.wildfly.plugins.wildfly-maven-plugin.version>
+	</properties>
 	
 	<dependencies>
 		<dependency>
@@ -20,15 +26,27 @@
 			<artifactId>workflow-client-controller-impl</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-	</dependencies>	
+	</dependencies>
 	
-	<profiles>
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${org.wildfly.plugins.wildfly-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+	
+	<!--profiles>
 		<profile>
 			<id>org.cyk.test</id>
 			<properties>
-				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+				<org.cyk.test.swarm.project.defaults.file>ci/gouv/dgbf/system/workflow/client/deployment/web/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+				<org.cyk.test.jpa.persistence.file>ci/gouv/dgbf/system/workflow/client/deployment/web/persistence.xml</org.cyk.test.jpa.persistence.file>
+				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity,org.cyk.utility.server.persistence.impl.DependenceProducer,org.cyk.utility.server.representation.MyRepresentation,org.cyk.utility.server.representation.MyRepresentationImpl,org.cyk.utility.server.representation.RepresentationGeneric,org.cyk.utility.server.representation.MyApplication</org.cyk.test.classes>
 			</properties>
 		</profile>
-	</profiles>	
-
+	</profiles-->
+	
 </project>
