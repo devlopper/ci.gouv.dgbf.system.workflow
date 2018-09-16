@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
 
@@ -23,9 +22,9 @@ public class WorkflowListPage extends AbstractPageImpl implements Serializable {
 		
 	public List<WorkflowDto> getWorkflowDtos() {
 		if(workflowDtos == null) {
-			//WorkflowRepresentation workflowRepresentation = __getProxyByUri__(WorkflowRepresentation.class,__getUri__(WorkflowRepresentation.class));
-			WorkflowRepresentation workflowRepresentation = __getProxyByRequest__(WorkflowRepresentation.class,FacesContext.getCurrentInstance().getExternalContext().getRequest());
+			WorkflowRepresentation workflowRepresentation = ____getProxy____(WorkflowRepresentation.class);
 			Response response = workflowRepresentation.getMany();
+			
 			Collection<WorkflowDto> dtos = __readEntityAsCollection__(response, WorkflowDto.class);
 			workflowDtos = (List<WorkflowDto>) __injectInstanceHelper__().buildMany(WorkflowDto.class, dtos);
 		}
