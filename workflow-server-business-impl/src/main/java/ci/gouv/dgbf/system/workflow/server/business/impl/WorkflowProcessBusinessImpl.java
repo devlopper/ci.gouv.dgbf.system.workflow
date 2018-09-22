@@ -18,10 +18,6 @@ public class WorkflowProcessBusinessImpl extends AbstractBusinessEntityImpl<Work
 	
 	@Override //TODO this must be done automatically. the specific persistence must be called from the business
 	public BusinessServiceProvider<WorkflowProcess> create(WorkflowProcess workflowProcess) {
-		//if(workflowProcess.getWorkflow() == null) {
-			System.out.println("WorkflowProcessBusinessImpl.create() WF IS REQUIRED");
-			//__injectThrowableHelper__().throwRuntimeException("Workflow is required");
-		//}
 		getPersistence().create(workflowProcess);
 		return this;
 	}

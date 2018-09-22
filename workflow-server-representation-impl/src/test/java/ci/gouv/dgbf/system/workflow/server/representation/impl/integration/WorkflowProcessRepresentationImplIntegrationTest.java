@@ -2,8 +2,6 @@ package ci.gouv.dgbf.system.workflow.server.representation.impl.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.server.representation.AbstractEntityCollection;
