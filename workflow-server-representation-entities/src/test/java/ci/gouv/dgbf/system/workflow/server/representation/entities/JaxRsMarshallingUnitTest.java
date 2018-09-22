@@ -18,7 +18,7 @@ public class JaxRsMarshallingUnitTest {
 		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowDto.class);
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		jaxbMarshaller.marshal(dto, System.out);
+		//jaxbMarshaller.marshal(dto, System.out);
 	}
 	
 	@Test
@@ -26,17 +26,17 @@ public class JaxRsMarshallingUnitTest {
 		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowDto.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		WorkflowDto dto = (WorkflowDto) unmarshaller.unmarshal(new StringReader(XML));
-		System.out.println(dto.getModel());
+		//System.out.println(dto.getModel());
 	}
 	
 	@Test
 	public void marshallWorkflowProcessDto() throws JAXBException {
 		WorkflowProcessDto dto = new WorkflowProcessDto();
-		dto.setCode("MyCode").setWorkflowCode("MyModel");
+		dto.setCode("MyCode").setWorkflow("MyModel");
 		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowProcessDto.class);
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		jaxbMarshaller.marshal(dto, System.out);
+		//jaxbMarshaller.marshal(dto, System.out);
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class JaxRsMarshallingUnitTest {
 		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowProcessDto.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		WorkflowProcessDto dto = (WorkflowProcessDto) unmarshaller.unmarshal(new StringReader(XML_WORKFLOW_PROCESS));
-		System.out.println(dto.getCode());
+		//System.out.println(dto.getCode());
 	}
 	
 	public static String XML = ""

@@ -9,7 +9,9 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
+import org.cyk.utility.server.persistence.PersistenceServiceProvider;
 import org.kie.internal.KieInternalServices;
 import org.kie.internal.process.CorrelationAwareProcessRuntime;
 
@@ -22,9 +24,9 @@ public class WorkflowProcessPersistenceImpl extends AbstractPersistenceEntityImp
 	private static final long serialVersionUID = 1L;
 
 	@Inject private EntityManager entityManager;
-		
+			
 	@Override
-	public WorkflowProcessPersistence create(WorkflowProcess workflowProcess) {
+	public PersistenceServiceProvider<WorkflowProcess> create(WorkflowProcess workflowProcess, Properties properties) {
 		String identifier = workflowProcess.getWorkflow().getCode();
 		((CorrelationAwareProcessRuntime)__inject__(JbpmHelper.class).getRuntimeEngine().getKieSession()).startProcess(identifier,KieInternalServices.Factory.get().newCorrelationKeyFactory()
 				.newCorrelationKey(Arrays.asList(workflowProcess.getWorkflow().getCode(),workflowProcess.getCode())),null);
@@ -67,9 +69,9 @@ public class WorkflowProcessPersistenceImpl extends AbstractPersistenceEntityImp
 	public Collection<WorkflowProcess> read() {
 		return entityManager.createNamedQuery("WorkflowProcess.readAll", WorkflowProcess.class).getResultList();
 	}
-	
+		
 	@Override
-	public Long count() {
+	public Long count(Properties properties) {
 		return entityManager.createNamedQuery("WorkflowProcess.countAll", Long.class).getSingleResult();
 	}
 	

@@ -33,8 +33,15 @@
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.resources.folders>bpmn</org.cyk.test.resources.folders>
-				<org.cyk.test.web.inf.resources>-ds.xml</org.cyk.test.web.inf.resources>
+				<org.cyk.test.classes>ci.gouv.dgbf.system.workflow.server.business.impl.integration.DataSourceDefinition</org.cyk.test.classes>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.197</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 	

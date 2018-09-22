@@ -20,7 +20,7 @@ public interface WorkflowRepresentation extends RepresentationEntity<Workflow,Wo
 	@Produces(MediaType.TEXT_PLAIN)
 	Response synchroniseWithJbpmMavenRepository();
 	
-	String PATH = "/workflow/";
+	String PATH = "/workflow";
 	
 	String PATH_SYNCHRONISE_WITH_JBPM_MAVEN_REPOSITORY = "/execute/synchronise";
 }

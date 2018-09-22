@@ -24,6 +24,13 @@
 			<artifactId>workflow-server-representation-api</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
+			<artifactId>jee-utility-server-representation-impl</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.business</groupId>
 			<artifactId>workflow-server-business-impl</artifactId>
@@ -51,8 +58,15 @@
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.resources.folders>bpmn</org.cyk.test.resources.folders>
-				<org.cyk.test.classes>ci.gouv.dgbf.system.workflow.server.representation.impl.integration.MyEntityDto,ci.gouv.dgbf.system.workflow.server.representation.impl.integration.MyRepresentation,ci.gouv.dgbf.system.workflow.server.representation.impl.integration.MyRepresentationImpl,ci.gouv.dgbf.system.workflow.server.representation.impl.integration.RepresentationGeneric</org.cyk.test.classes>
+				<org.cyk.test.classes>ci.gouv.dgbf.system.workflow.server.representation.impl.integration.MyEntityDto,ci.gouv.dgbf.system.workflow.server.representation.impl.integration.DataSourceDefinition</org.cyk.test.classes>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.197</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>	
 	

@@ -13,6 +13,6 @@ public class WorkflowProcessDto extends AbstractDto implements Serializable {
 	private String code;
 	private String state;
 	
-	private String workflowCode;
+	private String workflow;
 	
 }
