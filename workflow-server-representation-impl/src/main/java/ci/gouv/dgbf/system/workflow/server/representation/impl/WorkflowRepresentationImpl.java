@@ -17,6 +17,7 @@ public class WorkflowRepresentationImpl extends AbstractRepresentationEntityImpl
 
 	@Override
 	public Response synchroniseWithJbpmMavenRepository() {
+		//TODO handle error
 		getBusiness().synchroniseWithJbpmMavenRepository();
 		return Response.status(Response.Status.OK).build();
 	}

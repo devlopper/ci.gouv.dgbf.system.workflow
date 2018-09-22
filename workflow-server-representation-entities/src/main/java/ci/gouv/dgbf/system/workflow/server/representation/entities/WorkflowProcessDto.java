@@ -10,9 +10,15 @@ import org.cyk.utility.server.representation.AbstractDto;
 public class WorkflowProcessDto extends AbstractDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String code;
 	private String state;
 	
 	private String workflow;
+	
+	/**/
+	
+	@Override
+	public WorkflowProcessDto setCode(String code) {
+		return (WorkflowProcessDto) super.setCode(code);
+	}
 	
 }

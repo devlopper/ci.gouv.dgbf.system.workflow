@@ -36,10 +36,10 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	}	
 	
 	@Override public void createMany() throws Exception {}
-	@Override public void readOneByBusinessIdentifier() throws Exception {}
-	@Override public void readOneBySystemIdentifier() throws Exception {}
-	@Override public void updateOne() throws Exception {}
-	@Override public void deleteOne() throws Exception {}
+	//@Override public void readOneByBusinessIdentifier() throws Exception {}
+	//@Override public void readOneBySystemIdentifier() throws Exception {}
+	//@Override public void updateOne() throws Exception {}
+	//@Override public void deleteOne() throws Exception {}
 	
 	@Override
 	public <ENTITY> void __createEntity__(ENTITY entity, @SuppressWarnings("rawtypes") RepresentationEntity layerEntityInterface) {
@@ -47,7 +47,7 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 		super.__createEntity__(entity, layerEntityInterface);
 	}
 	
-	//@Test @InSequence(1)
+	@Test @InSequence(1)
 	public void countWorkflowBeforeCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
 		Response response = workflowRepresentation.count();
@@ -55,14 +55,14 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 		response.close();
 	}
 	
-	//@Test @InSequence(2)
+	@Test @InSequence(2)
 	public void readWorkflowByCodeBeforeCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
 		Response response = workflowRepresentation.getOne("ci.gouv.dgbf.workflow.validation.pap","business");
 		assertThat(response.getStatus()).isEqualTo(Response.Status.NO_CONTENT.getStatusCode());
 		response.close();
 	}
-	/*
+	
 	@Test @InSequence(3)
 	public void createWorkflow(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
@@ -70,7 +70,7 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 	}
-	
+	/*
 	@Test @InSequence(4)
 	public void countWorkflowAfterCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
