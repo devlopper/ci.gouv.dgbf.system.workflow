@@ -7,13 +7,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.server.representation.AbstractDto;
+import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntityDto;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.bpmn.Bpmn;
 
 @XmlRootElement
 @lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true) @lombok.NoArgsConstructor
-public class WorkflowDto extends AbstractDto implements Serializable {
+public class WorkflowDto extends AbstractEntityFromPersistenceEntityDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String name;

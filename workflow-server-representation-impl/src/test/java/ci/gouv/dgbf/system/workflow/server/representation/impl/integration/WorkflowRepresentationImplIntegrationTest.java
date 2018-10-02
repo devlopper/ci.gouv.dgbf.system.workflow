@@ -36,6 +36,15 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	}	
 	
 	@Override public void createMany() throws Exception {}
+	@Override public void createOne_businessIdentifierMustNotBeNull() throws Exception {}
+	//@Override public void createOne_businessIdentifierMustBeUnique() throws Exception {}
+	//@Override public void createOne() throws Exception {}
+	//@Override public void readOneByBusinessIdentifier() throws Exception {}
+	//@Override public void readOneByBusinessIdentifier_notFound() throws Exception {}
+	//@Override public void readOneBySystemIdentifier() throws Exception {}
+	//@Override public void readOneBySystemIdentifier_notFound() throws Exception {}
+	@Override public void updateOne() throws Exception {}
+	//@Override public void deleteOne() throws Exception {}
 	//@Override public void readOneByBusinessIdentifier() throws Exception {}
 	//@Override public void readOneBySystemIdentifier() throws Exception {}
 	//@Override public void updateOne() throws Exception {}
@@ -47,11 +56,16 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 		super.__createEntity__(entity, layerEntityInterface);
 	}
 	
+	@Override
+	protected WorkflowDto __instanciateEntity__(Object action) throws Exception {
+		return new WorkflowDto().setModel(XML);
+	}
+	
 	@Test @InSequence(1)
 	public void countWorkflowBeforeCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
 		Response response = workflowRepresentation.count();
-		assertThat(response.readEntity(Long.class)).isEqualTo(0);
+		assertThat(response.getEntity()).isEqualTo(0l);
 		response.close();
 	}
 	
@@ -59,7 +73,7 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	public void readWorkflowByCodeBeforeCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
 		Response response = workflowRepresentation.getOne("ci.gouv.dgbf.workflow.validation.pap","business");
-		assertThat(response.getStatus()).isEqualTo(Response.Status.NO_CONTENT.getStatusCode());
+		assertThat(response.getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
 		response.close();
 	}
 	
