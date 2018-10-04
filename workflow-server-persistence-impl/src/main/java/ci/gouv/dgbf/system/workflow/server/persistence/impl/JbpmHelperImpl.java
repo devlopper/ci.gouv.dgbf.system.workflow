@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -19,6 +21,7 @@ import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.SystemHelper;
+import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.kie.api.KieBase;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.manager.RuntimeEngine;
@@ -147,50 +150,36 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 		UserGroupCallback userGroupCallback = getUserGroupCallback();
 		RuntimeEnvironmentBuilder runtimeEnvironmentBuilder = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder()
 				.entityManagerFactory(__inject__(EntityManagerFactory.class))
-				.knowledgeBase(kieBase).userGroupCallback(userGroupCallback);
+				.knowledgeBase(kieBase);
 		
+		// User
+		Collection<String> userIdentifiers = new HashSet<>();
 		// Get all workflow from database
 		Collection<Workflow> workflows = __inject__(WorkflowPersistence.class).readMany();
 		if(workflows!=null)
-			for(Workflow index : workflows)
-				__addProcess__(runtimeEnvironmentBuilder,index.getModel());
-		
-		// Get all workflow from maven repository
-		/*String processesMavenRepositoryFolder  = getProcessesMavenRepositoryFolder();
-		if(__inject__(StringHelper.class).isNotBlank(processesMavenRepositoryFolder)) {
-			System.out.println("Processes maven repository folder is "+processesMavenRepositoryFolder);
-			for(File indexFile : FileUtils.listFiles(new File(processesMavenRepositoryFolder), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE)) {
-				if(indexFile.getAbsolutePath().endsWith(".jar")) {
-					try {
-						ZipFile zipFile = new ZipFile(indexFile.getAbsoluteFile());
-						zipFile.stream().filter(entry -> entry.getName().endsWith(".bpmn2")).forEach(new Consumer<ZipEntry>() {
-							@Override
-							public void accept(ZipEntry entry) {
-								try {
-									__addProcess__(runtimeEnvironmentBuilder, IOUtils.toString(zipFile.getInputStream(entry), "UTF-8"));
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-					        	
-							}
-						});
-					    zipFile.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+			for(Workflow index : workflows) {
+				Bpmn bpmn = Bpmn.__executeWithContent__(index.getModel());
+				runtimeEnvironmentBuilder.addAsset(ResourceFactory.newByteArrayResource(index.getModel().getBytes()), ResourceType.BPMN2);
+				if(userGroupCallback == null) {
+					Collection<String> lUserIdentifiers = bpmn.getProcessUserTaskPotentialOwners();
+					if(lUserIdentifiers!=null)
+						userIdentifiers.addAll(lUserIdentifiers);
 				}
+				System.out.println("\tProcess <<"+bpmn.getProcess().getId()+">> added");
 			}
-		}*/
+		
+		if(userGroupCallback == null) {
+			Properties properties = new Properties();
+			for(String index : userIdentifiers)
+				properties.put(index, "");
+			userGroupCallback = new JBossUserGroupCallbackImpl(properties);
+			System.out.println("\tDerived users : "+properties);
+		}
+		runtimeEnvironmentBuilder.userGroupCallback(userGroupCallback);
 		
 		setRuntimeEnvironment(runtimeEnvironmentBuilder.get());
 		System.out.println("Runtime environment build done.");
 		return this;
-	}
-	
-	protected void __addProcess__(RuntimeEnvironmentBuilder runtimeEnvironmentBuilder,String string) {
-		Bpmn bpmn = Bpmn.__executeWithContent__(string);
-		runtimeEnvironmentBuilder.addAsset(ResourceFactory.newByteArrayResource(string.getBytes()), ResourceType.BPMN2);
-		System.out.println("\tProcess <<"+bpmn.getProcess().getId()+">> added");
 	}
 	
 	@Override

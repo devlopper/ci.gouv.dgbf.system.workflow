@@ -28,8 +28,8 @@ public class UserTask implements Serializable {
 	
 	/**/
 	
-	public String getPotentialOwnerAsString(){
-		return potentialOwner == null ? null : potentialOwner.getResourceAssignmentExpressionAsString();
+	public String getPotentialOwnerResourceAssignmentExpressionFormalExpression(){
+		return potentialOwner == null ? null : potentialOwner.getResourceAssignmentExpressionFormalExpression();
 	}
 	
 }

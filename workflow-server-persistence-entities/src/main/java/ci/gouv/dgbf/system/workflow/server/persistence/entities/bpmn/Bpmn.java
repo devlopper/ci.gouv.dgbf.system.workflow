@@ -3,6 +3,7 @@ package ci.gouv.dgbf.system.workflow.server.persistence.entities.bpmn;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.util.Collection;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -24,6 +25,10 @@ public class Bpmn implements Serializable {
 	
 	public String getProcessFirstUserTaskPotentialOwner(){
 		return process == null ? null : process.getFirstUserTaskPotentialOwner();
+	}
+	
+	public Collection<String> getProcessUserTaskPotentialOwners(){
+		return process == null ? null : process.getUserTaskPotentialOwners();
 	}
 	
 	/**/

@@ -37,6 +37,7 @@ public class BpmnXmlUnitTest {
 	@Test
 	public void unmarshall(){
 		Bpmn bpmnXml = Bpmn.__execute__(System.getProperty("user.dir")+"/src/test/resources/bpmn/withhuman/Validation du PAP.bpmn2");
+		Assert.assertEquals(3, bpmnXml.getProcessUserTaskPotentialOwners().size());
 		Assert.assertEquals("charge_etude", bpmnXml.getProcessFirstUserTaskPotentialOwner());
 	}
 	

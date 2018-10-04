@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class JaxRsMarshallingUnitTest {
@@ -26,6 +27,7 @@ public class JaxRsMarshallingUnitTest {
 		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowDto.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		WorkflowDto dto = (WorkflowDto) unmarshaller.unmarshal(new StringReader(XML));
+		Assert.assertNotNull(dto.getModel());
 		//System.out.println(dto.getModel());
 	}
 	
@@ -44,6 +46,7 @@ public class JaxRsMarshallingUnitTest {
 		JAXBContext jaxbContext = JAXBContext.newInstance(WorkflowProcessDto.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		WorkflowProcessDto dto = (WorkflowProcessDto) unmarshaller.unmarshal(new StringReader(XML_WORKFLOW_PROCESS));
+		Assert.assertNotNull(dto.getCode());
 		//System.out.println(dto.getCode());
 	}
 	

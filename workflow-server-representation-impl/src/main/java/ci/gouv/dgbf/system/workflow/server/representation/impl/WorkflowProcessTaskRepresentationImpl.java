@@ -1,8 +1,10 @@
 package ci.gouv.dgbf.system.workflow.server.representation.impl;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.lang.reflect.Type;
+import java.util.List;
 
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.server.representation.AbstractRepresentationEntityImpl;
@@ -15,31 +17,35 @@ import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProce
 
 public class WorkflowProcessTaskRepresentationImpl extends AbstractRepresentationEntityImpl<WorkflowProcessTask, WorkflowProcessTaskBusiness, WorkflowProcessTaskDto,WorkflowProcessTaskDtoCollection> implements WorkflowProcessTaskRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	public Response execute(String workflowCode, String workflowProcessCode, String userIdentifier) {
 		getBusiness().execute(workflowCode,workflowProcessCode, userIdentifier);
-		return Response.ok().status(Response.Status.OK).build();
+		return Response.ok().build();
 	}
 	
 	@Override
-	public Collection<WorkflowProcessTaskDto> getByWorkflowCode(String workflowCode) {
-		return null;//getRepresentationFromPersistence(getBusiness().findByWorkflowCode(workflowCode));
+	public Response getByWorkflowCode(String workflowCode) {
+		List<?> collection = (List<?>) __injectInstanceHelper__().buildMany(WorkflowProcessTaskDto.class, getBusiness().findByWorkflowCode(workflowCode));
+		return Response.ok(new GenericEntity<List<?>>(collection,(Type) __injectTypeHelper__().instanciateCollectionParameterizedType(List.class, WorkflowProcessTask.class))).build();
 	}
 	
 	@Override
-	public Long countByWorkflowCode(String workflowCode) {
-		return getBusiness().countByWorkflowCode(workflowCode);
+	public Response countByWorkflowCode(String workflowCode) {
+		return Response.ok(getBusiness().countByWorkflowCode(workflowCode)).build();
 	}
 	
 	@Override
-	public Collection<WorkflowProcessTaskDto> getByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode, String userIdentifier) {
-		return null;//getRepresentationFromPersistence(getBusiness().findByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode,processCode,userIdentifier));
+	public Response getByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode, String userIdentifier) {
+		List<?> collection = (List<?>) __injectInstanceHelper__().buildMany(WorkflowProcessTaskDto.class, getBusiness().findByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode,processCode,userIdentifier));
+		if(collection == null)
+			return Response.ok().build();
+		return Response.ok(new GenericEntity<List<?>>(collection,(Type) __injectTypeHelper__().instanciateCollectionParameterizedType(List.class, WorkflowProcessTask.class))).build();
 	}
 	
 	@Override
-	public Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode, String processCode,String userIdentifier) {
-		return getBusiness().countByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode, processCode, userIdentifier);
+	public Response countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode, String processCode,String userIdentifier) {
+		return Response.ok(getBusiness().countByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode, processCode, userIdentifier)).build();
 	}
 	
 }

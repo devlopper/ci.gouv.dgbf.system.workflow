@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
@@ -88,12 +89,13 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractPersistenceEntit
 	}
 
 	@Override
-	public Collection<WorkflowProcessTask> read() {
+	public Collection<WorkflowProcessTask> read(Properties properties) {
 		return entityManager.createNamedQuery("WorkflowProcessTask.readAll", WorkflowProcessTask.class).getResultList();
 	}
 	
 	@Override
-	public Long count() {
+	public Long count(Properties properties) {
 		return entityManager.createNamedQuery("WorkflowProcessTask.countAll", Long.class).getSingleResult();
 	}
+	
 }

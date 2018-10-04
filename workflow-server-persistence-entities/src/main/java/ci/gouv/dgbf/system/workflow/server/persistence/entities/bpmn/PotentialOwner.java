@@ -25,7 +25,7 @@ public class PotentialOwner implements Serializable {
 		return name;
 	}
 	
-	public String getResourceAssignmentExpressionAsString(){
+	public String getResourceAssignmentExpressionFormalExpression(){
 		return resourceAssignmentExpression == null ? null : resourceAssignmentExpression.getFormalExpression();
 	}
 	

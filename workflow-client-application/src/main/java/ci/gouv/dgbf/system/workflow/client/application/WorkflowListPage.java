@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.inject.Named;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;

@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.server.representation.AbstractEntityCollection;
-import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram;
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
@@ -13,27 +11,9 @@ import org.junit.Test;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
-import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDtoCollection;
 
 public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowDto> {
 	private static final long serialVersionUID = 1L;
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Class<? extends RepresentationEntity> __getLayerEntityInterfaceClass__() {
-		return WorkflowRepresentation.class;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
-		try {
-			return (Class<? extends AbstractEntityCollection<ENTITY>>) Class.forName(WorkflowDtoCollection.class.getName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}	
 	
 	@Override public void createMany() throws Exception {}
 	@Override public void createOne_businessIdentifierMustNotBeNull() throws Exception {}
@@ -49,12 +29,6 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	//@Override public void readOneBySystemIdentifier() throws Exception {}
 	//@Override public void updateOne() throws Exception {}
 	//@Override public void deleteOne() throws Exception {}
-	
-	@Override
-	public <ENTITY> void __createEntity__(ENTITY entity, @SuppressWarnings("rawtypes") RepresentationEntity layerEntityInterface) {
-		((WorkflowDto)entity).setModel(XML);
-		super.__createEntity__(entity, layerEntityInterface);
-	}
 	
 	@Override
 	protected WorkflowDto __instanciateEntity__(Object action) throws Exception {

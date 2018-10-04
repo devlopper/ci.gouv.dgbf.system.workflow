@@ -2,6 +2,7 @@ package ci.gouv.dgbf.system.workflow.server.persistence.entities.bpmn;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,7 +36,17 @@ public class Process implements Serializable {
 	/**/
 	
 	public String getFirstUserTaskPotentialOwner(){
-		return userTasks == null || userTasks.isEmpty() ? null : userTasks.iterator().next().getPotentialOwnerAsString();
+		return userTasks == null || userTasks.isEmpty() ? null : userTasks.iterator().next().getPotentialOwnerResourceAssignmentExpressionFormalExpression();
+	}
+	
+	public Collection<String> getUserTaskPotentialOwners(){
+		Collection<String> collection = null;
+		if(userTasks != null && !userTasks.isEmpty()) {
+			collection = new HashSet<>();
+			for(UserTask index : userTasks)
+				collection.add(index.getPotentialOwnerResourceAssignmentExpressionFormalExpression());
+		}
+		return collection;
 	}
 	
 	/**/
