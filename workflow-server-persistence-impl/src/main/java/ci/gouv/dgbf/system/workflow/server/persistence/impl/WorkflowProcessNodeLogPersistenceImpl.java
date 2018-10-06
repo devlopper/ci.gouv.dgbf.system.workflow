@@ -70,4 +70,16 @@ public class WorkflowProcessNodeLogPersistenceImpl extends AbstractPersistenceEn
 				.setParameter("processInstanceId", workflowProcess.getIdentifier()).setParameter("workItemId", workItemIdentifier).getSingleResult();
 	}
 	
+	@Override
+	public Collection<WorkflowProcessNodeLog> readByWorkflowCodeByProcessIdentifierByWorkItemIdentifier(String workflowCode,Long processIdentifier, Long workItemIdentifier) {
+		return entityManager.createNamedQuery("WorkflowProcessNodeLog.readByProcessInstanceIdByWorkItemId", WorkflowProcessNodeLog.class)
+				.setParameter("processInstanceId", processIdentifier).setParameter("workItemId", workItemIdentifier).getResultList();
+	}
+
+	@Override
+	public Long countByWorkflowCodeByProcessIdentifierByWorkItemIdentifier(String workflowCode, Long processIdentifier,Long workItemIdentifier) {
+		return entityManager.createNamedQuery("WorkflowProcessNodeLog.countByProcessInstanceIdByWorkItemId", Long.class)
+				.setParameter("processInstanceId", processIdentifier).setParameter("workItemId", workItemIdentifier).getSingleResult();
+	}
+	
 }

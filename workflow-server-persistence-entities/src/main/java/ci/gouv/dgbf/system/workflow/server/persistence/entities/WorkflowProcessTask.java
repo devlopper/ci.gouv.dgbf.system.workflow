@@ -31,7 +31,8 @@ public class WorkflowProcessTask extends AbstractEntity implements Serializable 
 	*/
 	private WorkflowProcess workflowProcess;
 
-	public WorkflowProcessTask(Long identifier,String name,org.kie.api.task.model.TaskData data){
+	public WorkflowProcessTask(Long workflowProcessIdentifier,Long identifier,String name,org.kie.api.task.model.TaskData data){
+		setWorkflowProcess(new WorkflowProcess().setIdentifier(workflowProcessIdentifier));
 		setIdentifier(identifier);
 		//setCode(code);
 		setName(name);

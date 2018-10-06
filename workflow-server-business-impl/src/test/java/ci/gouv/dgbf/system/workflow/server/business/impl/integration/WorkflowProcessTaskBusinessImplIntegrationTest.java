@@ -63,7 +63,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 		//persistenceHelper.buildKieBase();
 		//persistenceHelper.buildRuntimeEnvironment();
 		
-		workflowProcessBusiness.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowBusiness.findByCode("ci.gouv.dgbf.workflow.validation.pap")));
+		workflowProcessBusiness.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowBusiness.findOneByBusinessIdentifier("ci.gouv.dgbf.workflow.validation.pap")));
 		
 		Assert.assertEquals(new Long(1), workflowProcessTaskBusiness.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskBusiness.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
@@ -80,7 +80,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 		assertThat(workflowProcessTask.getName()).isEqualTo("Première Validation");
 		assertThat(workflowProcessTask.getOwner()).isEqualTo("charge_etude");
 		
-		workflowProcessBusiness.create(new WorkflowProcess().setCode("PAP002").setWorkflow(workflowBusiness.findByCode("ci.gouv.dgbf.workflow.validation.pap")));
+		workflowProcessBusiness.create(new WorkflowProcess().setCode("PAP002").setWorkflow(workflowBusiness.findOneByBusinessIdentifier("ci.gouv.dgbf.workflow.validation.pap")));
 		
 		Assert.assertEquals(new Long(2), workflowProcessTaskBusiness.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskBusiness.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP002"));
@@ -89,7 +89,7 @@ public class WorkflowProcessTaskBusinessImplIntegrationTest extends AbstractBusi
 		Assert.assertEquals(new Long(1), workflowProcessTaskBusiness.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP002","charge_etude"));
 		Assert.assertEquals(new Long(0), workflowProcessTaskBusiness.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP002","pas_charge_etude"));
 		
-		workflowProcessBusiness.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowBusiness.findByCode("ci.gouv.dgbf.workflow.validation.pap.v01")));
+		workflowProcessBusiness.create(new WorkflowProcess().setCode("PAP001").setWorkflow(workflowBusiness.findOneByBusinessIdentifier("ci.gouv.dgbf.workflow.validation.pap.v01")));
 		
 		Assert.assertEquals(new Long(1), workflowProcessTaskBusiness.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 		Assert.assertEquals(new Long(1), workflowProcessTaskBusiness.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap.v01","PAP001"));

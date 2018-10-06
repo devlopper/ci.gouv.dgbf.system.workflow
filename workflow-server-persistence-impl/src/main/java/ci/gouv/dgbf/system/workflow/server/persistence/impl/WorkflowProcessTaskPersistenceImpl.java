@@ -115,5 +115,29 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractPersistenceEntit
 	public Long count(Properties properties) {
 		return entityManager.createNamedQuery("WorkflowProcessTask.countAll", Long.class).getSingleResult();
 	}
+
+	@Override
+	public Collection<WorkflowProcessTask> readByUserCodeByStatusCodes(String userCode,Collection<String> statusCodes) {
+		@SuppressWarnings("unchecked")
+		Collection<Status> status = __injectEnumCollectionGetter__().setGetter(__injectEnumGetter__().setClazz(Status.class)).setNames(statusCodes).execute().getOutput();
+		return entityManager.createNamedQuery("WorkflowProcessTask.readByActualOwnerIdByStatus", WorkflowProcessTask.class)
+				.setParameter("actualOwnerId", userCode).setParameter("status", status).getResultList();
+	}
+
+	@Override
+	public Long countByUserCodeByStatusCodes(String userCode, Collection<String> statusCodes) {
+		return entityManager.createNamedQuery("WorkflowProcessTask.countByActualOwnerIdByStatus", Long.class)
+				.setParameter("actualOwnerId", userCode).setParameter("status", statusCodes).getSingleResult();
+	}
+
+	@Override
+	public Collection<WorkflowProcessTask> readByUserCodeByStatusCodes(String userCode, String... statusCodes) {
+		return readByUserCodeByStatusCodes(userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
+
+	@Override
+	public Long countByUserCodeByStatusCodes(String userCode, String... statusCodes) {
+		return countByUserCodeByStatusCodes(userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
 	
 }

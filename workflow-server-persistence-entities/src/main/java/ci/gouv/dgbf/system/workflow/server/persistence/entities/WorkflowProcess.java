@@ -21,6 +21,11 @@ public class WorkflowProcess extends AbstractWorkflowProcess implements Serializ
 	}
 	
 	@Override
+	public WorkflowProcess setIdentifier(Long identifier) {
+		return (WorkflowProcess) super.setIdentifier(identifier);
+	}
+	
+	@Override
 	public WorkflowProcess setCode(String code) {
 		return (WorkflowProcess) super.setCode(code);
 	}

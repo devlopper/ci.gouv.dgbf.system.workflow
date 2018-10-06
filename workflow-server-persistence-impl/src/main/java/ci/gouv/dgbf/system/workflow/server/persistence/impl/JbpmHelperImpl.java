@@ -46,6 +46,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	private RuntimeManager runtimeManager;
 	private RuntimeEngine runtimeEngine;
 	private String processesMavenRepositoryFolder;
+	private Collection<String> userIdentifiers;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -94,6 +95,13 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	@Override
 	public RuntimeEngine getRuntimeEngine() {
 		return runtimeEngine = getRuntimeManager().getRuntimeEngine(ProcessInstanceIdContext.get());
+	}
+	
+	@Override
+	public Collection<String> getUserIdentifiers() {
+		if(runtimeEnvironment == null)
+			buildRuntimeEnvironment();
+		return userIdentifiers;
 	}
 	
 	@Override
@@ -154,7 +162,10 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 				.knowledgeBase(kieBase);
 		
 		// User
-		Collection<String> userIdentifiers = new HashSet<>();
+		if(userIdentifiers==null)
+			userIdentifiers = new HashSet<>();
+		else
+			userIdentifiers.clear();
 		// Get all workflow from database
 		Collection<Workflow> workflows = __inject__(WorkflowPersistence.class).readMany();
 		if(workflows!=null)

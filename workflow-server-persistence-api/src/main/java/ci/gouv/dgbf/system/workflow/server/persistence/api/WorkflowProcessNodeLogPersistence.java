@@ -19,4 +19,7 @@ public interface WorkflowProcessNodeLogPersistence extends PersistenceEntity<Wor
 	
 	Collection<WorkflowProcessNodeLog> readByWorkflowCodeByProcessCodeByWorkItemIdentifier(String workflowCode,String processCode,Long workItemIdentifier);
 	Long countByWorkflowCodeByProcessCodeByWorkItemIdentifier(String workflowCode,String processCode,Long workItemIdentifier);
+	
+	Collection<WorkflowProcessNodeLog> readByWorkflowCodeByProcessIdentifierByWorkItemIdentifier(String workflowCode,Long processIdentifier,Long workItemIdentifier);
+	Long countByWorkflowCodeByProcessIdentifierByWorkItemIdentifier(String workflowCode,Long processIdentifier,Long workItemIdentifier);
 }
