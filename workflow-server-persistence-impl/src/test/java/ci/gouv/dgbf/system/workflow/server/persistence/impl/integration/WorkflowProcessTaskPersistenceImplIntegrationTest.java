@@ -10,12 +10,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessNodeLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
-import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessNodeLog;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
 import ci.gouv.dgbf.system.workflow.server.persistence.impl.JbpmHelper;
 
@@ -91,34 +89,12 @@ public class WorkflowProcessTaskPersistenceImplIntegrationTest extends AbstractP
 		Assert.assertEquals(new Long(0), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap.v01","PAP001","pas_charge_etude"));
 		
 		WorkflowProcessTask workflowProcessTask = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001","charge_etude").iterator().next();
-		/*
-		System.out.println("BEFORE EXECUTE");
-		for(WorkflowProcessTask i : __inject__(WorkflowProcessTaskPersistence.class).readByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001")) {
-			i.setCode(__inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessCodeByWorkItemIdentifier("ci.gouv.dgbf.workflow.validation.pap", "PAP001",i.getWorkItemIdentifier())
-					.iterator().next().getCode());
-			System.out.println("TASK : "+i);
-		}
 		
-		for(WorkflowProcessNodeLog i : __inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001")) {
-			//System.out.println("NODE : "+i);
-		}
-		*/
 		userTransaction.begin();
 		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTask.getIdentifier(), "charge_etude");
 		jbpmHelper.getRuntimeEngine().getTaskService().complete(workflowProcessTask.getIdentifier(), "charge_etude", null);
 		userTransaction.commit();
-		/*
-		System.out.println("AFTER EXECUTE");
-		for(WorkflowProcessTask i : __inject__(WorkflowProcessTaskPersistence.class).readByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001")) {
-			i.setCode(__inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessCodeByWorkItemIdentifier("ci.gouv.dgbf.workflow.validation.pap", "PAP001",i.getWorkItemIdentifier())
-					.iterator().next().getCode());
-			System.out.println("TASK : "+i);
-		}
 		
-		for(WorkflowProcessNodeLog i : __inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001")) {
-			//System.out.println("NODE : "+i);
-		}
-		*/
 		Assert.assertEquals(new Long(3), workflowProcessPersistence.count());
 		Assert.assertEquals(new Long(3), workflowProcessTaskPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		Assert.assertEquals(new Long(2), workflowProcessTaskPersistence.countByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"));
