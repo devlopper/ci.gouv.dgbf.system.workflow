@@ -14,8 +14,10 @@
 		<mapping-file>META-INF/mapping/workflowprocess.xml</mapping-file>
 		<mapping-file>META-INF/mapping/workflowprocesslog.xml</mapping-file>
 		<mapping-file>META-INF/mapping/workflowprocesstask.xml</mapping-file>
+		<mapping-file>META-INF/mapping/workflowprocesstaskvariable.xml</mapping-file>
 		<mapping-file>META-INF/mapping/workflowprocesstasklog.xml</mapping-file>
-	
+		<mapping-file>META-INF/mapping/workflowprocessnodelog.xml</mapping-file>
+		
 		<class>org.drools.persistence.info.WorkItemInfo</class>
 		<class>org.drools.persistence.info.SessionInfo</class>
 		<class>org.jbpm.persistence.processinstance.ProcessInstanceInfo</class>

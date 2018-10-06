@@ -17,12 +17,12 @@ import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowProce
 public interface WorkflowProcessRepresentation extends RepresentationEntity<WorkflowProcess,WorkflowProcessDto,WorkflowProcessDtoCollection> {
 	
 	@GET
-	@Path(PATH+"get/code/{workflowCode}/{code}")
+	@Path("get/code/{workflowCode}/{code}")
 	@Produces({ MediaType.APPLICATION_XML })
 	Response getByWorkflowCodeByCode(@PathParam("workflowCode") String workflowCode,@PathParam("code") String code);
 
 	@GET
-	@Path(PATH+"delete/code/{workflowCode}/{code}")
+	@Path("delete/code/{workflowCode}/{code}")
 	@Produces({ MediaType.APPLICATION_XML })
 	Response deleteByWorkflowCodeByCode(@PathParam("workflowCode") String workflowCode,@PathParam("code") String code);
 	

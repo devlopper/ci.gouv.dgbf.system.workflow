@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_0.xsd"
+	version="2.0">
+
+	<!-- read one -->
+		
+	<!-- read many -->
+	
+	<named-query name="WorkflowProcessTaskVariable.readAll">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskVariable(
+			variable.id,variable.name,variable.value
+			)
+			FROM TaskVariableImpl variable
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskVariable.readByProcessId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskVariable(
+			variable.id,variable.name,variable.value
+			)
+			FROM TaskVariableImpl variable
+			WHERE variable.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskVariable.readByProcessInstanceId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskVariable(
+			variable.id,variable.name,variable.value
+			)
+			FROM TaskVariableImpl variable
+			WHERE variable.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+	
+	<!-- count -->
+	
+	<named-query name="WorkflowProcessTaskVariable.countAll">
+		<query>
+			SELECT COUNT(variable)
+			FROM TaskVariableImpl variable
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskVariable.countByProcessId">
+		<query>
+			SELECT COUNT(variable)
+			FROM TaskVariableImpl variable
+			WHERE variable.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskVariable.countByProcessInstanceId">
+		<query>
+			SELECT COUNT(variable)
+			FROM TaskVariableImpl variable
+			WHERE variable.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+
+</entity-mappings>

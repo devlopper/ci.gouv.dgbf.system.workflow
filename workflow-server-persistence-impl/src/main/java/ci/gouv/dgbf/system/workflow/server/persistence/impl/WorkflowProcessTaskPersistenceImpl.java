@@ -8,7 +8,9 @@ import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
+import org.kie.api.task.model.Status;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
@@ -88,6 +90,22 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractPersistenceEntit
 		return countByWorkflowProcessByUserIdentifier(workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode), userIdentifier);
 	}
 
+	@Override
+	public Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserCodeByStatusCode(String workflowCode,String processCode, String userCode,String statusCode) {
+		WorkflowProcess workflowProcess = __inject__(WorkflowProcessPersistence.class).readByWorkflowCodeByCode(workflowCode, processCode);
+		Status status = __inject__(EnumGetter.class).setClazz(Status.class).setIsNameCaseSensitive(Boolean.FALSE).setName(statusCode).execute().getOutputAs(Status.class);
+		return entityManager.createNamedQuery("WorkflowProcessTask.readByProcessInstanceIdByActualOwnerIdByStatus", WorkflowProcessTask.class).setParameter("processInstanceId"
+				, workflowProcess.getIdentifier()).setParameter("actualOwnerId", userCode).setParameter("status", status).getResultList();
+	}
+	
+	@Override
+	public Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCode(String workflowCode, String processCode,String userCode,String statusCode) {
+		WorkflowProcess workflowProcess = __inject__(WorkflowProcessPersistence.class).readByWorkflowCodeByCode(workflowCode, processCode);
+		Status status = __inject__(EnumGetter.class).setClazz(Status.class).setIsNameCaseSensitive(Boolean.FALSE).setName(statusCode).execute().getOutputAs(Status.class);
+		return entityManager.createNamedQuery("WorkflowProcessTask.readByProcessInstanceIdByActualOwnerIdByStatus", Long.class).setParameter("processInstanceId"
+				, workflowProcess.getIdentifier()).setParameter("actualOwnerId", userCode).setParameter("status", status).getSingleResult();
+	}
+	
 	@Override
 	public Collection<WorkflowProcessTask> read(Properties properties) {
 		return entityManager.createNamedQuery("WorkflowProcessTask.readAll", WorkflowProcessTask.class).getResultList();

@@ -66,7 +66,7 @@ public class WorkflowProcessPersistenceImpl extends AbstractPersistenceEntityImp
 	}
 	
 	@Override
-	public Collection<WorkflowProcess> read() {
+	public Collection<WorkflowProcess> read(Properties properties) {
 		return entityManager.createNamedQuery("WorkflowProcess.readAll", WorkflowProcess.class).getResultList();
 	}
 		

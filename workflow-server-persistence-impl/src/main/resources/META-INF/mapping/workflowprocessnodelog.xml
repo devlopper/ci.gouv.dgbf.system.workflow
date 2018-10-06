@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_0.xsd"
+	version="2.0">
+
+	<!-- read one -->
+		
+	<!-- read many -->
+	
+	<named-query name="WorkflowProcessNodeLog.readAll">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessNodeLog(
+			nodeLog.id,nodeLog.nodeId,nodeLog.nodeInstanceId,nodeLog.workItemId
+			)
+			FROM NodeInstanceLog nodeLog
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.readByProcessId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessNodeLog(
+			nodeLog.id,nodeLog.nodeId,nodeLog.nodeInstanceId,nodeLog.workItemId
+			)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.readByProcessInstanceId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessNodeLog(
+			nodeLog.id,nodeLog.nodeId,nodeLog.nodeInstanceId,nodeLog.workItemId
+			)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.readByProcessInstanceIdByNodeId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessNodeLog(
+			nodeLog.id,nodeLog.nodeId,nodeLog.nodeInstanceId,nodeLog.workItemId
+			)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processInstanceId = :processInstanceId AND nodeLog.nodeId = :nodeId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.readByProcessInstanceIdByWorkItemId">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessNodeLog(
+			nodeLog.id,nodeLog.nodeId,nodeLog.nodeInstanceId,nodeLog.workItemId
+			)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processInstanceId = :processInstanceId AND nodeLog.workItemId = :workItemId
+		</query>
+	</named-query>
+	
+	<!-- count -->
+	
+	<named-query name="WorkflowProcessNodeLog.countAll">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM NodeInstanceLog nodeLog
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.countByProcessId">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processId = :processId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.countByProcessInstanceId">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.countByProcessInstanceIdByNodeId">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processInstanceId = :processInstanceId AND nodeLog.nodeId = :nodeId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessNodeLog.countByProcessInstanceIdByWorkItemId">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM NodeInstanceLog nodeLog
+			WHERE nodeLog.processInstanceId = :processInstanceId AND nodeLog.workItemId = :workItemId
+		</query>
+	</named-query>
+
+</entity-mappings>

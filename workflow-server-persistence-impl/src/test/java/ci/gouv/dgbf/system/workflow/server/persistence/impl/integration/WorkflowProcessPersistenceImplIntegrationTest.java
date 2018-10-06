@@ -12,9 +12,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
+import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessNodeLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
+import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessNodeLog;
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
 
 public class WorkflowProcessPersistenceImplIntegrationTest extends AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowProcess> {
 
@@ -68,6 +72,17 @@ public class WorkflowProcessPersistenceImplIntegrationTest extends AbstractPersi
 		Assert.assertEquals(new Long(0), workflowProcessPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01"));
 		
 		workflowProcessPersistence.create(new WorkflowProcess().setWorkflow(workflowPersistence.readByCode("ci.gouv.dgbf.workflow.validation.pap")).setCode("PAP001"));
+		/*
+		for(WorkflowProcessTask i : __inject__(WorkflowProcessTaskPersistence.class).readByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001")) {
+			i.setCode(__inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessCodeByWorkItemIdentifier("ci.gouv.dgbf.workflow.validation.pap", "PAP001",i.getWorkItemIdentifier())
+					.iterator().next().getCode());
+			System.out.println("TASK : "+i);
+		}
+		*/
+		/*for(WorkflowProcessNodeLog i : __inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001")) {
+			System.out.println("NODE : "+i);
+		}*/
+		//assertThat(workflowProcessNodeLogs).isNotEmpty().hasSize(3);
 		
 		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001"));
 		Assert.assertNotNull(workflowProcessPersistence.readByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "PAP001").getWorkflow());

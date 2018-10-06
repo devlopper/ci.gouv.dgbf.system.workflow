@@ -81,6 +81,7 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 	public RuntimeManager getRuntimeManager() {
 		if(runtimeManager == null)
 			runtimeManager = RuntimeManagerFactory.Factory.get().newSingletonRuntimeManager(getRuntimeEnvironment());
+			//runtimeManager = RuntimeManagerFactory.Factory.get().newPerProcessInstanceRuntimeManager(getRuntimeEnvironment());
 		return runtimeManager;
 	}
 	
@@ -201,6 +202,5 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 		}
 		return this;
 	}
-	
 	
 }

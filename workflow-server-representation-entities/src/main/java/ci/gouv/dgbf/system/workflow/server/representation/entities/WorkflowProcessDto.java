@@ -13,6 +13,7 @@ public class WorkflowProcessDto extends AbstractEntityFromPersistenceEntityDto i
 	private String state;
 	
 	private String workflow;
+	private Tasks tasks;
 	
 	/**/
 	
@@ -21,4 +22,10 @@ public class WorkflowProcessDto extends AbstractEntityFromPersistenceEntityDto i
 		return (WorkflowProcessDto) super.setCode(code);
 	}
 	
+	public Tasks getTasks(Boolean instanciateIfNull) {
+		Tasks tasks = getTasks();
+		if(tasks == null && Boolean.TRUE.equals(instanciateIfNull))
+			setTasks(tasks = new Tasks());
+		return tasks;
+	}
 }

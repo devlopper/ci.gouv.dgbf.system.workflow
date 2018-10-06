@@ -1,6 +1,7 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.entities;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 
 import javax.persistence.Access;
@@ -49,7 +50,10 @@ public class Workflow extends AbstractEntity implements Serializable {
 	
 	public Workflow setModelFromResourceAsStream(String name){
 		try {
-			setModel(new String(IOUtils.toByteArray(getClass().getResourceAsStream(name))));
+			InputStreamReader inputStreamReader = new InputStreamReader(getClass().getResourceAsStream(name), "UTF-8");
+			setModel(new String(IOUtils.toByteArray(inputStreamReader, "UTF-8")));
+			//System.out.println("Workflow.setModelFromResourceAsStream() : "+getModel());
+			//setModel(new String(IOUtils.toByteArray(getClass().getResourceAsStream(name))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

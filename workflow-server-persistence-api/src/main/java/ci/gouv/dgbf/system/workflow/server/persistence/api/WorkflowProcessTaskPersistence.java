@@ -24,6 +24,9 @@ public interface WorkflowProcessTaskPersistence extends PersistenceEntity<Workfl
 	Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
 	Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
 	
+	Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserCodeByStatusCode(String workflowCode,String processCode,String userCode,String statusCode);
+	Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCode(String workflowCode,String processCode,String userCode,String statusCode);
+	
 	Collection<WorkflowProcessTask> readByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier);
 	Long countByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier);
 	

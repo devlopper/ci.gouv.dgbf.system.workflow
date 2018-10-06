@@ -15,6 +15,8 @@ import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
 public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram<WorkflowDto> {
 	private static final long serialVersionUID = 1L;
 	
+	private static String IDENTIFIER;
+	
 	@Override public void createMany() throws Exception {}
 	@Override public void createOne_businessIdentifierMustNotBeNull() throws Exception {}
 	//@Override public void createOne_businessIdentifierMustBeUnique() throws Exception {}
@@ -23,6 +25,7 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	//@Override public void readOneByBusinessIdentifier_notFound() throws Exception {}
 	//@Override public void readOneBySystemIdentifier() throws Exception {}
 	//@Override public void readOneBySystemIdentifier_notFound() throws Exception {}
+	@Override public void readMany() throws Exception {}
 	@Override public void updateOne() throws Exception {}
 	//@Override public void deleteOne() throws Exception {}
 	//@Override public void readOneByBusinessIdentifier() throws Exception {}
@@ -58,27 +61,29 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 	}
-	/*
+	
 	@Test @InSequence(4)
 	public void countWorkflowAfterCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		assertThat(workflowRepresentation.countAll()).isEqualTo(1);
+		assertThat(workflowRepresentation.count().getEntity()).isEqualTo(1l);
 	}
 	
 	@Test @InSequence(5)
 	public void readWorkflowByCodeAfterCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		WorkflowDto workflowDto = workflowRepresentation.getByCode("ci.gouv.dgbf.workflow.validation.pap");
+		WorkflowDto workflowDto = (WorkflowDto) workflowRepresentation.getOne("ci.gouv.dgbf.workflow.validation.pap","business").getEntity();
 		assertThat(workflowDto).isNotNull();
 		IDENTIFIER = workflowDto.getIdentifier();
 		assertThat(workflowDto.getCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap");
 		assertThat(workflowDto.getName()).isEqualTo("Validation du PAP");
+		assertThat(workflowDto.getModel()).isNotNull();
+		assertThat(workflowDto.getTasks().getCollection()).isNotNull().asList().hasSize(3);
 	}
 	
 	@Test @InSequence(6)
 	public void readWorkflowByIdentifierAfterCreate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		WorkflowDto workflowDto = workflowRepresentation.getByIdentifier(IDENTIFIER);
+		WorkflowDto workflowDto = (WorkflowDto) workflowRepresentation.getOne(IDENTIFIER,"system").getEntity();
 		assertThat(workflowDto).isNotNull();
 		assertThat(workflowDto.getIdentifier()).isEqualTo(IDENTIFIER);
 		assertThat(workflowDto.getCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap");
@@ -88,9 +93,9 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	@Test @InSequence(7)
 	public void updateWorkflow(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		WorkflowDto workflowDto = workflowRepresentation.getByIdentifier(IDENTIFIER);
-		workflowDto.setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP V01.bpmn2");
-		Response response = workflowRepresentation.updateOne(workflowDto);
+		WorkflowDto workflowDto = (WorkflowDto) workflowRepresentation.getOne(IDENTIFIER,"system").getEntity();
+		workflowDto.setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP New Name.bpmn2");
+		Response response = workflowRepresentation.updateOne(workflowDto,"model");
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 		response.close();
 	}
@@ -98,34 +103,33 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	@Test @InSequence(8)
 	public void countWorkflowAfterUpdate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		assertThat(workflowRepresentation.countAll()).isEqualTo(1);
+		assertThat(workflowRepresentation.count().getEntity()).isEqualTo(1l);
 	}
 	
 	@Test @InSequence(9)
 	public void readWorkflowByCodeAfterUpdate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		assertThat(workflowRepresentation.getByCode("ci.gouv.dgbf.workflow.validation.pap")).isNull();
-		WorkflowDto workflowDto = workflowRepresentation.getByCode("ci.gouv.dgbf.workflow.validation.pap.v01");
+		WorkflowDto workflowDto = (WorkflowDto) workflowRepresentation.getOne("ci.gouv.dgbf.workflow.validation.pap","business").getEntity();
 		assertThat(workflowDto).isNotNull();
 		IDENTIFIER = workflowDto.getIdentifier();
-		assertThat(workflowDto.getCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap.v01");
-		assertThat(workflowDto.getName()).isEqualTo("Validation du PAP V01");
+		assertThat(workflowDto.getCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap");
+		assertThat(workflowDto.getName()).isEqualTo("Validation du PAP New Name");
 	}
 	
 	@Test @InSequence(10)
 	public void readWorkflowByIdentifierAfterUpdate(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		WorkflowDto workflowDto = workflowRepresentation.getByIdentifier(IDENTIFIER);
+		WorkflowDto workflowDto = (WorkflowDto) workflowRepresentation.getOne(IDENTIFIER,"system").getEntity();
 		assertThat(workflowDto).isNotNull();
 		assertThat(workflowDto.getIdentifier()).isEqualTo(IDENTIFIER);
-		assertThat(workflowDto.getCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap.v01");
-		assertThat(workflowDto.getName()).isEqualTo("Validation du PAP V01");
+		assertThat(workflowDto.getCode()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap");
+		assertThat(workflowDto.getName()).isEqualTo("Validation du PAP New Name");
 	}
 	
 	@Test @InSequence(11)
 	public void deleteWorkflowByIdentifier(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		Response response = workflowRepresentation.deleteByIdentifier(IDENTIFIER);
+		Response response = workflowRepresentation.deleteOne(IDENTIFIER,"system");
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 		response.close();
 	}
@@ -133,50 +137,22 @@ public class WorkflowRepresentationImplIntegrationTest extends AbstractRepresent
 	@Test @InSequence(12)
 	public void countWorkflowAfterDeleteByIdentifier(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		assertThat(workflowRepresentation.countAll()).isEqualTo(0);
+		assertThat(workflowRepresentation.count().getEntity()).isEqualTo(0l);
 	}
 	
 	@Test @InSequence(13)
 	public void readWorkflowByCodeAfterDeleteByIdentifier(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		assertThat(workflowRepresentation.getByCode("ci.gouv.dgbf.workflow.validation.pap")).isNull();
-		assertThat(workflowRepresentation.getByCode("ci.gouv.dgbf.workflow.validation.pap.v01")).isNull();
+		assertThat(workflowRepresentation.getOne("ci.gouv.dgbf.workflow.validation.pap","business").getEntity()).isNull();
+		assertThat(workflowRepresentation.getOne("ci.gouv.dgbf.workflow.validation.pap.v01","business").getEntity()).isNull();
 	}
 	
 	@Test @InSequence(14)
 	public void readWorkflowByIdentifierAfterDeleteByIdentifier(){
 		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		assertThat(workflowRepresentation.getByIdentifier(IDENTIFIER)).isNull();
+		assertThat(workflowRepresentation.getOne(IDENTIFIER,"system").getEntity()).isNull();
 	}
 	
-	@Test @InSequence(15)
-	public void createWorkflowByManualPost(){
-		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target(UriBuilder.fromPath(contextPath.toExternalForm()+"workflow/create"));
-		WorkflowDto dto = new WorkflowDto();
-		dto.setModel(XML);
-		target.request().post(Entity.entity(XML,MediaType.APPLICATION_XML),String.class);
-	}
-	
-	@Test @InSequence(16)
-	public void readWorkflowByCodeAfterCreateByManualPost(){
-		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		assertThat(workflowRepresentation.getByCode("C")).isNull();
-		WorkflowDto dto = workflowRepresentation.getByCode("com.sample.hello");
-		assertThat(dto).isNotNull();
-		assertThat(dto.getCode()).isEqualTo("com.sample.hello");
-		assertThat(dto.getName()).isEqualTo("com.sample.hello");
-	}
-	
-	@Test @InSequence(17)
-	public void deleteWorkflowByCodeAfterCreateByManualPost(){
-		WorkflowRepresentation workflowRepresentation = (WorkflowRepresentation) ____getLayerEntityInterfaceFromClass____(Workflow.class);
-		Response response = workflowRepresentation.deleteByCode("com.sample.hello");
-		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-		response.close();
-	}
-	*/
 	public static String XML = ""
 			+ " <definitions id=\"Definition\" targetNamespace=\"http://www.jboss.org/drools\""
 			+ " typeLanguage=\"http://www.java.com/javaTypes\""

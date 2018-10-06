@@ -20,6 +20,7 @@ public class WorkflowProcessTask extends AbstractEntity implements Serializable 
     private String initiator;*/
     private org.kie.api.task.model.Status status;
     private String owner;
+    private Long workItemIdentifier;
     /*
     private Date dueDate;
     
@@ -31,13 +32,19 @@ public class WorkflowProcessTask extends AbstractEntity implements Serializable 
 	private WorkflowProcess workflowProcess;
 
 	public WorkflowProcessTask(Long identifier,String name,org.kie.api.task.model.TaskData data){
-		this.identifier = identifier;
-		this.name = name;
+		setIdentifier(identifier);
+		//setCode(code);
+		setName(name);
 		if(data!=null){
-			this.owner = data.getActualOwner() == null ? null : data.getActualOwner().getId();
-			this.status = data.getStatus();	
+			setOwner(this.owner = data.getActualOwner() == null ? null : data.getActualOwner().getId());
+			setStatus(this.status = data.getStatus());
+			setWorkItemIdentifier(data.getWorkItemId());
 		}
-		
+	}
+	
+	@Override
+	public String toString() {
+		return getCode()+"/"+getName()+"/"+getStatus();
 	}
 	
 }

@@ -1,6 +1,7 @@
 package ci.gouv.dgbf.system.workflow.server.representation.entities;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,6 +19,7 @@ public class WorkflowDto extends AbstractEntityFromPersistenceEntityDto implemen
 
 	private String name;
 	private String model;
+	private Tasks tasks;
 	
 	@Override
 	public WorkflowDto setCode(String code) {
@@ -32,7 +34,8 @@ public class WorkflowDto extends AbstractEntityFromPersistenceEntityDto implemen
 	
 	public WorkflowDto setModelFromResourceAsStream(String name){
 		try {
-			setModel(new String(IOUtils.toByteArray(getClass().getResourceAsStream(name))));
+			InputStreamReader inputStreamReader = new InputStreamReader(getClass().getResourceAsStream(name), "UTF-8");
+			setModel(new String(IOUtils.toByteArray(inputStreamReader, "UTF-8")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,6 +54,13 @@ public class WorkflowDto extends AbstractEntityFromPersistenceEntityDto implemen
 			}
 		}
 		return this;
+	}
+	
+	public Tasks getTasks(Boolean instanciateIfNull) {
+		Tasks tasks = getTasks();
+		if(tasks == null && Boolean.TRUE.equals(instanciateIfNull))
+			setTasks(tasks = new Tasks());
+		return tasks;
 	}
 	
 	@Override

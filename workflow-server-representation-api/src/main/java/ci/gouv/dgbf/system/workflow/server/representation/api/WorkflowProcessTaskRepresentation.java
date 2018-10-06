@@ -19,7 +19,7 @@ public interface WorkflowProcessTaskRepresentation extends RepresentationEntity<
 	@GET
 	@Path(PATH_EXECUTE)
 	@Produces({ MediaType.APPLICATION_XML })
-	Response execute(@PathParam("workflowCode")String workflowCode,@PathParam("workflowProcessCode")String workflowProcessCode,@PathParam("userIdentifier")String userIdentifier);
+	Response execute(@PathParam("workflowCode")String workflowCode,@PathParam("processCode")String workflowProcessCode,@PathParam("userIdentifier")String userIdentifier);
 	
 	@GET
 	@Path(PATH_GET_BY_WORKFLOW_CODE)

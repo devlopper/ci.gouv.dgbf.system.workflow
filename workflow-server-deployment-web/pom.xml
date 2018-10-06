@@ -15,22 +15,28 @@
 	<groupId>ci.gouv.dgbf.system.workflow.server.deployment</groupId>
 	<artifactId>workflow-server-deployment-web</artifactId>
 	<packaging>war</packaging>
-	
+
 	<build>
-        <plugins>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.2.2.Final</version>
-            </plugin>
-        </plugins>
-    </build>
-	
+		<plugins>
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>1.2.2.Final</version>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>ci.gouv.dgbf.system.workflow.server.representation</groupId>
 			<artifactId>workflow-server-representation-impl</artifactId>
 			<version>0.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.197</version>
 		</dependency>
 	</dependencies>
 

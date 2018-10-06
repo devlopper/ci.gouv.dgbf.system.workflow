@@ -68,9 +68,17 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 		
 		WorkflowProcessTaskDto workflowProcessTaskDto = workflowProcessTaskDtos.iterator().next();
 		assertThat(workflowProcessTaskDto.getStatus()).isEqualTo(Status.Reserved.name());
-		assertThat(workflowProcessTaskDto.getName()).isEqualTo("Première Validation");
+		assertThat(workflowProcessTaskDto.getName()).isEqualTo("Premiere Validation");
 		assertThat(workflowProcessTaskDto.getOwner()).isEqualTo("charge_etude");
 		
+		WorkflowProcessDto workflowProcessDto = (WorkflowProcessDto) __inject__(WorkflowProcessRepresentation.class).getByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "pap001").getEntity();
+		assertThat(workflowProcessDto).isNotNull();
+		assertThat(workflowProcessDto.getTasks()).isNotNull();
+		assertThat(workflowProcessDto.getTasks().getCollection()).asList().hasSize(3);
+		assertThat(workflowProcessDto.getTasks().getAt(0)).isNotNull();
+		assertThat(workflowProcessDto.getTasks().getAt(0).getStatus()).isEqualTo("Reserved");
+		assertThat(workflowProcessDto.getTasks().getAt(1).getStatus()).isNull();
+		assertThat(workflowProcessDto.getTasks().getAt(2).getStatus()).isNull();
 	}
 	
 	@Test @InSequence(3)
@@ -85,6 +93,15 @@ public class WorkflowProcessTaskRepresentationImplIntegrationTest extends Abstra
 		assertThat(__inject__(WorkflowProcessTaskRepresentation.class).countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap").getEntity()).isEqualTo(3l);
 		assertThat(__inject__(WorkflowProcessTaskRepresentation.class).countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap.v01").getEntity()).isEqualTo(1l);
 		assertThat(__inject__(WorkflowProcessTaskRepresentation.class).count().getEntity()).isEqualTo(4l);
+		
+		WorkflowProcessDto workflowProcessDto = (WorkflowProcessDto) __inject__(WorkflowProcessRepresentation.class).getByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap", "pap001").getEntity();
+		assertThat(workflowProcessDto).isNotNull();
+		assertThat(workflowProcessDto.getTasks()).isNotNull();
+		assertThat(workflowProcessDto.getTasks().getCollection()).asList().hasSize(3);
+		assertThat(workflowProcessDto.getTasks().getAt(0)).isNotNull();
+		assertThat(workflowProcessDto.getTasks().getAt(0).getStatus()).isEqualTo("Completed");
+		assertThat(workflowProcessDto.getTasks().getAt(1).getStatus()).isEqualTo("Reserved");
+		assertThat(workflowProcessDto.getTasks().getAt(2).getStatus()).isNull();
 	}
 	
 	@Test @InSequence(5)

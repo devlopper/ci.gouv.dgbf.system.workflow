@@ -14,6 +14,12 @@ import org.junit.Test;
 
 public class WorkflowDtoUnitTest {
 
+	//@Test
+	public void readFile() {
+		WorkflowDto workflowDto = new WorkflowDto().setModelFromResourceAsStream("/bpmn/withhuman/Validation du PAP.bpmn2");
+		System.out.println(workflowDto.getModel());
+	}
+	
 	@Test
 	public void one_marshal() {
 		try {

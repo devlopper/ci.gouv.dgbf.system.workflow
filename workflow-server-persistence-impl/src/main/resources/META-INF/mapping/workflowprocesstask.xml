@@ -57,6 +57,16 @@
 		</query>
 	</named-query>
 	
+	<named-query name="WorkflowProcessTask.readByProcessInstanceIdByActualOwnerIdByStatus">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask(
+			task.id,task.name,task.taskData
+			)
+			FROM TaskImpl task
+			WHERE task.taskData.processInstanceId = :processInstanceId AND task.taskData.actualOwner.id = :actualOwnerId AND task.taskData.status = :status
+		</query>
+	</named-query>
+	
 	<!-- count -->
 	
 	<named-query name="WorkflowProcessTask.countAll">
@@ -95,6 +105,14 @@
 			SELECT COUNT(task)
 			FROM TaskImpl task
 			WHERE task.taskData.processInstanceId = :processInstanceId AND task.taskData.actualOwner.id = :actualOwnerId
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTask.countByProcessInstanceIdByActualOwnerIdByStatus">
+		<query>
+			SELECT COUNT(task)
+			FROM TaskImpl task
+			WHERE task.taskData.processInstanceId = :processInstanceId AND task.taskData.actualOwner.id = :actualOwnerId AND task.taskData.status = :status
 		</query>
 	</named-query>
 	

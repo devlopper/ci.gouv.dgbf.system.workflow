@@ -2,6 +2,8 @@ package ci.gouv.dgbf.system.workflow.server.representation.impl.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collection;
+
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram;
@@ -30,32 +32,42 @@ public class WorkflowProcessRepresentationImplIntegrationTest extends AbstractRe
 	@Override public void readOneByBusinessIdentifier_notFound() throws Exception {}
 	@Override public void readOneBySystemIdentifier() throws Exception {}
 	@Override public void readOneBySystemIdentifier_notFound() throws Exception {}
+	@Override public void readMany() throws Exception {}
 	@Override public void updateOne() throws Exception {}
 	@Override public void deleteOne() throws Exception {}
 	
 	@Test @InSequence(1)
+	public void readAllBeforeAnyOperation(){
+		Response response = __inject__(WorkflowProcessRepresentation.class).getMany();
+		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+		@SuppressWarnings("unchecked")
+		Collection<WorkflowProcessDto> workflowProcessDtos = (Collection<WorkflowProcessDto>) response.getEntity();
+		assertThat(workflowProcessDtos).isNull();
+	}
+	
+	@Test @InSequence(2)
 	public void countWorkflowProcessBeforeCreate(){
 		assertThat(__inject__(WorkflowProcessRepresentation.class).count().getEntity()).isEqualTo(0l);
 	}
 	
-	@Test @InSequence(2)
+	@Test @InSequence(3)
 	public void readWorkflowProcessByWorkflowCodeByCodeBeforeCreate(){
 		assertThat(__inject__(WorkflowProcessRepresentation.class).getByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap","pap001").getStatus()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
 	}
 	
-	@Test @InSequence(3)
+	@Test @InSequence(4)
 	public void createWorkflowProcess(){
 		Response response = __inject__(WorkflowProcessRepresentation.class).createOne(new WorkflowProcessDto().setCode("pap001").setWorkflow("ci.gouv.dgbf.workflow.validation.pap"));
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 	}
 	
-	@Test @InSequence(4)
+	@Test @InSequence(5)
 	public void countWorkflowProcessAfterCreate(){
 		assertThat(__inject__(WorkflowProcessRepresentation.class).count().getEntity()).isEqualTo(1l);
 	}
 	
-	@Test @InSequence(5)
+	@Test @InSequence(6)
 	public void readWorkflowProcessByWorkflowCodeByCodeAfterCreate(){
 		Response response = __inject__(WorkflowProcessRepresentation.class).getByWorkflowCodeByCode("ci.gouv.dgbf.workflow.validation.pap","pap001");
 		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
@@ -65,6 +77,16 @@ public class WorkflowProcessRepresentationImplIntegrationTest extends AbstractRe
 		assertThat(workflowProcessDto.getCode()).isEqualTo("pap001");
 		assertThat(workflowProcessDto.getWorkflow()).isEqualTo("ci.gouv.dgbf.workflow.validation.pap");
 		assertThat(workflowProcessDto.getState()).isEqualTo("1");
+		
 	}
 	
+	@Test @InSequence(7)
+	public void readAllAfterCreate(){
+		Response response = __inject__(WorkflowProcessRepresentation.class).getMany();
+		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+		@SuppressWarnings("unchecked")
+		Collection<WorkflowProcessDto> workflowProcessDtos = (Collection<WorkflowProcessDto>) response.getEntity();
+		assertThat(workflowProcessDtos).isNotNull();
+		assertThat(workflowProcessDtos).hasSize(1);
+	}
 }
