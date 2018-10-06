@@ -41,7 +41,7 @@ public class ResourceHandler extends javax.faces.application.ResourceHandlerWrap
 			for (String customBasePath : PATHS) {
 				final URL url = getClass().getResource(customBasePath + resourceName);
 				if (url == null) {
-					// System.out.println("NOT IN : "+customBasePath+path);
+					
 				} else{
 					resource = new ViewResource() {
 						@Override
@@ -54,7 +54,7 @@ public class ResourceHandler extends javax.faces.application.ResourceHandlerWrap
 			}
 		if(resource == null)
 			//throw new RuntimeException();
-			System.out.println("Resource named "+resourceName+" not found");
+			System.err.println("Resource named "+resourceName+" not found");
 		return resource;
 	}
 
