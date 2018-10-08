@@ -57,37 +57,37 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractPersistenceEntit
 	}
 	
 	@Override
-	public Collection<WorkflowProcessTask> readByWorkflowCodeByUserIdentifier(String workflowCode, String userIdentifier) {
+	public Collection<WorkflowProcessTask> readByWorkflowCodeByUserCode(String workflowCode, String userCode) {
 		return entityManager.createNamedQuery("WorkflowProcessTask.readByProcessIdByActualOwnerId", WorkflowProcessTask.class).setParameter("processId"
-				, workflowCode).setParameter("actualOwnerId", userIdentifier).getResultList();
+				, workflowCode).setParameter("actualOwnerId", userCode).getResultList();
 	}
 	
 	@Override
-	public Long countByWorkflowCodeByUserIdentifier(String workflowCode,String userIdentifier) {
+	public Long countByWorkflowCodeByUserCode(String workflowCode,String userCode) {
 		return entityManager.createNamedQuery("WorkflowProcessTask.countByProcessIdByActualOwnerId", Long.class).setParameter("processId"
-				, workflowCode).setParameter("actualOwnerId", userIdentifier).getSingleResult();
+				, workflowCode).setParameter("actualOwnerId", userCode).getSingleResult();
 	}
 	
 	@Override
-	public Collection<WorkflowProcessTask> readByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier) {
+	public Collection<WorkflowProcessTask> readByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userCode) {
 		return entityManager.createNamedQuery("WorkflowProcessTask.readByProcessInstanceIdByActualOwnerId", WorkflowProcessTask.class).setParameter("processInstanceId"
-				, workflowProcess.getIdentifier()).setParameter("actualOwnerId", userIdentifier).getResultList();
+				, workflowProcess.getIdentifier()).setParameter("actualOwnerId", userCode).getResultList();
 	}
 	
 	@Override
-	public Long countByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess, String userIdentifier) {
-		return entityManager.createNamedQuery("WorkflowProcessTask.countByProcessInstanceIdByActualOwnerId", Long.class).setParameter("processInstanceId"
-				, workflowProcess.getIdentifier()).setParameter("actualOwnerId", userIdentifier).getSingleResult();
+	public Long countByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess, String userCode) {
+		return workflowProcess == null ? 0l : entityManager.createNamedQuery("WorkflowProcessTask.countByProcessInstanceIdByActualOwnerId", Long.class).setParameter("processInstanceId"
+				, workflowProcess.getIdentifier()).setParameter("actualOwnerId", userCode).getSingleResult();
 	}
 	
 	@Override
-	public Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode, String userIdentifier) {
-		return readByWorkflowProcessByUserIdentifier(workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode), userIdentifier);
+	public Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserCode(String workflowCode,String processCode, String userCode) {
+		return readByWorkflowProcessByUserIdentifier(workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode), userCode);
 	}
 	
 	@Override
-	public Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode, String processCode,String userIdentifier) {
-		return countByWorkflowProcessByUserIdentifier(workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode), userIdentifier);
+	public Long countByWorkflowCodeByProcessCodeByUserCode(String workflowCode, String processCode,String userCode) {
+		return countByWorkflowProcessByUserIdentifier(workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode), userCode);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class WorkflowProcessTaskPersistenceImpl extends AbstractPersistenceEntit
 	public Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCode(String workflowCode, String processCode,String userCode,String statusCode) {
 		WorkflowProcess workflowProcess = __inject__(WorkflowProcessPersistence.class).readByWorkflowCodeByCode(workflowCode, processCode);
 		Status status = __inject__(EnumGetter.class).setClazz(Status.class).setIsNameCaseSensitive(Boolean.FALSE).setName(statusCode).execute().getOutputAs(Status.class);
-		return entityManager.createNamedQuery("WorkflowProcessTask.readByProcessInstanceIdByActualOwnerIdByStatus", Long.class).setParameter("processInstanceId"
+		return entityManager.createNamedQuery("WorkflowProcessTask.countByProcessInstanceIdByActualOwnerIdByStatus", Long.class).setParameter("processInstanceId"
 				, workflowProcess.getIdentifier()).setParameter("actualOwnerId", userCode).setParameter("status", status).getSingleResult();
 	}
 	

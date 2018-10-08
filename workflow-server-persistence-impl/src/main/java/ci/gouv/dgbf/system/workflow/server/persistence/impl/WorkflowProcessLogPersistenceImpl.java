@@ -1,7 +1,6 @@
 package ci.gouv.dgbf.system.workflow.server.persistence.impl;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -10,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
-import org.kie.internal.KieInternalServices;
 
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
@@ -34,10 +32,8 @@ public class WorkflowProcessLogPersistenceImpl extends AbstractPersistenceEntity
 	
 	@Override
 	public WorkflowProcessLog readByWorkflowCodeByProcessCode(String workflowCode, String code) {
-		String correlationKey = KieInternalServices.Factory.get().newCorrelationKeyFactory()
-				.newCorrelationKey(Arrays.asList(workflowCode,code)).toExternalForm();
 		try {
-			return entityManager.createNamedQuery("WorkflowProcessLog.readByCorrelationKey", WorkflowProcessLog.class).setParameter("correlationKey", correlationKey)
+			return entityManager.createNamedQuery("WorkflowProcessLog.readByCorrelationKey", WorkflowProcessLog.class).setParameter("correlationKey", __inject__(JbpmHelper.class).buildCorrelationKey(workflowCode,code))
 					.getSingleResult();
 		} catch (NoResultException exception) {
 			return null;
@@ -57,6 +53,17 @@ public class WorkflowProcessLogPersistenceImpl extends AbstractPersistenceEntity
 	@Override
 	public Long countByWorkflowCode(String workflowCode) {
 		return entityManager.createNamedQuery("WorkflowProcessLog.countByProcessId", Long.class).setParameter("processId", workflowCode).getSingleResult();
+	}
+
+	@Override
+	public Long countByWorkflowByProcessCode(Workflow workflow, String processCode) {
+		return countByWorkflowCodeByProcessCode(workflow.getCode(),processCode);
+	}
+
+	@Override
+	public Long countByWorkflowCodeByProcessCode(String workflowCode, String processCode) {
+		return entityManager.createNamedQuery("WorkflowProcessLog.countByCorrelationKey", Long.class).setParameter("correlationKey", __inject__(JbpmHelper.class).buildCorrelationKey(workflowCode,processCode))
+				.getSingleResult();
 	}
 	
 	

@@ -7,18 +7,19 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessPersistence;
+import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcess;
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog;
 
 @Singleton
 public class WorkflowProcessTaskLogPersistenceImpl extends AbstractPersistenceEntityImpl<WorkflowProcessTaskLog> implements WorkflowProcessTaskLogPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private WorkflowProcessPersistence workflowProcessPersistence;
 	@Inject private EntityManager entityManager;
 	
 	@Override
@@ -32,57 +33,126 @@ public class WorkflowProcessTaskLogPersistenceImpl extends AbstractPersistenceEn
 	}
 	
 	@Override
+	public Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifier(Long workflowProcessIdentifier) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.readByProcessInstanceId", WorkflowProcessTaskLog.class).setParameter("processInstanceId", workflowProcessIdentifier).getResultList();
+	}
+	
+	@Override
+	public Long countByWorkflowProcessIdentifier(Long workflowProcessIdentifier) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.countByProcessInstanceId", Long.class).setParameter("processInstanceId", workflowProcessIdentifier).getSingleResult();
+	}
+	
+	@Override
+	public Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifierByUserCode(Long workflowProcessIdentifier,String userCode) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.readByProcessInstanceIdByActualOwner", WorkflowProcessTaskLog.class).setParameter("processInstanceId"
+				, workflowProcessIdentifier).setParameter("actualOwner", userCode).getResultList();
+	}
+	
+	@Override
+	public Long countByWorkflowProcessIdentifierByUserCode(Long workflowProcessIdentifier, String userCode) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.countByProcessInstanceIdByActualOwner", Long.class).setParameter("processInstanceId", workflowProcessIdentifier)
+				.setParameter("actualOwner", userCode).getSingleResult();
+	}
+	
+	@Override
 	public Collection<WorkflowProcessTaskLog> readByWorkflowProcess(WorkflowProcess workflowProcess) {
-		/*Collection<WorkflowProcessTaskLog> workflowProcessTaskLogs =  null;
-		Collection<Long> identifiers = runtimeDataService.getTasksByProcessInstanceId(workflowProcess.getIdentifier());
-		if(identifiers!=null){
-			workflowProcessTaskLogs = new ArrayList<>();
-			for(Long index : identifiers){
-				UserTaskInstanceDesc userTaskInstanceDesc = runtimeDataService.getTaskById(index);
-				WorkflowProcessTaskLog workflowProcessTaskLog = new WorkflowProcessTaskLog();
-				workflowProcessTaskLogs.add(workflowProcessTaskLog);
-			}
-		}*/
-		return null;
+		return workflowProcess == null ? null : readByWorkflowProcessIdentifier(workflowProcess.getIdentifier());
 	}
 	
 	@Override
 	public Long countByWorkflowProcess(WorkflowProcess workflowProcess) {
-		Collection<WorkflowProcessTaskLog> workflowProcessTaskLogs = readByWorkflowProcess(workflowProcess);
-		return workflowProcessTaskLogs == null ? null : new Long(workflowProcessTaskLogs.size());
+		return workflowProcess == null ? 0l :  countByWorkflowProcessIdentifier(workflowProcess.getIdentifier());
 	}
 	
 	@Override
 	public Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCode(String workflowCode,String processCode) {
-		WorkflowProcess workflowProcess = workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode);
-		return entityManager.createNamedQuery("WorkflowProcessTaskLog.readByProcessInstanceId", WorkflowProcessTaskLog.class).setParameter("processInstanceId", workflowProcess.getIdentifier())
-			.getResultList();	
+		WorkflowProcessLog workflowProcessLog = __inject__(WorkflowProcessLogPersistence.class).readByWorkflowCodeByProcessCode(workflowCode, processCode);
+		return workflowProcessLog == null ? null : readByWorkflowProcessIdentifier(workflowProcessLog.getWorkflowProcess().getIdentifier());	
 	}
 	
 	@Override
 	public Long countByWorkflowCodeByProcessCode(String workflowCode, String processCode) {
-		WorkflowProcess workflowProcess = workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode);
-		return entityManager.createNamedQuery("WorkflowProcessTaskLog.countByProcessInstanceId", Long.class).setParameter("processInstanceId", workflowProcess.getIdentifier())
-			.getSingleResult();
+		WorkflowProcessLog workflowProcessLog = __inject__(WorkflowProcessLogPersistence.class).readByWorkflowCodeByProcessCode(workflowCode, processCode);
+		return workflowProcessLog == null ? 0l : countByWorkflowProcessIdentifier(workflowProcessLog.getWorkflowProcess().getIdentifier());
 	}
 	
 	@Override
-	public Collection<WorkflowProcessTaskLog> readByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier) {
-		return null;
+	public Collection<WorkflowProcessTaskLog> readByWorkflowProcessByUserCode(WorkflowProcess workflowProcess,String userCode) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.readByProcessInstanceIdByActualOwner", WorkflowProcessTaskLog.class).setParameter("processInstanceId"
+				, workflowProcess.getIdentifier()).setParameter("actualOwner", userCode)
+				.getResultList();
 	}
 	
 	@Override
-	public Long countByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess, String userIdentifier) {
-		return null;
+	public Long countByWorkflowProcessByUserCode(WorkflowProcess workflowProcess, String userCode) {
+		return workflowProcess == null ? 0l :  countByWorkflowProcessIdentifierByUserCode(workflowProcess.getIdentifier(),userCode);
 	}
 	
 	@Override
-	public Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode, String userIdentifier) {
-		return readByWorkflowProcessByUserIdentifier(workflowProcessPersistence.readByWorkflowCodeByCode(workflowCode, processCode), userIdentifier);
+	public Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserCode(String workflowCode,String processCode, String userCode) {
+		WorkflowProcessLog workflowProcessLog = __inject__(WorkflowProcessLogPersistence.class).readByWorkflowCodeByProcessCode(workflowCode, processCode);
+		return workflowProcessLog == null ? null : readByWorkflowProcessIdentifierByUserCode(workflowProcessLog.getWorkflowProcess().getIdentifier(), userCode);
 	}
 	
 	@Override
-	public Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode, String processCode,String userIdentifier) {
-		return null;
+	public Long countByWorkflowCodeByProcessCodeByUserCode(String workflowCode, String processCode,String userCode) {
+		WorkflowProcessLog workflowProcessLog = __inject__(WorkflowProcessLogPersistence.class).readByWorkflowCodeByProcessCode(workflowCode, processCode);
+		return workflowProcessLog == null ? 0l : countByWorkflowProcessIdentifierByUserCode(workflowProcessLog.getWorkflowProcess().getIdentifier(), userCode);
 	}
+
+	@Override
+	public Collection<WorkflowProcessTaskLog> read(Properties properties) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.readAll", WorkflowProcessTaskLog.class).getResultList();	
+	}
+	
+	@Override
+	public Long count(Properties properties) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.countAll", Long.class).getSingleResult();	
+	}
+
+	@Override
+	public Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier, String userCode, Collection<String> statusCodes) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.readByProcessInstanceIdByActualOwnerByStatus", WorkflowProcessTaskLog.class).setParameter("processInstanceId"
+				, workflowProcessIdentifier).setParameter("actualOwner", userCode).setParameter("status", statusCodes).getResultList();
+	}
+
+	@Override
+	public Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier, String userCode, String... statusCodes) {
+		return readByWorkflowProcessIdentifierByUserCodeByStatusCodes(workflowProcessIdentifier, userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
+
+	@Override
+	public Long countByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier, String userCode,Collection<String> statusCodes) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.countByProcessInstanceIdByActualOwnerByStatus", Long.class).setParameter("processInstanceId", workflowProcessIdentifier)
+				.setParameter("actualOwner", userCode).setParameter("status", statusCodes).getSingleResult();
+	}
+
+	@Override
+	public Long countByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier, String userCode,String... statusCodes) {
+		return countByWorkflowProcessIdentifierByUserCodeByStatusCodes(workflowProcessIdentifier, userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
+
+	@Override
+	public Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode, String processCode, String userCode, Collection<String> statusCodes) {
+		WorkflowProcessLog workflowProcessLog = __inject__(WorkflowProcessLogPersistence.class).readByWorkflowCodeByProcessCode(workflowCode, processCode);
+		return workflowProcessLog == null ? null : readByWorkflowProcessIdentifierByUserCodeByStatusCodes(workflowProcessLog.getWorkflowProcess().getIdentifier(), userCode, statusCodes);
+	}
+
+	@Override
+	public Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode, String processCode, String userCode, String... statusCodes) {
+		return readByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(workflowCode, processCode, userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
+
+	@Override
+	public Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode, String processCode,String userCode, Collection<String> statusCodes) {
+		WorkflowProcessLog workflowProcessLog = __inject__(WorkflowProcessLogPersistence.class).readByWorkflowCodeByProcessCode(workflowCode, processCode);
+		return workflowProcessLog == null ? 0l : countByWorkflowProcessIdentifierByUserCodeByStatusCodes(workflowProcessLog.getWorkflowProcess().getIdentifier(), userCode, statusCodes);
+	}
+
+	@Override
+	public Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode, String processCode,String userCode, String... statusCodes) {
+		return countByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(workflowCode, processCode, userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
+
+	
 }

@@ -45,7 +45,7 @@ public class WorkflowProcessTask extends AbstractEntity implements Serializable 
 	
 	@Override
 	public String toString() {
-		return getCode()+"/"+getName()+"/"+getStatus();
+		return getCode()+"/"+getName()+"/"+getStatus()+"/"+getOwner();
 	}
 	
 }

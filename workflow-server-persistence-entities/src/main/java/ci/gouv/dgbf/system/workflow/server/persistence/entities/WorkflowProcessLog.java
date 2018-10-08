@@ -12,8 +12,11 @@ import lombok.experimental.Accessors;
 public class WorkflowProcessLog extends AbstractWorkflowProcess implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public WorkflowProcessLog(Long identifier,String code,String workflowCode,Date startDate,Date endDate,Long duration,Integer state){
+	private WorkflowProcess workflowProcess;
+	
+	public WorkflowProcessLog(Long workflowProcessIdentifier,Long identifier,String code,String workflowCode,Date startDate,Date endDate,Long duration,Integer state){
 		super(identifier, code, workflowCode, null, startDate, endDate, duration, state);
+		setWorkflowProcess(new WorkflowProcess().setIdentifier(workflowProcessIdentifier));
 	}
 	
 }

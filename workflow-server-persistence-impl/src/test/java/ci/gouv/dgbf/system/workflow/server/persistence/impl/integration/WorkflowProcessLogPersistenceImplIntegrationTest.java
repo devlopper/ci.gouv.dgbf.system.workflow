@@ -65,7 +65,7 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 		Assert.assertEquals(new Long(3), workflowProcessLogPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		
 		String userIdentifier = "charge_etude";
-		Long workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001"
+		Long workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"
 				,userIdentifier).iterator().next().getIdentifier();
 		userTransaction.begin();
 		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
@@ -75,7 +75,7 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 		Assert.assertEquals(new Long(3), workflowProcessLogPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		
 		userIdentifier = "sous_directeur";
-		workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001"
+		workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"
 				,userIdentifier).iterator().next().getIdentifier();
 		userTransaction.begin();
 		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);
@@ -85,7 +85,7 @@ public class WorkflowProcessLogPersistenceImplIntegrationTest extends AbstractPe
 		Assert.assertEquals(new Long(3), workflowProcessLogPersistence.countByWorkflowCode("ci.gouv.dgbf.workflow.validation.pap"));
 		
 		userIdentifier = "directeur";
-		workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserIdentifier("ci.gouv.dgbf.workflow.validation.pap","PAP001"
+		workflowProcessTaskIdentifier = workflowProcessTaskPersistence.readByWorkflowCodeByProcessCodeByUserCode("ci.gouv.dgbf.workflow.validation.pap","PAP001"
 				,userIdentifier).iterator().next().getIdentifier();
 		userTransaction.begin();
 		jbpmHelper.getRuntimeEngine().getTaskService().start(workflowProcessTaskIdentifier, userIdentifier);

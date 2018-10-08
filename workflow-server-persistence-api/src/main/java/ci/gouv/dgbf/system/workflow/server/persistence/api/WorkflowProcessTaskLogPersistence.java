@@ -12,16 +12,32 @@ public interface WorkflowProcessTaskLogPersistence extends PersistenceEntity<Wor
 	Collection<WorkflowProcessTaskLog> readByWorkflowCode(String workflowCode);
 	Long countByWorkflowCode(String workflowCode);
 	
+	Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifier(Long workflowProcessIdentifier);
+	Long countByWorkflowProcessIdentifier(Long workflowProcessIdentifier);
+	
 	Collection<WorkflowProcessTaskLog> readByWorkflowProcess(WorkflowProcess workflowProcess);
 	Long countByWorkflowProcess(WorkflowProcess workflowProcess);
 	
 	Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCode(String workflowCode,String processCode);
 	Long countByWorkflowCodeByProcessCode(String workflowCode,String processCode);
 	
-	Collection<WorkflowProcessTaskLog> readByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier);
-	Long countByWorkflowProcessByUserIdentifier(WorkflowProcess workflowProcess,String userIdentifier);
+	Collection<WorkflowProcessTaskLog> readByWorkflowProcessByUserCode(WorkflowProcess workflowProcess,String userCode);
+	Long countByWorkflowProcessByUserCode(WorkflowProcess workflowProcess,String userCode);
 	
-	Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
-	Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
+	Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifierByUserCode(Long workflowProcessIdentifier,String userCode);
+	Long countByWorkflowProcessIdentifierByUserCode(Long workflowProcessIdentifier,String userCode);
 	
+	Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserCode(String workflowCode,String processCode,String userCode);
+	Long countByWorkflowCodeByProcessCodeByUserCode(String workflowCode,String processCode,String userCode);
+	
+	Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier,String userCode,Collection<String> statusCodes);
+	Collection<WorkflowProcessTaskLog> readByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier,String userCode,String...statusCodes);
+	Long countByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier,String userCode,Collection<String> statusCodes);
+	Long countByWorkflowProcessIdentifierByUserCodeByStatusCodes(Long workflowProcessIdentifier,String userCode,String...statusCodes);
+	
+	Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode,String processCode,String userCode,Collection<String> statusCodes);
+	Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode,String processCode,String userCode,String...statusCodes);
+	Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode,String processCode,String userCode,Collection<String> statusCodes);
+	Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode,String processCode,String userCode,String...statusCodes);
+
 }

@@ -18,11 +18,11 @@ public interface WorkflowProcessTaskPersistence extends PersistenceEntity<Workfl
 	Collection<WorkflowProcessTask> readByWorkflowProcess(WorkflowProcess workflowProcess);
 	Long countByWorkflowProcess(WorkflowProcess workflowProcess);
 	
-	Collection<WorkflowProcessTask> readByWorkflowCodeByUserIdentifier(String workflowCode,String userIdentifier);
-	Long countByWorkflowCodeByUserIdentifier(String workflowCode,String userIdentifier);
+	Collection<WorkflowProcessTask> readByWorkflowCodeByUserCode(String workflowCode,String userCode);
+	Long countByWorkflowCodeByUserCode(String workflowCode,String userCode);
 	
-	Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
-	Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode,String userIdentifier);
+	Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserCode(String workflowCode,String processCode,String userCode);
+	Long countByWorkflowCodeByProcessCodeByUserCode(String workflowCode,String processCode,String userCode);
 	
 	Collection<WorkflowProcessTask> readByWorkflowCodeByProcessCodeByUserCodeByStatusCode(String workflowCode,String processCode,String userCode,String statusCode);
 	Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCode(String workflowCode,String processCode,String userCode,String statusCode);

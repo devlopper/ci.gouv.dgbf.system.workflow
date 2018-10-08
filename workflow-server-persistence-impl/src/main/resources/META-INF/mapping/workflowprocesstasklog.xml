@@ -37,6 +37,26 @@
 		</query>
 	</named-query>
 	
+	<named-query name="WorkflowProcessTaskLog.readByProcessInstanceIdByActualOwner">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog(
+			taskLog.id,taskLog.name,taskLog.actualOwner,taskLog.status
+			)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processInstanceId = :processInstanceId AND taskLog.actualOwner = :actualOwner
+		</query>
+	</named-query>
+	
+	<named-query name="WorkflowProcessTaskLog.readByProcessInstanceIdByActualOwnerByStatus">
+		<query>
+			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog(
+			taskLog.id,taskLog.name,taskLog.actualOwner,taskLog.status
+			)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processInstanceId = :processInstanceId AND taskLog.actualOwner = :actualOwner AND taskLog.status IN :status
+		</query>
+	</named-query>
+	
 	<!-- count -->
 	
 	<named-query name="WorkflowProcessTaskLog.countAll">
@@ -59,6 +79,22 @@
 			SELECT COUNT(taskLog)
 			FROM AuditTaskImpl taskLog
 			WHERE taskLog.processInstanceId = :processInstanceId
+		</query>
+	</named-query>
+
+	<named-query name="WorkflowProcessTaskLog.countByProcessInstanceIdByActualOwner">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processInstanceId = :processInstanceId AND taskLog.actualOwner = :actualOwner
+		</query>
+	</named-query>
+
+	<named-query name="WorkflowProcessTaskLog.countByProcessInstanceIdByActualOwnerByStatus">
+		<query>
+			SELECT COUNT(taskLog)
+			FROM AuditTaskImpl taskLog
+			WHERE taskLog.processInstanceId = :processInstanceId AND taskLog.actualOwner = :actualOwner AND taskLog.status IN :status
 		</query>
 	</named-query>
 

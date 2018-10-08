@@ -36,7 +36,7 @@
 			<artifactId>workflow-server-business-impl</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		
+		<!--
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
@@ -50,6 +50,7 @@
 		    <version>${org.jboss.resteasy.resteasy-bom.version}</version>
 		    <scope>provided</scope>
 		</dependency>
+		-->
 	</dependencies>		
 	
 	<profiles>

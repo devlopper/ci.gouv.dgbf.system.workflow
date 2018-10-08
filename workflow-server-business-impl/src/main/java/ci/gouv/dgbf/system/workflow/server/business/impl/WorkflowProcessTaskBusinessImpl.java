@@ -83,22 +83,22 @@ public class WorkflowProcessTaskBusinessImpl extends AbstractBusinessEntityImpl<
 
 	@Override
 	public Collection<WorkflowProcessTask> findByWorkflowCodeByUserIdentifier(String workflowCode,String userCode) {
-		return getPersistence().readByWorkflowCodeByUserIdentifier(workflowCode, userCode);
+		return getPersistence().readByWorkflowCodeByUserCode(workflowCode, userCode);
 	}
 
 	@Override
 	public Long countByWorkflowCodeByUserIdentifier(String workflowCode, String userCode) {
-		return getPersistence().countByWorkflowCodeByUserIdentifier(workflowCode, userCode);
+		return getPersistence().countByWorkflowCodeByUserCode(workflowCode, userCode);
 	}
 
 	@Override
 	public Collection<WorkflowProcessTask> findByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode,String processCode, String userCode) {
-		return getPersistence().readByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode, processCode, userCode);
+		return getPersistence().readByWorkflowCodeByProcessCodeByUserCode(workflowCode, processCode, userCode);
 	}
 
 	@Override
 	public Long countByWorkflowCodeByProcessCodeByUserIdentifier(String workflowCode, String processCode,String userCode) {
-		return getPersistence().countByWorkflowCodeByProcessCodeByUserIdentifier(workflowCode, processCode, userCode);
+		return getPersistence().countByWorkflowCodeByProcessCodeByUserCode(workflowCode, processCode, userCode);
 	}
 
 	@Override

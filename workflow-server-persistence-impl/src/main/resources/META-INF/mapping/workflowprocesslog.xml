@@ -9,7 +9,7 @@
 	<named-query name="WorkflowProcessLog.readByCorrelationKey">
 		<query>
 			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(
-			log.processInstanceId,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
+			log.processInstanceId,log.id,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
 			)
 			FROM ProcessInstanceLog log
 			WHERE log.correlationKey = :correlationKey
@@ -21,7 +21,7 @@
 	<named-query name="WorkflowProcessLog.readByProcessId">
 		<query>
 			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(
-			log.processInstanceId,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
+			log.processInstanceId,log.id,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
 			)
 			FROM ProcessInstanceLog log
 			WHERE log.processId = :processId
@@ -31,7 +31,7 @@
 	<named-query name="WorkflowProcessLog.readAll">
 		<query>
 			SELECT new ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessLog(
-			log.processInstanceId,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
+			log.processInstanceId,log.id,log.correlationKey,log.processId,log.start,log.end,log.duration,log.status
 			)
 			FROM ProcessInstanceLog log
 		</query>

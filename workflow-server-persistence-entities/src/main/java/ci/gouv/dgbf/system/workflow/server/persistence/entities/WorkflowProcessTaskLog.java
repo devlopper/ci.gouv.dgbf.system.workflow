@@ -26,4 +26,9 @@ public class WorkflowProcessTaskLog extends AbstractEntity implements Serializab
 		this.status = status;
 	}
 	
+	@Override
+	public String toString() {
+		return getIdentifier()+"/"+getName()+"/"+getStatus()+"/"+getOwner();
+	}
+	
 }

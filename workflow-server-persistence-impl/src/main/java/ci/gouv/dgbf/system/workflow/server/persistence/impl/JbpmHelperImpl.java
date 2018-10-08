@@ -30,6 +30,7 @@ import org.kie.api.runtime.manager.RuntimeEnvironmentBuilder;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.runtime.manager.RuntimeManagerFactory;
 import org.kie.api.task.UserGroupCallback;
+import org.kie.internal.KieInternalServices;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 
@@ -214,4 +215,17 @@ public class JbpmHelperImpl extends AbstractHelper implements JbpmHelper, Serial
 		return this;
 	}
 	
+	@Override
+	public String buildCorrelationKey(Collection<String> strings) {
+		String correlationKey = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(strings)) {
+			correlationKey = KieInternalServices.Factory.get().newCorrelationKeyFactory().newCorrelationKey(new ArrayList<>(strings)).toExternalForm();
+		}
+		return correlationKey;
+	}
+	
+	@Override
+	public String buildCorrelationKey(String... strings) {
+		return buildCorrelationKey(__inject__(CollectionHelper.class).instanciate(strings));
+	}
 }

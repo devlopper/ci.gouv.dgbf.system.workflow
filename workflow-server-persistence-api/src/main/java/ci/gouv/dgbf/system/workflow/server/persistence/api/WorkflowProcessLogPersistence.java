@@ -16,6 +16,8 @@ public interface WorkflowProcessLogPersistence extends PersistenceEntity<Workflo
 	Long countByWorkflowCode(String workflowCode);
 	
 	WorkflowProcessLog readByWorkflowByProcessCode(Workflow workflow,String processCode);
-	WorkflowProcessLog readByWorkflowCodeByProcessCode(String workflowCode,String processCode);
+	Long countByWorkflowByProcessCode(Workflow workflow,String processCode);
 	
+	WorkflowProcessLog readByWorkflowCodeByProcessCode(String workflowCode,String processCode);
+	Long countByWorkflowCodeByProcessCode(String workflowCode,String processCode);
 }
