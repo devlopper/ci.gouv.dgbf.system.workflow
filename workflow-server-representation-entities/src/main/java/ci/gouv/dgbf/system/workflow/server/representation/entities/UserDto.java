@@ -11,18 +11,25 @@ import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity
 public class UserDto extends AbstractEntityFromPersistenceEntityDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Tasks tasks;
+	private Tasks notCompletedTasks;
+	private Tasks completedTasks;
 	
 	@Override
 	public UserDto setCode(String code) {
 		return (UserDto) super.setCode(code);
 	}
 	
-	public Tasks getTasks(Boolean instanciateIfNull) {
-		Tasks tasks = getTasks();
+	public Tasks getNotCompletedTasks(Boolean instanciateIfNull) {
+		Tasks tasks = getNotCompletedTasks();
 		if(tasks == null && Boolean.TRUE.equals(instanciateIfNull))
-			setTasks(tasks = new Tasks());
+			setNotCompletedTasks(tasks = new Tasks());
 		return tasks;
 	}
 	
+	public Tasks getCompletedTasks(Boolean instanciateIfNull) {
+		Tasks tasks = getCompletedTasks();
+		if(tasks == null && Boolean.TRUE.equals(instanciateIfNull))
+			setCompletedTasks(tasks = new Tasks());
+		return tasks;
+	}
 }

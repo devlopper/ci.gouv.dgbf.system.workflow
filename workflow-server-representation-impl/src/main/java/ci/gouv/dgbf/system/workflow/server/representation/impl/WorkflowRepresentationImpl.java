@@ -32,6 +32,7 @@ public class WorkflowRepresentationImpl extends AbstractRepresentationEntityImpl
 		WorkflowDto workflowDto = (WorkflowDto)response.getEntity();
 		if(workflowDto!=null && workflowDto.getModel()!=null && !workflowDto.getModel().isEmpty()) {
 			Bpmn bpmn = Bpmn.__executeWithContent__(workflowDto.getModel());
+			workflowDto.setModel(null);
 			if(bpmn!=null && bpmn.getProcess()!=null && bpmn.getProcess().getUserTasks()!=null)
 				for(UserTask index : bpmn.getProcess().getUserTasks())
 					workflowDto.getTasks(Boolean.TRUE).add(index.getName(),Arrays.asList(index.getPotentialOwnerResourceAssignmentExpressionFormalExpression()));

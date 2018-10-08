@@ -39,5 +39,10 @@ public interface WorkflowProcessTaskLogPersistence extends PersistenceEntity<Wor
 	Collection<WorkflowProcessTaskLog> readByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode,String processCode,String userCode,String...statusCodes);
 	Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode,String processCode,String userCode,Collection<String> statusCodes);
 	Long countByWorkflowCodeByProcessCodeByUserCodeByStatusCodes(String workflowCode,String processCode,String userCode,String...statusCodes);
+	
+	Collection<WorkflowProcessTaskLog> readByUserCodeByStatusCodes(String userCode,Collection<String> statusCodes);
+	Collection<WorkflowProcessTaskLog> readByUserCodeByStatusCodes(String userCode,String...statusCodes);
+	Long countByUserCodeByStatusCodes(String userCode,Collection<String> statusCodes);
+	Long countByUserCodeByStatusCodes(String userCode,String...statusCodes);
 
 }

@@ -38,7 +38,8 @@ public class UserRepresentationImplIntegrationTest extends AbstractRepresentatio
 		
 		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
 		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNull();
+		assertThat(userDto.getNotCompletedTasks()).isNull();
+		assertThat(userDto.getCompletedTasks()).isNull();
 	}
 	
 	

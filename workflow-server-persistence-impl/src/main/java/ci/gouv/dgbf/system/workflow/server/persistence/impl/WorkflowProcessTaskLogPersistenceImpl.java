@@ -155,4 +155,26 @@ public class WorkflowProcessTaskLogPersistenceImpl extends AbstractPersistenceEn
 	}
 
 	
+	@Override
+	public Collection<WorkflowProcessTaskLog> readByUserCodeByStatusCodes(String userCode,Collection<String> statusCodes) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.readByActualOwnerByStatus", WorkflowProcessTaskLog.class)
+				.setParameter("actualOwner", userCode).setParameter("status", statusCodes).getResultList();
+	}
+
+	@Override
+	public Collection<WorkflowProcessTaskLog> readByUserCodeByStatusCodes(String userCode, String... statusCodes) {
+		return readByUserCodeByStatusCodes(userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
+
+	@Override
+	public Long countByUserCodeByStatusCodes(String userCode, Collection<String> statusCodes) {
+		return entityManager.createNamedQuery("WorkflowProcessTaskLog.countByProcessInstanceIdByActualOwnerByStatus", Long.class)
+				.setParameter("actualOwner", userCode).setParameter("status", statusCodes).getSingleResult();
+	}
+
+	@Override
+	public Long countByUserCodeByStatusCodes(String userCode, String... statusCodes) {
+		return countByUserCodeByStatusCodes(userCode, __injectCollectionHelper__().instanciate(statusCodes));
+	}
+	
 }

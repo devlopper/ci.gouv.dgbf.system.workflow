@@ -19,11 +19,14 @@ public class WorkflowProcessTaskLog extends AbstractEntity implements Serializab
     
 	private WorkflowProcessTask workflowProcessTask;
 
-	public WorkflowProcessTaskLog(Long identifier,String name,String owner,String status){
-		this.identifier = identifier;
-		this.name = name;
-		this.owner = owner;
-		this.status = status;
+	public WorkflowProcessTaskLog(String workflowCode,Long workflowProcessIdentifier,Long identifier,String name,String owner,String status,Long workItemId){
+		setIdentifier(identifier);
+		setName(name);
+		setOwner(owner);
+		setStatus(status);
+		
+		setWorkflowProcessTask(new WorkflowProcessTask().setWorkItemIdentifier(workItemId)
+				.setWorkflowProcess(new WorkflowProcess().setIdentifier(workflowProcessIdentifier).setWorkflow(new Workflow().setCode(workflowCode))));
 	}
 	
 	@Override

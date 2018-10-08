@@ -11,10 +11,10 @@ import org.kie.api.task.model.Status;
 import ci.gouv.dgbf.system.workflow.server.business.api.UserBusiness;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessNodeLogPersistence;
-import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskPersistence;
+import ci.gouv.dgbf.system.workflow.server.persistence.api.WorkflowProcessTaskLogPersistence;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.User;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.Workflow;
-import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTask;
+import ci.gouv.dgbf.system.workflow.server.persistence.entities.WorkflowProcessTaskLog;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.bpmn.Bpmn;
 import ci.gouv.dgbf.system.workflow.server.persistence.entities.bpmn.UserTask;
 import ci.gouv.dgbf.system.workflow.server.representation.api.UserRepresentation;
@@ -32,31 +32,38 @@ public class UserRepresentationImpl extends AbstractRepresentationEntityImpl<Use
 		UserDto userDto = (UserDto)response.getEntity();
 		if(userDto!=null) {
 			Collection<Workflow> workflows = __inject__(WorkflowPersistence.class).readMany();
-			Collection<WorkflowProcessTask> workflowProcessTasks = __inject__(WorkflowProcessTaskPersistence.class).readByUserCodeByStatusCodes(userDto.getCode(), Status.Reserved.name());
-			
-			for(WorkflowProcessTask indexTask : workflowProcessTasks) {
-				Task task = null;
-				for(Workflow indexWorkflow : workflows) {
-					Bpmn bpmn = Bpmn.__executeWithContent__(indexWorkflow.getModel());
-					if(bpmn!=null && bpmn.getProcess()!=null && bpmn.getProcess().getUserTasks()!=null) {
-						indexTask.setCode(__inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessIdentifierByWorkItemIdentifier(indexWorkflow.getCode()
-								, indexTask.getWorkflowProcess().getIdentifier(),indexTask.getWorkItemIdentifier()).iterator().next().getCode());
-						
-						for(UserTask indexUserTask : bpmn.getProcess().getUserTasks()) {							
-							for(WorkflowProcessTask indexWorkflowProcessTask : workflowProcessTasks)
-								if(indexWorkflowProcessTask.getCode().equals(indexUserTask.getId()) && indexUserTask.getPotentialOwnerResourceAssignmentExpressionFormalExpression().equals(identifier)) {
-									task = new Task().setName(indexUserTask.getName()).addUsers(indexUserTask.getPotentialOwnerResourceAssignmentExpressionFormalExpression());
-									task.setStatus(indexWorkflowProcessTask.getStatus().name());
-									break;
-								}
-						}	
-					}
-				}
-				if(task!=null)
-					userDto.getTasks(Boolean.TRUE).add(task);
-			}
+			addTasks(userDto, workflows, __inject__(WorkflowProcessTaskLogPersistence.class).readByUserCodeByStatusCodes(userDto.getCode(), Status.Reserved.name()), Boolean.FALSE);
+			addTasks(userDto, workflows, __inject__(WorkflowProcessTaskLogPersistence.class).readByUserCodeByStatusCodes(userDto.getCode(), Status.Completed.name()), Boolean.TRUE);
 		}
 		return response;
+	}
+	
+	private void addTasks(UserDto userDto,Collection<Workflow> workflows,Collection<WorkflowProcessTaskLog> tasks,Boolean completed) {
+		for(WorkflowProcessTaskLog indexTask : tasks) {
+			Task task = null;
+			for(Workflow indexWorkflow : workflows) {
+				Bpmn bpmn = Bpmn.__executeWithContent__(indexWorkflow.getModel());
+				if(bpmn!=null && bpmn.getProcess()!=null && bpmn.getProcess().getUserTasks()!=null) {
+					indexTask.setCode(__inject__(WorkflowProcessNodeLogPersistence.class).readByWorkflowCodeByProcessIdentifierByWorkItemIdentifier(indexWorkflow.getCode()
+							, indexTask.getWorkflowProcessTask().getWorkflowProcess().getIdentifier(),indexTask.getWorkflowProcessTask().getWorkItemIdentifier()).iterator().next().getCode());
+					
+					for(UserTask indexUserTask : bpmn.getProcess().getUserTasks()) {							
+						for(WorkflowProcessTaskLog indexWorkflowProcessTask : tasks)
+							if(indexWorkflowProcessTask.getCode()!=null && indexWorkflowProcessTask.getCode().equals(indexUserTask.getId()) && indexUserTask.getPotentialOwnerResourceAssignmentExpressionFormalExpression().equals(userDto.getCode())) {
+								task = new Task().setName(indexUserTask.getName()).addUsers(indexUserTask.getPotentialOwnerResourceAssignmentExpressionFormalExpression());
+								task.setStatus(indexWorkflowProcessTask.getStatus());
+								break;
+							}
+					}	
+				}
+			}
+			if(task!=null)
+				//((Boolean.TRUE.equals(completed) ? userDto.getCompletedTasks(Boolean.TRUE) : userDto.getNotCompletedTasks(Boolean.TRUE)).add(task);
+				if(Boolean.TRUE.equals(completed))
+					userDto.getCompletedTasks(Boolean.TRUE).add(task);
+				else
+					userDto.getNotCompletedTasks(Boolean.TRUE).add(task);
+		}
 	}
 	
 }

@@ -2,16 +2,19 @@ package ci.gouv.dgbf.system.workflow.server.representation.impl.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.jboss.arquillian.junit.InSequence;
+import org.junit.Assert;
 import org.junit.Test;
 
 import ci.gouv.dgbf.system.workflow.server.representation.api.UserRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowProcessTaskRepresentation;
 import ci.gouv.dgbf.system.workflow.server.representation.api.WorkflowRepresentation;
+import ci.gouv.dgbf.system.workflow.server.representation.entities.Task;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.Tasks;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.UserDto;
 import ci.gouv.dgbf.system.workflow.server.representation.entities.WorkflowDto;
@@ -30,9 +33,7 @@ public class ElaborationEnvelopRepresentationIntegrationTest extends AbstractRep
 		
 		assertThat(__inject__(UserRepresentation.class).count().getEntity()).isEqualTo(4l);
 		
-		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNull();
+		assertUser("dti", null, null);
 	}
 	
 	@Test @InSequence(2)
@@ -57,12 +58,10 @@ public class ElaborationEnvelopRepresentationIntegrationTest extends AbstractRep
 			,{null,1,"dgbf"}
 		});
 		
-		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).hasSize(1);
-		assertThat(userDto.getTasks().getAt(0).getName()).isEqualTo("Mise en place");
+		assertUser("dti", new String[] {"Mise en place"}, null);
+		assertUser("dbe", null, null);
+		assertUser("dcb", null, null);
+		assertUser("dgbf", null, null);
 	}
 	
 	@Test @InSequence(3)
@@ -78,16 +77,10 @@ public class ElaborationEnvelopRepresentationIntegrationTest extends AbstractRep
 			,{null,1,"dgbf"}
 		});
 		
-		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNull();
-		
-		userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dbe", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).hasSize(1);
-		assertThat(userDto.getTasks().getAt(0).getName()).isEqualTo("Remplissage");
+		assertUser("dti", null, new String[] {"Mise en place"});
+		assertUser("dbe", new String[] {"Remplissage"}, null);
+		assertUser("dcb", null, null);
+		assertUser("dgbf", null, null);
 	}
 	
 	@Test @InSequence(4)
@@ -103,16 +96,10 @@ public class ElaborationEnvelopRepresentationIntegrationTest extends AbstractRep
 			,{null,1,"dgbf"}
 		});
 		
-		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNull();
-		
-		userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dcb", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).hasSize(1);
-		assertThat(userDto.getTasks().getAt(0).getName()).isEqualTo("Controlle");
+		assertUser("dti", null, new String[] {"Mise en place"});
+		assertUser("dbe", null, new String[] {"Remplissage"});
+		assertUser("dcb", new String[] {"Controlle"}, null);
+		assertUser("dgbf", null, null);
 	}
 	
 	@Test @InSequence(5)
@@ -128,18 +115,10 @@ public class ElaborationEnvelopRepresentationIntegrationTest extends AbstractRep
 			,{null,1,"dgbf"}
 		});
 		
-		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).hasSize(1);
-		
-		userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).hasSize(1);
-		assertThat(userDto.getTasks().getAt(0).getName()).isEqualTo("Etude");
+		assertUser("dti", new String[] {"Etude"}, new String[] {"Mise en place"});
+		assertUser("dbe", null, new String[] {"Remplissage"});
+		assertUser("dcb", null, new String[] {"Controlle"});
+		assertUser("dgbf", null, null);
 	}
 	
 	@Test @InSequence(6)
@@ -155,37 +134,20 @@ public class ElaborationEnvelopRepresentationIntegrationTest extends AbstractRep
 			,{"Reserved",1,"dgbf"}
 		});
 		
-		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNull();
-		
-		userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dgbf", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).isNotNull();
-		assertThat(userDto.getTasks().getCollection()).hasSize(1);
-		assertThat(userDto.getTasks().getAt(0).getName()).isEqualTo("Envoi");
+		assertUser("dti", null, new String[] {"Mise en place","Etude"});
+		assertUser("dbe", null, new String[] {"Remplissage"});
+		assertUser("dcb", null, new String[] {"Controlle"});
+		assertUser("dgbf", new String[] {"Envoi"}, null);
 	}
 	
 	@Test @InSequence(7)
 	public void executeTask_p01_dgbf(){
 		__inject__(WorkflowProcessTaskRepresentation.class).execute("ElabEnv", "p01", "dgbf");
 		
-		WorkflowProcessDto workflowProcessDto = (WorkflowProcessDto) __inject__(WorkflowProcessRepresentation.class).getByWorkflowCodeByCode("ElabEnv", "p01").getEntity();
-		assertThat(workflowProcessDto).isNull();
-		/*
-		assertTasks(workflowProcessDto.getTasks(), 5, new Object[][] {
-			{"Completed",1,"dti"}
-			,{"Completed",1,"dbe"}
-			,{"Completed",1,"dcb"}
-			,{"Completed",1,"dti2"}
-			,{"Completed",1,"dgbf"}
-		});
-		*/
-		
-		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne("dti", "business").getEntity();
-		assertThat(userDto).isNotNull();
-		assertThat(userDto.getTasks()).isNull();
+		assertUser("dti", null, new String[] {"Mise en place","Etude"});
+		assertUser("dbe", null, new String[] {"Remplissage"});
+		assertUser("dcb", null, new String[] {"Controlle"});
+		assertUser("dgbf", null, new String[] {"Envoi"});
 	}
 	
 	@Override
@@ -204,6 +166,46 @@ public class ElaborationEnvelopRepresentationIntegrationTest extends AbstractRep
 				assertThat(tasks.getAt(index).getUsers()).hasSize(__inject__(NumberHelper.class).getInteger(expectedTasks[index][1]));
 				assertThat(tasks.getAt(index).getUsers().iterator().next().getIdentifier()).isEqualTo(expectedTasks[index][2]);
 			}
+	}
+	
+	private void assertUser(String code,String[] expectedNotCompletedTasks,String[] expectedCompletedTasks) {
+		UserDto userDto = (UserDto) __inject__(UserRepresentation.class).getOne(code, "business").getEntity();
+		assertThat(userDto).isNotNull();
+		if(__inject__(ArrayHelper.class).isEmpty(expectedNotCompletedTasks)) {
+			assertThat(userDto.getNotCompletedTasks()).isNull();
+		}else {
+			assertThat(userDto.getNotCompletedTasks()).isNotNull();
+			assertThat(userDto.getNotCompletedTasks().getCollection()).isNotNull();
+			assertThat(userDto.getNotCompletedTasks().getCollection()).hasSize(expectedNotCompletedTasks.length);
+			
+			for(String index : expectedNotCompletedTasks) {
+				Boolean found = Boolean.FALSE;
+				for(Task indexTask : userDto.getNotCompletedTasks().getCollection())
+					if(indexTask.getName().equals(index)) {
+						found = Boolean.TRUE;
+						break;
+					}
+				Assert.assertTrue(index+" not found in not completed", found);
+			}
+		}
+		
+		if(__inject__(ArrayHelper.class).isEmpty(expectedCompletedTasks)) {
+			assertThat(userDto.getCompletedTasks()).isNull();
+		}else {
+			assertThat(userDto.getCompletedTasks()).isNotNull();
+			assertThat(userDto.getCompletedTasks().getCollection()).isNotNull();
+			assertThat(userDto.getCompletedTasks().getCollection()).hasSize(expectedCompletedTasks.length);
+			
+			for(String index : expectedCompletedTasks) {
+				Boolean found = Boolean.FALSE;
+				for(Task indexTask : userDto.getCompletedTasks().getCollection())
+					if(indexTask.getName().equals(index)) {
+						found = Boolean.TRUE;
+						break;
+					}
+				Assert.assertTrue(index+" not found in completed", found);
+			}
+		}
 	}
 	
 }
